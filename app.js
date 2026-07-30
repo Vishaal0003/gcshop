@@ -1,5 +1,5 @@
 const products = [
-  { id: 1, name: "PLAYSTORE", balance: "10000 INR", price: 1599, category: "gaming", stock: true, theme: "play" },
+  { id: 1, name: "PLAY STORE", balance: "10000 INR", price: 1599, category: "gaming", stock: true, theme: "play" },
   { id: 2, name: "APPLE", balance: "10000", price: 1999, category: "shopping", stock: true, theme: "apple" },
   { id: 3, name: "APPLE", balance: "5000", price: 999, category: "shopping", stock: false, theme: "apple" },
   { id: 4, name: "BEST BUY", balance: "85 USD", price: 2000, category: "shopping", stock: true, theme: "bestbuy" },
