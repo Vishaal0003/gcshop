@@ -330,7 +330,7 @@ function selectPaymentMethod(method) {
 function submitGatewayPayment() {
   const utr = document.getElementById("gatewayUtr").value.trim();
   if (!utr) {
-    showToast("UTR ya reference number daalo");
+    showToast("Please enter UTR or reference number");
     return;
   }
   clearInterval(state.gatewayInterval);
@@ -647,7 +647,7 @@ document.addEventListener("click", (event) => {
   const methodButton = event.target.closest("[data-method]");
   if (methodButton) selectPaymentMethod(methodButton.dataset.method);
   if (event.target.closest("[data-open-add-money]")) document.getElementById("addMoneyDialog").showModal();
-  if (event.target.closest(".forgot-btn")) showToast("Password reset backend next step me connect karenge");
+  if (event.target.closest(".forgot-btn")) showToast("Password reset backend will be connected in the next step");
 });
 
 document.getElementById("searchBtn").addEventListener("click", homeSearch);
@@ -667,7 +667,7 @@ document.getElementById("ticketForm").addEventListener("submit", (event) => {
   };
   state.tickets.unshift(ticket);
   event.target.reset();
-  showToast("Ticket submit ho gaya");
+  showToast("Ticket submitted successfully");
   renderTickets();
 });
 
@@ -693,7 +693,7 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
   const email = document.getElementById("loginEmail").value.trim().toLowerCase();
   const password = document.getElementById("loginPassword").value;
   if (!savedUser || savedUser.email !== email || savedUser.password !== password) {
-    showToast("Email ya password galat hai");
+    showToast("Invalid email or password");
     return;
   }
   localStorage.setItem("gcshop_session", "active");
@@ -722,13 +722,13 @@ document.getElementById("addMoneyForm").addEventListener("submit", (event) => {
 
 document.getElementById("logoutBtn").addEventListener("click", () => {
   if (!state.user) {
-    showToast("Pehle login karo");
+    showToast("Please login first");
     setView("login");
     return;
   }
   localStorage.setItem("gcshop_session", "inactive");
   state.user = null;
-  showToast("Logout ho gaya");
+  showToast("Logged out successfully");
   setView("home");
 });
 
