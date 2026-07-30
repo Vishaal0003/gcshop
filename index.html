@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GC Shop | Gift Card Store</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="global-discount-badge">Flat 90% Off</div>
+    <button class="brand" data-view="home" aria-label="GC Shop Home">
+      <span class="brand-mark">GC</span>
+      <span class="brand-name">GC Shop</span>
+    </button>
+
+    <nav class="nav" aria-label="Primary navigation">
+      <button class="nav-btn active" data-view="home">
+        <i class="bi bi-house nav-icon"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-btn" data-view="cards">
+        <i class="bi bi-gift nav-icon"></i>
+        <span>Gift Cards</span>
+      </button>
+      <button class="nav-btn auth-only" data-view="cart">
+        <i class="bi bi-cart3 nav-icon"></i>
+        <span>Cart</span>
+        <span class="count cart-count">0</span>
+      </button>
+      <button class="nav-btn auth-only" data-view="orders">
+        <i class="bi bi-bag-check nav-icon"></i>
+        <span>My Orders</span>
+      </button>
+      <button class="nav-btn auth-only" data-view="issue">
+        <i class="bi bi-exclamation-circle nav-icon"></i>
+        <span>Deposit Issue</span>
+      </button>
+      <button class="nav-btn auth-only" data-view="wallet">
+        <i class="bi bi-wallet2 nav-icon"></i>
+        <span>Wallet ⌄</span>
+      </button>
+      <button class="nav-btn auth-link" id="loginBtn" data-view="login">
+        <i class="bi bi-box-arrow-in-right nav-icon"></i>
+        <span>Login</span>
+      </button>
+      <button class="nav-btn auth-btn-accent auth-link" id="signupBtn" data-view="signup">
+        <i class="bi bi-person-plus nav-icon"></i>
+        <span>Sign up</span>
+      </button>
+      <button class="nav-btn auth-only hidden" id="logoutBtn">
+        <i class="bi bi-box-arrow-right nav-icon"></i>
+        <span>Logout</span>
+      </button>
+    </nav>
+
+    <button class="wallet-pill auth-only" data-view="wallet">
+      <i class="bi bi-wallet2" style="color: var(--red); font-size: 18px;"></i>
+      <strong id="walletTop">₹0.00</strong>
+      <i class="bi bi-chevron-down" style="font-size: 14px; margin-top: 2px;"></i>
+    </button>
+  </header>
+
+  <main>
+    <section class="view active" id="homeView">
+      <div class="search-panel">
+        <input id="searchInput" type="search" placeholder="Search gift cards" autocomplete="off" />
+        <button class="primary-btn" id="searchBtn">Search</button>
+      </div>
+
+      <section class="ad-carousel hero-slider" aria-label="Top advertisements">
+        <button class="ad-prev" aria-label="Previous ad">‹</button>
+        <div class="ad-track" aria-live="polite"></div>
+        <button class="ad-next" aria-label="Next ad">›</button>
+        <div class="ad-dots" aria-hidden="false"></div>
+      </section>
+
+      <section class="catalog-section">
+        <h2>Premium Gift Cards</h2>
+        <div class="cards-grid compact" id="homeCards"></div>
+      </section>
+    </section>
+
+    <section class="view" id="cardsView">
+      <div class="page-title">
+        <h1>Gift Cards</h1>
+        <p>Choose your favorite digital vouchers</p>
+      </div>
+      <div class="catalog-toolbar">
+        <input id="cardsSearch" type="search" placeholder="Search gift cards" />
+        <select id="categoryFilter" aria-label="Category filter">
+          <option value="all">All Categories</option>
+          <option value="shopping">Shopping</option>
+          <option value="food">Food</option>
+          <option value="gaming">Gaming</option>
+          <option value="entertainment">Entertainment</option>
+        </select>
+      </div>
+      <div class="cards-grid compact" id="allCards"></div>
+    </section>
+
+    <section class="view" id="cartView">
+      <div class="page-title">
+        <h1>Your Cart</h1>
+        <p>Review your selected gift cards</p>
+      </div>
+      <div id="cartPanel"></div>
+    </section>
+
+    <section class="view" id="paymentView">
+      <div class="page-title">
+        <h1>Payment Summary</h1>
+        <p>Review your amount before opening the gateway</p>
+      </div>
+      <section class="content-card payment-checkout">
+        <div class="payment-info">
+          <span>Total payable amount</span>
+          <strong id="paymentAmount">₹0.00</strong>
+        </div>
+        <div class="payment-actions">
+          <button class="success-btn" id="payNowBtn">Open Payment Gateway</button>
+          <button class="primary-btn" data-view="cart">← Back to Cart</button>
+        </div>
+        <p class="muted"> The gateway page will open, where you can complete the payment via UPI / QR code.</p>
+      </section>
+    </section>
+
+    <section class="view" id="paymentGatewayView">
+      <div class="gateway-shell">
+        <div class="gateway-header">
+          <div>
+            <span>Payment Amount</span>
+            <strong id="gatewayAmount">₹0.00</strong>
+          </div>
+          <div class="gateway-timer" id="gatewayTimer">05:00</div>
+        </div>
+        <div class="gateway-card">
+          <div class="gateway-tabs">
+            <button class="gateway-tab active">Direct Transfer</button>
+            <button class="gateway-tab">Scan QRCode</button>
+          </div>
+          <div class="gateway-methods">
+            <button class="gateway-method active" data-method="Paytm">Paytm</button>
+            <button class="gateway-method" data-method="PhonePe">PhonePe</button>
+            <button class="gateway-method" data-method="Google Pay">Google Pay</button>
+          </div>
+          <div class="gateway-qr">
+            <div class="qr-badge">QR</div>
+            <div class="qr-code"></div>
+            <span>Use mobile scan code to pay</span>
+          </div>
+          <div class="gateway-note">
+            <p>Please do not use same QR code for multiple payments. Complete payment once and enter UTR/Reference
+              below.</p>
+          </div>
+          <label class="gateway-utr">
+            Payment successful, enter UTR / reference
+            <input id="gatewayUtr" type="text" placeholder="Enter UTR / reference" />
+          </label>
+          <div class="gateway-actions">
+            <button class="success-btn" id="submitGatewayBtn">Submit</button>
+            <button class="primary-btn" data-view="payment">Back to summary</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="ordersView">
+      <div class="page-title">
+        <h1>My Orders</h1>
+        <p id="ordersHint">No orders found yet.</p>
+      </div>
+      <div class="content-card hidden" id="ordersList"></div>
+    </section>
+
+    <section class="view" id="issueView">
+      <div class="page-title">
+        <h1>Deposit Issue</h1>
+        <p>Submit payment proof if wallet was not credited</p>
+      </div>
+      <div class="narrow-stack">
+        <form class="content-card" id="ticketForm">
+          <h2>New Ticket</h2>
+          <label>
+            Order / Payment ID *
+            <input id="paymentId" type="text" placeholder="PAY123456789" required />
+          </label>
+          <label>
+            Issue / Problem *
+            <textarea id="issueText" rows="5" placeholder="Describe your issue..." required></textarea>
+          </label>
+          <label>
+            Payment Proof Screenshot
+            <input id="proofFile" type="file" accept="image/*" />
+          </label>
+          <button class="success-btn" type="submit">Submit Ticket</button>
+        </form>
+        <section class="content-card">
+          <h2>Your Tickets</h2>
+          <div id="ticketsList" class="muted">No tickets yet.</div>
+        </section>
+      </div>
+    </section>
+
+    <section class="view" id="walletView">
+      <div class="page-title">
+        <h1>My Wallet</h1>
+        <p>Balance & transaction history</p>
+      </div>
+      <div class="wallet-page">
+        <section class="wallet-balance">
+          <span><i class="bi bi-wallet2" style="margin-right: 6px;"></i>Available Balance</span>
+          <strong id="walletMain">₹0.00</strong>
+        </section>
+        <div class="quick-actions">
+          <button data-open-add-money><i class="bi bi-plus-circle"></i><span>Add Money</span></button>
+          <button data-view="cards"><i class="bi bi-gift"></i><span>Buy Gift Card</span></button>
+          <button data-view="orders"><i class="bi bi-bag-check"></i><span>My Orders</span></button>
+          <button data-view="home"><i class="bi bi-house"></i><span>Home</span></button>
+        </div>
+        <section class="content-card">
+          <div class="card-heading">
+            <h2>Transaction History</h2>
+            <span id="transactionCount">0 transactions</span>
+          </div>
+          <div id="transactionsList" class="muted">No transactions yet.</div>
+        </section>
+      </div>
+    </section>
+
+    <section class="view" id="loginView">
+      <div class="auth-layout">
+        <form class="content-card auth-card" id="loginForm">
+          <h2>Login</h2>
+          <label>
+            Email
+            <input id="loginEmail" type="email" required />
+          </label>
+          <label>
+            Password
+            <input id="loginPassword" type="password" required />
+          </label>
+          <button class="forgot-btn" type="button">Forgot password?</button>
+          <button class="success-btn" type="submit">Login</button>
+          <p class="auth-switch">Don't have an account? <button type="button" data-view="signup">Sign up</button></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="view" id="signupView">
+      <div class="auth-layout">
+        <form class="content-card auth-card" id="signupForm">
+          <h2>Sign up</h2>
+          <label>
+            Full Name
+            <input id="signupName" type="text" required />
+          </label>
+          <label>
+            Email
+            <input id="signupEmail" type="email" required />
+          </label>
+          <label>
+            Phone Number
+            <input id="signupPhone" type="tel" required />
+          </label>
+          <label>
+            Password
+            <input id="signupPassword" type="password" minlength="6" required />
+          </label>
+          <button class="success-btn" type="submit">Create Account</button>
+          <p class="auth-switch">Already have an account? <button type="button" data-view="login">Login</button></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <h2>GC Shop</h2>
+      <p>Trusted marketplace for 100% genuine digital gift cards, vouchers & codes.</p>
+      <div class="badges">
+        <span>Fast Delivery</span>
+        <span>Secure Checkout</span>
+        <span>1M+ Users</span>
+      </div>
+    </div>
+    <div class="footer-line"></div>
+    <div class="footer-links">
+      <span class="security-badge"><i class="bi bi-shield-check"></i> SSL Secured</span>
+      <span class="security-badge"><i class="bi bi-patch-check"></i> Verified Seller</span>
+      <span class="security-badge"><i class="bi bi-credit-card"></i> Safe Payments</span>
+    </div>
+    <div class="policy-links">
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+    <small>© 2020-2026 GC Shop. All rights reserved.</small>
+  </footer>
+
+  <dialog id="addMoneyDialog">
+    <form method="dialog" class="modal-card" id="addMoneyForm">
+      <button class="close-btn" value="cancel" aria-label="Close">×</button>
+      <h2>Add Money</h2>
+      <p class="muted">Demo amount instantly add ho jayega.</p>
+      <label>
+        Amount
+        <input id="addAmount" type="number" min="1" step="1" placeholder="1000" required />
+      </label>
+      <button class="success-btn" type="submit">Add to Wallet</button>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+
+</html>
