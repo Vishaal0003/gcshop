@@ -1339,22 +1339,60 @@ dialog::backdrop {
 @media (max-width: 980px) {
   .topbar {
     height: auto;
+    display: grid;
     grid-template-columns: 1fr auto;
-    padding: 10px 14px;
+    grid-template-areas:
+      "brand wallet"
+      "nav nav";
+    padding: 8px 14px 6px;
+    gap: 6px 12px;
+    align-items: center;
+  }
+
+  .brand {
+    grid-area: brand;
+    justify-self: start;
+  }
+
+  .wallet-pill {
+    grid-area: wallet;
+    justify-self: end;
+    height: 36px;
+    min-width: auto;
+    padding: 0 12px;
+    font-size: 13px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
   }
 
   .nav {
-    grid-column: 1 / -1;
+    grid-area: nav;
     display: flex;
     overflow-x: auto;
-    padding-bottom: 4px;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+    gap: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
   }
 
   .nav-btn {
-    min-width: 88px;
+    min-width: 70px;
+    min-height: 44px;
+    padding: 4px 6px;
+    font-size: 11px;
+    flex-shrink: 0;
   }
 
   .brand-name {
+    display: none;
+  }
+
+  .global-discount-badge {
     display: none;
   }
 
@@ -1367,16 +1405,61 @@ dialog::backdrop {
 
 @media (max-width: 640px) {
   .view {
-    padding-inline: 14px;
+    padding-inline: 12px;
+    padding-top: 16px;
   }
 
   .search-panel,
   .catalog-toolbar,
   .cart-layout,
-  .cards-grid,
-  .cards-grid.compact,
   .quick-actions {
     grid-template-columns: 1fr;
+  }
+
+  .cards-grid,
+  .cards-grid.compact {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .gift-card {
+    grid-template-rows: 105px auto;
+    border-radius: 12px;
+  }
+
+  .gift-art-img {
+    height: 105px;
+    padding: 6px;
+  }
+
+  .gift-body {
+    padding: 10px;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .gift-body h3 {
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+
+  .gift-body p {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .price-row {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .card-btn {
+    min-height: 34px;
+    font-size: 12px;
+    padding: 0 6px;
+    border-radius: 8px;
   }
 
   .slide.active {
@@ -1403,6 +1486,8 @@ dialog::backdrop {
   }
 
   .wallet-pill {
-    min-width: 102px;
+    height: 34px;
+    padding: 0 10px;
+    font-size: 12px;
   }
 }
