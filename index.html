@@ -158,6 +158,12 @@
               <img src="assets/my-qr.jpg" alt="Payment QR Code" id="paymentQrImage" />
             </div>
             <span style="margin-top: 8px; font-weight: 500; font-size: 13px;"><i class="bi bi-shield-check" style="color: var(--green);"></i> Scan code using any UPI App</span>
+            <div id="gatewayUpiBox" style="margin-top: 10px; padding: 8px 14px; background: #eef2ff; border: 1px dashed #6366f1; border-radius: 10px; text-align: center; cursor: pointer;" onclick="const text = document.getElementById('upiIdText').innerText.replace('UPI ID: ', '').trim(); navigator.clipboard.writeText(text); showToast('UPI ID copied: ' + text);">
+              <span style="font-size: 11px; text-transform: uppercase; color: #6366f1; font-weight: 700; display: block; margin-bottom: 2px;">Official Merchant UPI ID</span>
+              <div style="font-family: monospace; font-size: 14px; font-weight: 700; color: #3730a3; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <i class="bi bi-copy"></i> <span id="upiIdText">UPI ID: vs112020@ptyes</span>
+              </div>
+            </div>
           </div>
           <div class="gateway-note">
             <i class="bi bi-exclamation-triangle-fill" style="font-size: 16px; margin-right: 6px;"></i>

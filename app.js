@@ -301,6 +301,12 @@ function startGatewayTimer() {
   }, 1000);
 }
 
+const upiHandles = {
+  "PhonePe": "vs112020@axl",
+  "Paytm": "vs112020@ptyes",
+  "Google Pay": "vs1120204@okicici"
+};
+
 function renderGatewayStatus() {
   const timerEl = document.getElementById("gatewayTimer");
   if (timerEl) {
@@ -316,13 +322,13 @@ function renderGatewayStatus() {
   const amountEl = document.getElementById("gatewayAmount");
   if (amountEl) amountEl.textContent = formatMoney(state.paymentAmount);
   
-  const upiId = "gcshop@upi";
+  const currentUpi = upiHandles[state.gatewayMethod] || "vs112020@ptyes";
   const amountStr = state.paymentAmount ? state.paymentAmount.toFixed(2) : "0.00";
   
-  const upiUri = `upi://pay?pa=${upiId}&pn=GC%20Shop&am=${amountStr}&cu=INR&tn=Order%20Payment`;
-  const paytmUri = `paytmmp://pay?pa=${upiId}&pn=GC%20Shop&am=${amountStr}&cu=INR`;
-  const phonepeUri = `phonepe://pay?pa=${upiId}&pn=GC%20Shop&am=${amountStr}&cu=INR`;
-  const gpayUri = `tez://upi/pay?pa=${upiId}&pn=GC%20Shop&am=${amountStr}&cu=INR`;
+  const upiUri = `upi://pay?pa=${currentUpi}&pn=GC%20Shop&am=${amountStr}&cu=INR&tn=Order%20Payment`;
+  const paytmUri = `paytmmp://pay?pa=${upiHandles["Paytm"]}&pn=GC%20Shop&am=${amountStr}&cu=INR`;
+  const phonepeUri = `phonepe://pay?pa=${upiHandles["PhonePe"]}&pn=GC%20Shop&am=${amountStr}&cu=INR`;
+  const gpayUri = `tez://upi/pay?pa=${upiHandles["Google Pay"]}&pn=GC%20Shop&am=${amountStr}&cu=INR`;
 
   let activeUri = upiUri;
   if (state.gatewayMethod === "Paytm") activeUri = paytmUri;
@@ -333,6 +339,11 @@ function renderGatewayStatus() {
   if (payAppBtn) {
     payAppBtn.href = activeUri;
     payAppBtn.innerHTML = `<i class="bi bi-box-arrow-up-right" style="margin-right: 8px;"></i> Open ${state.gatewayMethod} to Pay ${formatMoney(state.paymentAmount)}`;
+  }
+
+  const upiIdText = document.getElementById("upiIdText");
+  if (upiIdText) {
+    upiIdText.textContent = `UPI ID: ${currentUpi}`;
   }
   
   const qrImage = document.getElementById("paymentQrImage");
