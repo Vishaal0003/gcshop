@@ -33,6 +33,7 @@ const state = {
   adInterval: null,
   user: null,
   paymentAmount: 0,
+  paymentType: "order",
   pendingOrder: null,
   gatewayMethod: "Paytm",
   gatewayTimer: 0,
@@ -273,6 +274,7 @@ function renderCart() {
 function preparePayment() {
   if (!state.cart.length) return;
   state.paymentAmount = cartTotal();
+  state.paymentType = "order";
   state.pendingOrder = {
     id: `ORD${Date.now().toString().slice(-10)}`,
     total: state.paymentAmount,
@@ -304,20 +306,55 @@ function renderGatewayStatus() {
   if (timerEl) {
     const minutes = String(Math.floor(state.gatewayTimer / 60)).padStart(2, "0");
     const seconds = String(state.gatewayTimer % 60).padStart(2, "0");
-    timerEl.textContent = `${minutes}:${seconds}`;
+    const span = timerEl.querySelector("span");
+    if (span) {
+      span.textContent = `${minutes}:${seconds}`;
+    } else {
+      timerEl.textContent = `${minutes}:${seconds}`;
+    }
   }
   const amountEl = document.getElementById("gatewayAmount");
   if (amountEl) amountEl.textContent = formatMoney(state.paymentAmount);
+  
+  const upiId = "gcshop@upi";
+  const amountStr = state.paymentAmount ? state.paymentAmount.toFixed(2) : "0.00";
+  
+  const upiUri = `upi://pay?pa=${upiId}&pn=GC%20Shop&am=${amountStr}&cu=INR&tn=Order%20Payment`;
+  const paytmUri = `paytmmp://pay?pa=${upiId}&pn=GC%20Shop&am=${amountStr}&cu=INR`;
+  const phonepeUri = `phonepe://pay?pa=${upiId}&pn=GC%20Shop&am=${amountStr}&cu=INR`;
+  const gpayUri = `tez://upi/pay?pa=${upiId}&pn=GC%20Shop&am=${amountStr}&cu=INR`;
+
+  let activeUri = upiUri;
+  if (state.gatewayMethod === "Paytm") activeUri = paytmUri;
+  else if (state.gatewayMethod === "PhonePe") activeUri = phonepeUri;
+  else if (state.gatewayMethod === "Google Pay") activeUri = gpayUri;
+
+  const payAppBtn = document.getElementById("payWithAppBtn");
+  if (payAppBtn) {
+    payAppBtn.href = activeUri;
+    payAppBtn.innerHTML = `<i class="bi bi-box-arrow-up-right" style="margin-right: 8px;"></i> Open ${state.gatewayMethod} to Pay ${formatMoney(state.paymentAmount)}`;
+  }
+  
+  const qrImage = document.getElementById("paymentQrImage");
+  if (qrImage) {
+    qrImage.src = "assets/my-qr.jpg";
+  }
+  
+  const submitBtn = document.getElementById("submitGatewayBtn");
+  if (submitBtn) {
+    submitBtn.innerHTML = `<i class="bi bi-check-circle-fill" style="margin-right: 6px;"></i> Submit Payment (${formatMoney(state.paymentAmount)})`;
+  }
+
   document.querySelectorAll("[data-method]").forEach((button) => {
     button.classList.toggle("active", button.dataset.method === state.gatewayMethod);
   });
 }
 
 function openPaymentGateway() {
-  if (!state.pendingOrder) return;
+  if (!state.pendingOrder && state.paymentType !== "wallet") return;
   state.gatewayMethod = "Paytm";
   document.getElementById("gatewayUtr").value = "";
-  setView("paymentGatewayView");
+  setView("paymentGateway");
   startGatewayTimer();
   renderGatewayStatus();
 }
@@ -334,18 +371,54 @@ function submitGatewayPayment() {
     return;
   }
   clearInterval(state.gatewayInterval);
-  state.orders.unshift({ ...state.pendingOrder });
-  state.transactions.unshift({
-    id: `PAY${Date.now().toString().slice(-12)}`,
-    amount: state.pendingOrder.total,
-    status: "Success",
-    date: new Date()
-  });
-  state.cart = [];
-  state.pendingOrder = null;
+  
+  if (state.paymentType === "wallet") {
+    state.wallet += state.paymentAmount;
+    state.transactions.unshift({
+      id: `PAY${Date.now().toString().slice(-12)}`,
+      amount: state.paymentAmount,
+      status: "Success",
+      date: new Date()
+    });
+    showToast(`Payment successful (${state.gatewayMethod}) - ${formatMoney(state.paymentAmount)} added to wallet`);
+    setView("wallet");
+  } else {
+    const orderItemsWithVouchers = [];
+    state.pendingOrder.items.forEach((item) => {
+      const product = products.find((p) => p.id === item.id);
+      for (let i = 0; i < item.qty; i++) {
+        const prefix = (product ? product.theme.slice(0, 4) : "CARD").toUpperCase();
+        const randomPart = () => Math.random().toString(36).substring(2, 6).toUpperCase();
+        const voucherCode = `${prefix}-${randomPart()}-${randomPart()}-${randomPart()}`;
+        orderItemsWithVouchers.push({
+          productId: item.id,
+          name: product ? product.name : "Gift Card",
+          balance: product ? product.balance : "",
+          price: product ? product.price : 0,
+          theme: product ? product.theme : "play",
+          voucherCode: voucherCode
+        });
+      }
+    });
+
+    state.orders.unshift({
+      ...state.pendingOrder,
+      voucherItems: orderItemsWithVouchers
+    });
+
+    state.transactions.unshift({
+      id: `PAY${Date.now().toString().slice(-12)}`,
+      amount: state.pendingOrder.total,
+      status: "Success",
+      date: new Date()
+    });
+    state.cart = [];
+    state.pendingOrder = null;
+    showToast(`Payment successful (${state.gatewayMethod})`);
+    setView("orders");
+  }
+  
   state.paymentAmount = 0;
-  showToast(`Payment successful (${state.gatewayMethod})`);
-  setView("orders");
 }
 
 function renderOrders() {
@@ -360,14 +433,34 @@ function renderOrders() {
   hint.textContent = `${state.orders.length} order${state.orders.length > 1 ? "s" : ""} found`;
   list.classList.remove("hidden");
   list.innerHTML = state.orders
-    .map((order) => `
-      <div class="order">
-        <strong>#${order.id}</strong>
-        <span>${order.date.toLocaleString("en-IN")}</span>
-        <span>${order.items.length} products | ${formatMoney(order.total)}</span>
-        <span class="muted">Status: Processing</span>
+    .map((order) => {
+      const itemsList = (order.voucherItems || []).map((vItem) => `
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; background: #ffffff; border: 1px solid var(--line); border-radius: 8px; margin-top: 8px;">
+          <div>
+            <div style="font-weight: 600; font-size: 14px;">${vItem.name}</div>
+            <div class="muted" style="font-size: 12px;">Balance: ${vItem.balance}</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <code style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-weight: 700; color: #4338ca; font-size: 13px; letter-spacing: 0.5px;">${vItem.voucherCode}</code>
+            <button class="primary-btn" style="min-height: 32px; padding: 0 12px; font-size: 12px;" onclick="navigator.clipboard.writeText('${vItem.voucherCode}'); showToast('Voucher code copied!')">Copy</button>
+          </div>
+        </div>
+      `).join('');
+
+      return `
+      <div class="order" style="margin-bottom: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line);">
+          <div>
+            <strong>#${order.id}</strong>
+            <span class="muted" style="font-size: 13px; margin-left: 8px;">${order.date.toLocaleString("en-IN")}</span>
+          </div>
+          <span style="color: var(--green); font-weight: 600; font-size: 14px;"><i class="bi bi-check-circle-fill"></i> Completed (${formatMoney(order.total)})</span>
+        </div>
+        <div style="font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">Purchased Gift Cards (${order.voucherItems ? order.voucherItems.length : order.items.length}):</div>
+        ${itemsList}
       </div>
-    `)
+    `;
+    })
     .join("");
 }
 
@@ -624,10 +717,23 @@ function showToast(message) {
 
 document.addEventListener("click", (event) => {
   const viewButton = event.target.closest("[data-view]");
-  if (viewButton) setView(viewButton.dataset.view);
+  if (viewButton) {
+    let targetView = viewButton.dataset.view;
+    if (targetView === "payment" && state.paymentType === "wallet") {
+      targetView = "wallet";
+    }
+    setView(targetView);
+  }
 
   const addButton = event.target.closest("[data-add]");
   if (addButton) addToCart(addButton.dataset.add);
+
+  const revealButton = event.target.closest("[data-reveal]");
+  if (revealButton) {
+    const segments = Array.from({length: 4}, () => Math.random().toString(36).substring(2, 6).toUpperCase());
+    document.getElementById("voucherCodeDisplay").innerText = segments.join('-');
+    document.getElementById("revealDialog").showModal();
+  }
 
   const qtyButton = event.target.closest("[data-qty]");
   if (qtyButton) changeQty(qtyButton.dataset.qty, Number(qtyButton.dataset.delta));
@@ -707,17 +813,15 @@ document.getElementById("addMoneyForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const amount = Number(document.getElementById("addAmount").value);
   if (!amount || amount < 1) return;
-  state.wallet += amount;
-  state.transactions.unshift({
-    id: `PAY${Date.now().toString().slice(-12)}`,
-    amount,
-    status: "Success",
-    date: new Date()
-  });
+  
+  state.paymentAmount = amount;
+  state.paymentType = "wallet";
+  state.pendingOrder = null;
+  
   document.getElementById("addAmount").value = "";
   document.getElementById("addMoneyDialog").close();
-  showToast(`${formatMoney(amount)} added to wallet.`);
-  renderWallet();
+  
+  openPaymentGateway();
 });
 
 document.getElementById("logoutBtn").addEventListener("click", () => {

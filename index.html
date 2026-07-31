@@ -132,37 +132,44 @@
       <div class="gateway-shell">
         <div class="gateway-header">
           <div>
-            <span>Payment Amount</span>
+            <span>Total Payable Amount</span>
             <strong id="gatewayAmount">₹0.00</strong>
           </div>
-          <div class="gateway-timer" id="gatewayTimer">05:00</div>
+          <div class="gateway-timer" id="gatewayTimer">
+            <i class="bi bi-clock-history"></i> <span>05:00</span>
+          </div>
         </div>
         <div class="gateway-card">
           <div class="gateway-tabs">
-            <button class="gateway-tab active">Direct Transfer</button>
-            <button class="gateway-tab">Scan QRCode</button>
+            <button class="gateway-tab active"><i class="bi bi-send-fill" style="margin-right: 6px;"></i> Direct Transfer</button>
+            <button class="gateway-tab"><i class="bi bi-qr-code-scan" style="margin-right: 6px;"></i> Scan QRCode</button>
           </div>
           <div class="gateway-methods">
-            <button class="gateway-method active" data-method="Paytm">Paytm</button>
-            <button class="gateway-method" data-method="PhonePe">PhonePe</button>
-            <button class="gateway-method" data-method="Google Pay">Google Pay</button>
+            <button class="gateway-method active" id="btnPaytm" data-method="Paytm"><i class="bi bi-wallet2" style="margin-right: 4px;"></i> Paytm</button>
+            <button class="gateway-method" id="btnPhonePe" data-method="PhonePe"><i class="bi bi-phone" style="margin-right: 4px;"></i> PhonePe</button>
+            <button class="gateway-method" id="btnGpay" data-method="Google Pay"><i class="bi bi-google" style="margin-right: 4px;"></i> GPay</button>
           </div>
+          <a id="payWithAppBtn" href="#" style="display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 14px; font-weight: 700; font-size: 15px; margin-bottom: 18px; background: linear-gradient(135deg, #4f46e5, #4338ca); border-radius: 12px; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3); color: #fff;">
+            <i class="bi bi-box-arrow-up-right" style="margin-right: 8px;"></i> Open Paytm to Pay ₹0.00
+          </a>
           <div class="gateway-qr">
-            <div class="qr-badge">QR</div>
-            <div class="qr-code"></div>
-            <span>Use mobile scan code to pay</span>
+            <div class="qr-badge"><i class="bi bi-qr-code"></i> Instant UPI Payment</div>
+            <div class="qr-code">
+              <img src="assets/my-qr.jpg" alt="Payment QR Code" id="paymentQrImage" />
+            </div>
+            <span style="margin-top: 8px; font-weight: 500; font-size: 13px;"><i class="bi bi-shield-check" style="color: var(--green);"></i> Scan code using any UPI App</span>
           </div>
           <div class="gateway-note">
-            <p>Please do not use same QR code for multiple payments. Complete payment once and enter UTR/Reference
-              below.</p>
+            <i class="bi bi-exclamation-triangle-fill" style="font-size: 16px; margin-right: 6px;"></i>
+            <span>Complete your payment first, then enter the 12-digit UTR / Reference number below to confirm.</span>
           </div>
           <label class="gateway-utr">
-            Payment successful, enter UTR / reference
-            <input id="gatewayUtr" type="text" placeholder="Enter UTR / reference" />
+            <span>Enter UTR / Reference Number *</span>
+            <input id="gatewayUtr" type="text" placeholder="e.g. 329482910384" />
           </label>
           <div class="gateway-actions">
-            <button class="success-btn" id="submitGatewayBtn">Submit</button>
-            <button class="primary-btn" data-view="payment">Back to summary</button>
+            <button class="success-btn" id="submitGatewayBtn" style="font-size: 15px; font-weight: 600;"><i class="bi bi-check-circle-fill" style="margin-right: 6px;"></i> Submit Payment</button>
+            <button class="primary-btn" data-view="payment" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;"><i class="bi bi-arrow-left" style="margin-right: 4px;"></i> Back to Summary</button>
           </div>
         </div>
       </div>
@@ -311,6 +318,18 @@
       </label>
       <button class="success-btn" type="submit">Add to Wallet</button>
     </form>
+  </dialog>
+
+  <dialog id="revealDialog">
+    <div class="modal-card" style="text-align: center; max-width: 400px;">
+      <button class="close-btn" onclick="document.getElementById('revealDialog').close()" aria-label="Close">×</button>
+      <h2 style="color: var(--green);">Gift Card Revealed!</h2>
+      <p class="muted">Here is your voucher code:</p>
+      <div style="margin: 24px 0; padding: 20px; background: #f3f6fc; border: 2px dashed var(--green); border-radius: 12px; font-size: 24px; font-weight: bold; letter-spacing: 2px; color: var(--ink);" id="voucherCodeDisplay">
+        XXXX-XXXX-XXXX
+      </div>
+      <button class="primary-btn" onclick="navigator.clipboard.writeText(document.getElementById('voucherCodeDisplay').innerText); showToast('Code copied to clipboard!')" style="width: 100%;">Copy Code</button>
+    </div>
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
