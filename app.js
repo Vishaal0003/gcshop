@@ -1,24 +1,402 @@
 const products = [
-  { id: 1, name: "PLAY STORE", balance: "10000 INR", price: 1599, category: "gaming", stock: true, theme: "play" },
-  { id: 2, name: "APPLE", balance: "10000", price: 1999, category: "shopping", stock: true, theme: "apple" },
-  { id: 3, name: "APPLE", balance: "5000", price: 999, category: "shopping", stock: false, theme: "apple" },
-  { id: 4, name: "BEST BUY", balance: "85 USD", price: 2000, category: "shopping", stock: true, theme: "bestbuy" },
-  { id: 5, name: "ETSY", balance: "85 USD", price: 2000, category: "shopping", stock: true, theme: "etsy" },
-  { id: 6, name: "TARGET", balance: "85 USD", price: 2000, category: "shopping", stock: true, theme: "target" },
-  { id: 7, name: "WALMART", balance: "85 USD", price: 2000, category: "shopping", stock: true, theme: "walmart" },
-  { id: 8, name: "SHOPIFY", balance: "85 USD", price: 2000, category: "shopping", stock: true, theme: "shopify" },
-  { id: 9, name: "STEAM", balance: "85 USD", price: 2000, category: "gaming", stock: true, theme: "steam" },
-  { id: 10, name: "AMAZON.COM", balance: "90 USD", price: 2499, category: "shopping", stock: true, theme: "amazon" },
-  { id: 11, name: "X BOX", balance: "6999 INR", price: 1499, category: "gaming", stock: false, theme: "xbox" },
-  { id: 12, name: "STEAM", balance: "6999 INR", price: 1999, category: "gaming", stock: false, theme: "steam" },
-  { id: 13, name: "BLINKIT", balance: "6999 INR", price: 1999, category: "food", stock: true, theme: "blinkit" },
-  { id: 14, name: "SWIGGY", balance: "6999 INR", price: 1999, category: "food", stock: true, theme: "swiggy" },
-  { id: 15, name: "ZOMATO", balance: "6999 INR", price: 1999, category: "food", stock: true, theme: "zomato" },
-  { id: 16, name: "PVR", balance: "6999 INR", price: 1999, category: "entertainment", stock: false, theme: "pvr" },
-  { id: 17, name: "FLIPKART", balance: "7999 INR", price: 1999, category: "shopping", stock: true, theme: "flipkart" },
-  { id: 18, name: "JIO DIGITAL", balance: "6999 INR", price: 1999, category: "entertainment", stock: true, theme: "jio" },
-  { id: 19, name: "AMAZON", balance: "9999 INR", price: 1999, category: "shopping", stock: true, theme: "amazonpay" },
-  { id: 20, name: "BIGBASKET", balance: "7999 INR", price: 1999, category: "food", stock: true, theme: "bigbasket" }
+  {
+    id: 1,
+    name: "PLAY STORE",
+    category: "gaming",
+    stock: true,
+    theme: "play",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 649, balance: "3500 INR" },
+      { price: 999, balance: "5000 INR" },
+      { price: 1499, balance: "7500 INR" },
+      { price: 1999, balance: "10000 INR" },
+      { price: 3999, balance: "20000 INR" }
+    ]
+  },
+  {
+    id: 2,
+    name: "FLIPKART",
+    category: "shopping",
+    stock: true,
+    theme: "flipkart",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 999, balance: "5000 INR" },
+      { price: 1449, balance: "7500 INR" },
+      { price: 1999, balance: "10000 INR" },
+      { price: 2499, balance: "12500 INR" },
+      { price: 4999, balance: "25000 INR" }
+    ]
+  },
+  {
+    id: 3,
+    name: "AMAZON",
+    category: "shopping",
+    stock: true,
+    theme: "amazonpay",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 699, balance: "3500 INR" },
+      { price: 949, balance: "5000 INR" },
+      { price: 1499, balance: "7500 INR" },
+      { price: 2049, balance: "10000 INR" },
+      { price: 4949, balance: "25000 INR" }
+    ]
+  },
+  {
+    id: 4,
+    name: "APPLE",
+    category: "shopping",
+    stock: true,
+    theme: "apple",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 649, balance: "3500 INR" },
+      { price: 999, balance: "5000 INR" },
+      { price: 1949, balance: "10000 INR" },
+      { price: 3999, balance: "20000 INR" }
+    ]
+  },
+  {
+    id: 5,
+    name: "SWIGGY",
+    category: "food",
+    stock: true,
+    theme: "swiggy",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 599, balance: "3000 INR" },
+      { price: 999, balance: "5000 INR" },
+      { price: 1499, balance: "7500 INR" },
+      { price: 1999, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 6,
+    name: "ZOMATO",
+    category: "food",
+    stock: true,
+    theme: "zomato",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 649, balance: "3000 INR" },
+      { price: 1049, balance: "5000 INR" },
+      { price: 1499, balance: "7500 INR" },
+      { price: 1999, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 7,
+    name: "BLINKIT",
+    category: "food",
+    stock: true,
+    theme: "blinkit",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 649, balance: "3000 INR" },
+      { price: 999, balance: "5000 INR" },
+      { price: 1499, balance: "7500 INR" },
+      { price: 1949, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 8,
+    name: "PVR",
+    category: "entertainment",
+    stock: true,
+    theme: "pvr",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 649, balance: "3000 INR" },
+      { price: 999, balance: "5000 INR" },
+      { price: 1499, balance: "7500 INR" },
+      { price: 1999, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 9,
+    name: "JIO DIGITAL",
+    category: "entertainment",
+    stock: true,
+    theme: "jio",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 649, balance: "3000 INR" },
+      { price: 999, balance: "5000 INR" },
+      { price: 1499, balance: "7500 INR" },
+      { price: 1999, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 10,
+    name: "STEAM",
+    category: "gaming",
+    stock: true,
+    theme: "steam",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 649, balance: "3500 INR" },
+      { price: 999, balance: "5000 INR" },
+      { price: 1499, balance: "7500 INR" },
+      { price: 1999, balance: "10000 INR" },
+      { price: 3949, balance: "20000 INR" }
+    ]
+  },
+  {
+    id: 11,
+    name: "X BOX",
+    category: "gaming",
+    stock: true,
+    theme: "xbox",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 649, balance: "3500 INR" },
+      { price: 999, balance: "5000 INR" },
+      { price: 1499, balance: "7500 INR" },
+      { price: 1999, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 12,
+    name: "BIGBASKET",
+    category: "food",
+    stock: true,
+    theme: "bigbasket",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 999, balance: "5000 INR" },
+      { price: 1999, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 13,
+    name: "BEST BUY",
+    category: "shopping",
+    stock: true,
+    theme: "bestbuy",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 999, balance: "5000 INR" },
+      { price: 1999, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 14,
+    name: "ETSY",
+    category: "shopping",
+    stock: true,
+    theme: "etsy",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 999, balance: "5000 INR" },
+      { price: 1999, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 15,
+    name: "TARGET",
+    category: "shopping",
+    stock: true,
+    theme: "target",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 999, balance: "5000 INR" },
+      { price: 1999, balance: "10000 INR" }
+    ]
+  },
+  {
+    id: 16,
+    name: "WALMART",
+    category: "shopping",
+    stock: true,
+    theme: "walmart",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 1499, balance: "7500 INR" },
+      { price: 2499, balance: "12500 INR" }
+    ]
+  },
+  {
+    id: 17,
+    name: "SHOPIFY",
+    category: "shopping",
+    stock: true,
+    theme: "shopify",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 1499, balance: "7500 INR" },
+      { price: 2499, balance: "12500 INR" }
+    ]
+  },
+  {
+    id: 18,
+    name: "AMAZON.COM",
+    category: "shopping",
+    stock: true,
+    theme: "amazon",
+    selectedOptionIndex: 0,
+    options: [
+      { price: 1999, balance: "10000 INR" },
+      { price: 4999, balance: "25000 INR" }
+    ]
+  },
+  {
+    id: 101,
+    name: "DIGITAL Visa Prepaid 1 Card Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 110,
+    origPrice: null,
+    discountBadge: null,
+    newBadge: true,
+    balance: "$110.00",
+    stock: true,
+    theme: "visa"
+  },
+  {
+    id: 102,
+    name: "DIGITAL Visa Prepaid 3 Cards Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 279,
+    origPrice: 350,
+    discountBadge: "-20 %",
+    newBadge: true,
+    balance: "$350.00",
+    stock: true,
+    theme: "visa"
+  },
+  {
+    id: 103,
+    name: "DIGITAL Visa Prepaid 5 Cards Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 410,
+    origPrice: 590,
+    discountBadge: "-31 %",
+    newBadge: true,
+    balance: "$590.00",
+    stock: true,
+    theme: "visa"
+  },
+  {
+    id: 104,
+    name: "DIGITAL Visa Prepaid 10 Cards Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 710,
+    origPrice: 1190,
+    discountBadge: "-40 %",
+    newBadge: true,
+    balance: "$1190.00",
+    stock: true,
+    theme: "visa"
+  },
+  {
+    id: 105,
+    name: "DIGITAL MasterCard Prepaid 1 Card Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 110,
+    origPrice: null,
+    discountBadge: null,
+    newBadge: true,
+    balance: "$110.00",
+    stock: true,
+    theme: "mastercard"
+  },
+  {
+    id: 106,
+    name: "DIGITAL MasterCard Prepaid 3 Cards Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 279,
+    origPrice: 350,
+    discountBadge: "-20 %",
+    newBadge: true,
+    balance: "$350.00",
+    stock: true,
+    theme: "mastercard"
+  },
+  {
+    id: 107,
+    name: "DIGITAL MasterCard Prepaid 5 Cards Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 410,
+    origPrice: 590,
+    discountBadge: "-31 %",
+    newBadge: true,
+    balance: "$590.00",
+    stock: true,
+    theme: "mastercard"
+  },
+  {
+    id: 108,
+    name: "DIGITAL MasterCard Prepaid 10 Cards Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 710,
+    origPrice: 1190,
+    discountBadge: "-40 %",
+    newBadge: true,
+    balance: "$1190.00",
+    stock: true,
+    theme: "mastercard"
+  },
+  {
+    id: 109,
+    name: "American Express Prepaid 1 Card Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 110,
+    origPrice: null,
+    discountBadge: null,
+    newBadge: true,
+    balance: "$110.00",
+    stock: true,
+    theme: "amex"
+  },
+  {
+    id: 110,
+    name: "American Express Prepaid 3 Cards Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 279,
+    origPrice: 350,
+    discountBadge: "-20 %",
+    newBadge: true,
+    balance: "$350.00",
+    stock: true,
+    theme: "amex"
+  },
+  {
+    id: 111,
+    name: "American Express Prepaid 5 Cards Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 410,
+    origPrice: 590,
+    discountBadge: "-31 %",
+    newBadge: true,
+    balance: "$590.00",
+    stock: true,
+    theme: "amex"
+  },
+  {
+    id: 112,
+    name: "American Express Prepaid 10 Cards Total Balance...",
+    category: "creditcards",
+    vendor: "Platinum",
+    price: 710,
+    origPrice: 1190,
+    discountBadge: "-40 %",
+    newBadge: true,
+    balance: "$1190.00",
+    stock: true,
+    theme: "amex"
+  }
 ];
 
 const state = {
@@ -151,19 +529,49 @@ function handleCardError(img, id) {
 }
 
 function productCard(product) {
+  const selectedIndex = product.selectedOptionIndex || 0;
+  const currentOpt = (product.options && product.options[selectedIndex]) || {
+    price: product.price || 499,
+    balance: product.balance || "1000 INR"
+  };
+
+  const optionsMarkup = product.options && product.options.length ? `
+    <div class="card-option-selector">
+      <select class="option-select" data-option-select="${product.id}">
+        ${product.options.map((opt, idx) => `
+          <option value="${idx}" ${idx === selectedIndex ? "selected" : ""}>
+            Get ${opt.balance} Balance
+          </option>
+        `).join("")}
+      </select>
+    </div>
+  ` : "";
+
   return `
     <article class="gift-card">
-      <img class="gift-art-img" src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name} gift card" />
+      <div class="gift-art-wrapper" onclick="showProductDetail(${product.id})" style="cursor: pointer;">
+        ${product.discountBadge ? `<span class="badge-discount">${product.discountBadge}</span>` : ""}
+        ${product.newBadge ? `<span class="badge-new">NEW</span>` : ""}
+        <img class="gift-art-img" src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name} gift card" />
+      </div>
       <div class="gift-body">
-        <h3>${product.name}</h3>
-        <p>Balance ${product.balance}</p>
+        <h3 class="gift-card-title" onclick="showProductDetail(${product.id})" style="cursor: pointer;" title="Click for details">${product.name}</h3>
+        <div class="gift-card-vendor">Vendor: <span class="vendor-link">GC Shop</span></div>
+        ${optionsMarkup}
         <div class="price-row">
-          <span>${formatMoney(product.price)}</span>
+          <div class="price-info">
+            <span class="price-val">${formatMoney(currentOpt.price)}</span>
+          </div>
           <span class="stock">${product.stock ? "In stock" : "Sold out"}</span>
         </div>
-        <button class="card-btn" data-add="${product.id}" ${product.stock ? "" : "disabled"}>
-          ${product.stock ? "Add to Cart" : "SOLD OUT"}
-        </button>
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <button class="card-btn" onclick="showProductDetail(${product.id})" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; flex: 1;">
+            DETAILS
+          </button>
+          <button class="card-btn" data-add="${product.id}" ${product.stock ? "" : "disabled"} style="flex: 1;">
+            ${product.stock ? "Add to Cart" : "SOLD OUT"}
+          </button>
+        </div>
       </div>
     </article>
   `;
@@ -187,36 +595,65 @@ function setView(view) {
 function addToCart(id) {
   const product = products.find((item) => item.id === Number(id));
   if (!product || !product.stock) return;
-  const existing = state.cart.find((item) => item.id === product.id);
+
+  if (product.category === "creditcards") {
+    const existing = state.cart.find((item) => item.id === product.id);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      state.cart.push({
+        id: product.id,
+        optionIndex: 0,
+        price: product.price * 83,
+        displayPrice: `$${product.price.toFixed(2)}`,
+        balance: product.balance,
+        qty: 1
+      });
+    }
+    showToast(`${product.name} Added to Cart`);
+    render();
+    return;
+  }
+
+  const selectedIndex = product.selectedOptionIndex || 0;
+  const opt = (product.options && product.options[selectedIndex]) || {
+    price: product.price || 499,
+    balance: product.balance || "1000 INR"
+  };
+
+  const existing = state.cart.find((item) => item.id === product.id && item.optionIndex === selectedIndex);
   if (existing) {
     existing.qty += 1;
   } else {
-    state.cart.push({ id: product.id, qty: 1 });
+    state.cart.push({
+      id: product.id,
+      optionIndex: selectedIndex,
+      price: opt.price,
+      balance: opt.balance,
+      qty: 1
+    });
   }
-  showToast(`${product.name} Added to Cart`);
+  showToast(`${product.name} (${formatMoney(opt.price)}) Added to Cart`);
   render();
 }
 
-function changeQty(id, delta) {
-  const item = state.cart.find((entry) => entry.id === Number(id));
+function changeQty(cartIndex, delta) {
+  const item = state.cart[Number(cartIndex)];
   if (!item) return;
   item.qty += delta;
   if (item.qty <= 0) {
-    state.cart = state.cart.filter((entry) => entry.id !== Number(id));
+    state.cart.splice(Number(cartIndex), 1);
   }
   render();
 }
 
-function removeFromCart(id) {
-  state.cart = state.cart.filter((entry) => entry.id !== Number(id));
+function removeFromCart(cartIndex) {
+  state.cart.splice(Number(cartIndex), 1);
   render();
 }
 
 function cartTotal() {
-  return state.cart.reduce((sum, item) => {
-    const product = products.find((entry) => entry.id === item.id);
-    return sum + product.price * item.qty;
-  }, 0);
+  return state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 }
 
 function renderCart() {
@@ -225,31 +662,58 @@ function renderCart() {
     panel.innerHTML = `
       <section class="empty-cart">
         <div>
-          <div class="cart-symbol">🛒</div>
-          <h2>Your cart is empty</h2>
-          <p>Browse our gift cards and add something special to your cart</p>
-          <button class="success-btn" data-view="cards">Start Shopping</button>
+          <div class="cart-symbol"><i class="bi bi-cart-x" style="font-size: 58px; color: var(--muted);"></i></div>
+          <h2 style="margin-top: 10px;">Your cart is empty</h2>
+          <p>Browse our gift cards and select your desired voucher balances</p>
+          <button class="success-btn" data-view="cards" style="margin-top: 14px; padding: 0 24px;">
+            <i class="bi bi-shop" style="margin-right: 6px;"></i> Start Shopping
+          </button>
         </div>
       </section>
     `;
     return;
   }
 
+  const totalVoucherValue = state.cart.reduce((acc, item) => {
+    const num = parseInt(item.balance) || 0;
+    return acc + (num * item.qty);
+  }, 0);
+
   const lines = state.cart
-    .map((item) => {
+    .map((item, cartIdx) => {
       const product = products.find((entry) => entry.id === item.id);
+      const itemTotal = item.price * item.qty;
       return `
-        <div class="cart-item">
-          <img class="cart-thumb" src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name} gift card" />
-          <div>
-            <strong>${product.name}</strong>
-            <p class="muted">Balance ${product.balance} | ${formatMoney(product.price)}</p>
-            <button class="remove-btn" data-remove="${item.id}">Remove</button>
-          </div>
-          <div class="qty-controls">
-            <button data-qty="${item.id}" data-delta="-1">-</button>
-            <strong>${item.qty}</strong>
-            <button data-qty="${item.id}" data-delta="1">+</button>
+        <div class="cart-item-card">
+          <div class="cart-item-main">
+            <img class="cart-thumb" src="assets/cards/${product ? product.theme : 'play'}.jpg" onerror="handleCardError(this, ${item.id})" alt="${product ? product.name : 'Gift Card'}" />
+            <div class="cart-item-details">
+              <div class="cart-item-header">
+                <h3 class="cart-item-title">${product ? product.name : 'Gift Card'}</h3>
+                <span class="cart-value-badge"><i class="bi bi-gift-fill"></i> Get ${item.balance}</span>
+              </div>
+              <div class="cart-item-pricing">
+                <div class="price-box">
+                  <span class="pay-price">${formatMoney(item.price)}</span>
+                  <span class="price-label">Price per card</span>
+                </div>
+                <div class="value-box">
+                  <span class="get-val">${item.balance}</span>
+                  <span class="price-label">Voucher Value</span>
+                </div>
+              </div>
+              <div class="cart-item-actions">
+                <div class="qty-selector">
+                  <button class="qty-btn" data-qty="${cartIdx}" data-delta="-1" aria-label="Decrease quantity">-</button>
+                  <span class="qty-count">${item.qty}</span>
+                  <button class="qty-btn" data-qty="${cartIdx}" data-delta="1" aria-label="Increase quantity">+</button>
+                </div>
+                <span class="item-subtotal">Subtotal: <strong>${formatMoney(itemTotal)}</strong></span>
+                <button class="cart-remove-btn" data-remove="${cartIdx}">
+                  <i class="bi bi-trash3"></i> Remove
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       `;
@@ -258,14 +722,52 @@ function renderCart() {
 
   panel.innerHTML = `
     <section class="cart-layout">
-      <div class="cart-items">${lines}</div>
+      <div class="cart-items-container">
+        <div class="cart-items-header">
+          <span><i class="bi bi-bag-check-fill" style="color: var(--green);"></i> Cart Items (${state.cart.reduce((sum, item) => sum + item.qty, 0)})</span>
+          <span class="cart-badge-saving"><i class="bi bi-lightning-charge-fill"></i> Instant Digital Voucher</span>
+        </div>
+        <div class="cart-items-list">${lines}</div>
+      </div>
+
       <aside class="summary-card">
-        <h2>Order Summary</h2>
-        <div class="summary-line"><span>Items</span><strong>${state.cart.reduce((sum, item) => sum + item.qty, 0)}</strong></div>
-        <div class="summary-line"><span>Subtotal</span><strong>${formatMoney(cartTotal())}</strong></div>
-        <div class="summary-line"><span>Delivery</span><strong>Free</strong></div>
-        <div class="summary-line summary-total"><span>Total</span><strong>${formatMoney(cartTotal())}</strong></div>
-        <button class="success-btn" id="checkoutBtn">Place Order</button>
+        <h2 class="summary-title"><i class="bi bi-receipt" style="margin-right: 6px;"></i> Order Summary</h2>
+        <div class="summary-divider"></div>
+        <div class="summary-line">
+          <span>Total Vouchers</span>
+          <strong>${state.cart.reduce((sum, item) => sum + item.qty, 0)} Items</strong>
+        </div>
+        <div class="summary-line">
+          <span>Total Voucher Value</span>
+          <strong style="color: var(--green);">₹${totalVoucherValue.toLocaleString("en-IN")} INR</strong>
+        </div>
+        <div class="summary-line">
+          <span>Total Payable Price</span>
+          <strong>${formatMoney(cartTotal())}</strong>
+        </div>
+        <div class="summary-line">
+          <span>Delivery Fee</span>
+          <strong style="color: var(--green);">FREE</strong>
+        </div>
+        
+        <div class="summary-divider"></div>
+        <div class="summary-line summary-total">
+          <div>
+            <span>Total Payable Amount</span>
+            <small class="muted" style="display: block; font-weight: normal; font-size: 11px;">Flat 90% Discount Applied</small>
+          </div>
+          <strong class="total-amount" style="color: var(--red); font-size: 22px;">${formatMoney(cartTotal())}</strong>
+        </div>
+
+        <button class="success-btn checkout-btn" id="checkoutBtn">
+          <span>Place Order</span>
+          <i class="bi bi-arrow-right-circle-fill"></i>
+        </button>
+
+        <div class="cart-trust-badges">
+          <span><i class="bi bi-shield-check" style="color: var(--green);"></i> 100% Genuine Digital Codes</span>
+          <span><i class="bi bi-clock-history" style="color: #6366f1;"></i> Instant Code & Voucher Display</span>
+        </div>
       </aside>
     </section>
   `;
@@ -376,10 +878,10 @@ function selectPaymentMethod(method) {
 }
 
 function submitGatewayPayment() {
-  const utr = document.getElementById("gatewayUtr").value.trim();
+  let utr = document.getElementById("gatewayUtr").value.trim();
   if (!utr) {
-    showToast("Please enter UTR or reference number");
-    return;
+    utr = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+    document.getElementById("gatewayUtr").value = utr;
   }
   clearInterval(state.gatewayInterval);
   
@@ -394,28 +896,77 @@ function submitGatewayPayment() {
     showToast(`Payment successful (${state.gatewayMethod}) - ${formatMoney(state.paymentAmount)} added to wallet`);
     setView("wallet");
   } else {
+    if (!state.pendingOrder) {
+      state.pendingOrder = {
+        id: `ORD${Date.now().toString().slice(-8)}`,
+        items: state.cart.length ? [...state.cart] : [{ id: products[0].id, qty: 1, price: products[0].price, balance: "1000 INR" }],
+        total: state.paymentAmount || 499,
+        date: new Date()
+      };
+    }
+
     const orderItemsWithVouchers = [];
+    const foreignNames = [
+      "Johnathan Miller", "Alexander Wright", "Christopher Hayes", "Nicholas Vance",
+      "Benjamin Carter", "William Harrison", "David Sterling", "Michael Thorne",
+      "Richard Montgomery", "Robert Henderson"
+    ];
+
     state.pendingOrder.items.forEach((item) => {
       const product = products.find((p) => p.id === item.id);
+      const isCreditCard = product && product.category === "creditcards";
+
       for (let i = 0; i < item.qty; i++) {
-        const prefix = (product ? product.theme.slice(0, 4) : "CARD").toUpperCase();
-        const randomPart = () => Math.random().toString(36).substring(2, 6).toUpperCase();
-        const voucherCode = `${prefix}-${randomPart()}-${randomPart()}-${randomPart()}`;
-        orderItemsWithVouchers.push({
-          productId: item.id,
-          name: product ? product.name : "Gift Card",
-          balance: product ? product.balance : "",
-          price: product ? product.price : 0,
-          theme: product ? product.theme : "play",
-          voucherCode: voucherCode
-        });
+        if (isCreditCard) {
+          const randDigits = (len) => Array.from({length: len}, () => Math.floor(Math.random() * 10)).join("");
+          const cardNumber = `4000 ${randDigits(4)} ${randDigits(4)} ${randDigits(4)}`;
+          const cvv = Math.floor(100 + Math.random() * 900);
+          const expMonth = String(Math.floor(1 + Math.random() * 12)).padStart(2, '0');
+          const expYear = String(new Date().getFullYear() + Math.floor(2 + Math.random() * 4)).slice(-2);
+          const expiryDate = `${expMonth}/${expYear}`;
+          const cardHolderName = foreignNames[Math.floor(Math.random() * foreignNames.length)];
+
+          orderItemsWithVouchers.push({
+            productId: item.id,
+            name: product ? product.name : "Prepaid Credit Card",
+            balance: item.balance || "$110.00",
+            price: item.price || 0,
+            theme: product ? product.theme : "visa",
+            isCreditCard: true,
+            cardNumber: cardNumber,
+            cvv: cvv,
+            expiryDate: expiryDate,
+            cardHolderName: cardHolderName
+          });
+        } else {
+          const prefix = (product ? product.theme.slice(0, 4) : "CARD").toUpperCase();
+          const randomPart = () => Math.random().toString(36).substring(2, 6).toUpperCase();
+          const voucherCode = `${prefix}-${randomPart()}-${randomPart()}-${randomPart()}`;
+          const pinCode = Math.floor(1000 + Math.random() * 9000);
+          const expDate = new Date();
+          expDate.setFullYear(expDate.getFullYear() + 1);
+          const expiryDate = expDate.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
+
+          orderItemsWithVouchers.push({
+            productId: item.id,
+            name: product ? product.name : "Gift Card",
+            balance: item.balance || "",
+            price: item.price || 0,
+            theme: product ? product.theme : "play",
+            voucherCode: voucherCode,
+            pinCode: pinCode,
+            expiryDate: expiryDate
+          });
+        }
       }
     });
 
-    state.orders.unshift({
+    const createdOrder = {
       ...state.pendingOrder,
       voucherItems: orderItemsWithVouchers
-    });
+    };
+
+    state.orders.unshift(createdOrder);
 
     state.transactions.unshift({
       id: `PAY${Date.now().toString().slice(-12)}`,
@@ -425,11 +976,51 @@ function submitGatewayPayment() {
     });
     state.cart = [];
     state.pendingOrder = null;
-    showToast(`Payment successful (${state.gatewayMethod})`);
-    setView("orders");
+
+    showOrderSuccessModal(createdOrder);
   }
   
   state.paymentAmount = 0;
+}
+
+function showOrderSuccessModal(order) {
+  const modal = document.getElementById("orderSuccessModal");
+  const summary = document.getElementById("successOrderSummary");
+  const btn = document.getElementById("goToOrdersBtn");
+
+  if (summary) {
+    summary.innerHTML = `
+      <div class="success-chip-row">
+        <span>Order ID: <strong>#${order.id}</strong></span>
+        <span>Amount Paid: <strong style="color: var(--green); font-size: 15px;">${formatMoney(order.total)}</strong></span>
+      </div>
+    `;
+  }
+
+  const navigateToOrders = () => {
+    if (modal && modal.open) {
+      modal.close();
+    }
+    setView("orders");
+  };
+
+  if (btn) {
+    btn.onclick = navigateToOrders;
+  }
+
+  if (modal) {
+    modal.oncancel = (e) => {
+      e.preventDefault();
+      navigateToOrders();
+    };
+    if (typeof modal.showModal === "function") {
+      modal.showModal();
+    } else {
+      navigateToOrders();
+    }
+  } else {
+    setView("orders");
+  }
 }
 
 function renderOrders() {
@@ -445,35 +1036,127 @@ function renderOrders() {
   list.classList.remove("hidden");
   list.innerHTML = state.orders
     .map((order) => {
-      const itemsList = (order.voucherItems || []).map((vItem) => `
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; background: #ffffff; border: 1px solid var(--line); border-radius: 8px; margin-top: 8px;">
-          <div>
-            <div style="font-weight: 600; font-size: 14px;">${vItem.name}</div>
-            <div class="muted" style="font-size: 12px;">Balance: ${vItem.balance}</div>
+      const itemsList = (order.voucherItems || []).map((vItem) => {
+        if (vItem.isCreditCard) {
+          return `
+            <div class="voucher-card-item">
+              <div class="voucher-card-left">
+                <img class="voucher-thumb" src="assets/cards/${vItem.theme}.jpg" onerror="handleCardError(this, ${vItem.productId})" alt="${vItem.name}" />
+                <div class="voucher-brand-info">
+                  <div class="voucher-brand-name">${vItem.name}</div>
+                  <div class="voucher-balance-pill" style="background: #eef2ff; color: #4338ca;"><i class="bi bi-credit-card-2-front-fill"></i> Balance: ${vItem.balance}</div>
+                </div>
+              </div>
+
+              <div class="voucher-code-wrapper">
+                <div class="voucher-code-box" style="border-color: #3b82f6; background: #f8fafc;">
+                  <div class="voucher-reveal-overlay">
+                    <button class="tap-reveal-btn" onclick="revealVoucherCode(this)">
+                      <i class="bi bi-eye-fill"></i> Tap to Reveal Card Details
+                    </button>
+                  </div>
+
+                  <div class="voucher-code-content">
+                    <div class="code-label" style="color: #2563eb;">DIGITAL PREPAID CREDIT CARD DETAILS</div>
+                    
+                    <div class="code-value-row" style="margin-bottom: 8px;">
+                      <code class="voucher-code-text" style="font-size: 16px; letter-spacing: 1.5px;">${vItem.cardNumber}</code>
+                      <button class="copy-code-btn" onclick="copyVoucherCode(this, '${vItem.cardNumber}')">
+                        <i class="bi bi-copy"></i> Copy Card No.
+                      </button>
+                    </div>
+
+                    <div class="voucher-meta-row" style="flex-wrap: wrap; gap: 10px 18px; font-size: 14px; color: #000;">
+                      <span><i class="bi bi-person-badge-fill" style="color: #475569;"></i> <strong style="color: #000;">Name: ${vItem.cardHolderName}</strong></span>
+                      <span><i class="bi bi-shield-lock-fill" style="color: #ef4444;"></i> <strong style="color: #000;">CVV: ${vItem.cvv}</strong></span>
+                      <span><i class="bi bi-calendar2-check-fill" style="color: #16a34a;"></i> <strong style="color: #000;">EXP: ${vItem.expiryDate}</strong></span>
+                      <span class="status-verified"><i class="bi bi-patch-check-fill"></i> Card Active</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        const pin = vItem.pinCode || Math.floor(1000 + Math.random() * 9000);
+        const exp = vItem.expiryDate || "1 Year";
+        return `
+          <div class="voucher-card-item">
+            <div class="voucher-card-left">
+              <img class="voucher-thumb" src="assets/cards/${vItem.theme}.jpg" onerror="handleCardError(this, ${vItem.productId})" alt="${vItem.name}" />
+              <div class="voucher-brand-info">
+                <div class="voucher-brand-name">${vItem.name}</div>
+                <div class="voucher-balance-pill"><i class="bi bi-gift-fill"></i> Balance: ${vItem.balance}</div>
+              </div>
+            </div>
+
+            <div class="voucher-code-wrapper">
+              <div class="voucher-code-box">
+                <div class="voucher-reveal-overlay">
+                  <button class="tap-reveal-btn" onclick="revealVoucherCode(this)">
+                    <i class="bi bi-eye-fill"></i> Tap to Reveal Voucher
+                  </button>
+                </div>
+
+                <div class="voucher-code-content">
+                  <div class="code-label">OFFICIAL E-GIFT VOUCHER CODE</div>
+                  <div class="code-value-row">
+                    <code class="voucher-code-text">${vItem.voucherCode}</code>
+                    <button class="copy-code-btn" onclick="copyVoucherCode(this, '${vItem.voucherCode}')">
+                      <i class="bi bi-copy"></i> Copy Code
+                    </button>
+                  </div>
+                  <div class="voucher-meta-row">
+                    <span><i class="bi bi-shield-lock-fill"></i> PIN: <strong>${pin}</strong></span>
+                    <span><i class="bi bi-calendar2-check-fill"></i> Valid Until: <strong>${exp}</strong></span>
+                    <span class="status-verified"><i class="bi bi-patch-check-fill"></i> Verified & Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <code style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-weight: 700; color: #4338ca; font-size: 13px; letter-spacing: 0.5px;">${vItem.voucherCode}</code>
-            <button class="primary-btn" style="min-height: 32px; padding: 0 12px; font-size: 12px;" onclick="navigator.clipboard.writeText('${vItem.voucherCode}'); showToast('Voucher code copied!')">Copy</button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
 
       return `
-      <div class="order" style="margin-bottom: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line);">
-          <div>
-            <strong>#${order.id}</strong>
-            <span class="muted" style="font-size: 13px; margin-left: 8px;">${order.date.toLocaleString("en-IN")}</span>
+      <div class="order-card-box">
+        <div class="order-card-header">
+          <div class="order-card-info">
+            <strong class="order-card-id">#${order.id}</strong>
+            <span class="order-card-date"><i class="bi bi-clock"></i> ${order.date.toLocaleString("en-IN")}</span>
           </div>
-          <span style="color: var(--green); font-weight: 600; font-size: 14px;"><i class="bi bi-check-circle-fill"></i> Completed (${formatMoney(order.total)})</span>
+          <div class="order-card-status">
+            <i class="bi bi-check-circle-fill"></i> Payment Successful (${formatMoney(order.total)})
+          </div>
         </div>
-        <div style="font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">Purchased Gift Cards (${order.voucherItems ? order.voucherItems.length : order.items.length}):</div>
+        <div class="order-card-title">Purchased E-Gift Cards (${order.voucherItems ? order.voucherItems.length : order.items.length}):</div>
         ${itemsList}
       </div>
     `;
     })
     .join("");
 }
+
+window.revealVoucherCode = function(btn) {
+  const box = btn.closest('.voucher-code-box');
+  if (box) {
+    box.classList.add('is-revealed');
+    showToast('Voucher code revealed! Keep it safe.');
+  }
+};
+
+window.copyVoucherCode = function(btn, code) {
+  navigator.clipboard.writeText(code);
+  showToast('Voucher Code Copied!');
+  const original = btn.innerHTML;
+  btn.innerHTML = `<i class="bi bi-check-lg"></i> Copied!`;
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.innerHTML = original;
+    btn.classList.remove('copied');
+  }, 2200);
+};
 
 function renderWallet() {
   document.getElementById("walletTop").textContent = formatMoney(state.wallet);
@@ -558,6 +1241,268 @@ function renderAuth() {
   }
 }
 
+function showProductDetail(id) {
+  const product = products.find((p) => p.id === Number(id));
+  if (!product) return;
+  state.selectedCreditCardId = product.id;
+  setView("carddetail");
+}
+
+function showCreditCardDetail(id) {
+  showProductDetail(id);
+}
+
+function addProductToCartWithQty(id) {
+  const product = products.find((item) => item.id === Number(id));
+  if (!product) return;
+  const qtyInput = document.getElementById("detailQtyInput");
+  const qty = qtyInput ? Math.max(1, parseInt(qtyInput.value) || 1) : 1;
+
+  if (product.category === "creditcards") {
+    const existing = state.cart.find((item) => item.id === product.id);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      state.cart.push({
+        id: product.id,
+        optionIndex: 0,
+        price: product.price * 83,
+        displayPrice: `$${product.price.toFixed(2)}`,
+        balance: product.balance,
+        qty: qty
+      });
+    }
+    showToast(`${product.name} (${qty} x $${product.price.toFixed(2)}) Added to Cart`);
+  } else {
+    const selectedIndex = product.selectedOptionIndex || 0;
+    const opt = (product.options && product.options[selectedIndex]) || {
+      price: product.price || 499,
+      balance: product.balance || "1000 INR"
+    };
+    const existing = state.cart.find((item) => item.id === product.id && item.optionIndex === selectedIndex);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      state.cart.push({
+        id: product.id,
+        optionIndex: selectedIndex,
+        price: opt.price,
+        balance: opt.balance,
+        qty: qty
+      });
+    }
+    showToast(`${product.name} (${qty} x ${formatMoney(opt.price)}) Added to Cart`);
+  }
+  render();
+}
+
+function creditCardProductCard(product) {
+  return `
+    <article class="credit-product-card">
+      <div class="credit-card-image-box" onclick="showCreditCardDetail(${product.id})" style="cursor: pointer;">
+        ${product.discountBadge ? `<span class="badge-discount">${product.discountBadge}</span>` : ""}
+        ${product.newBadge ? `<span class="badge-new">NEW</span>` : ""}
+        <img class="credit-card-img" src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name}" />
+      </div>
+      <div class="credit-card-body">
+        <h3 class="credit-card-title" title="${product.name}" onclick="showCreditCardDetail(${product.id})" style="cursor: pointer;">${product.name}</h3>
+        <div class="credit-card-vendor">Vendor: <span class="vendor-link">${product.vendor}</span></div>
+        <div class="credit-card-price-row">
+          <span class="credit-card-price ${product.discountBadge ? 'discounted' : ''}">$${product.price.toFixed(2)}</span>
+          ${product.origPrice ? `<span class="credit-card-orig-price">$${product.origPrice.toFixed(2)}</span>` : ""}
+        </div>
+        <button class="credit-card-btn" onclick="showCreditCardDetail(${product.id})">
+          SEE MORE
+        </button>
+      </div>
+    </article>
+  `;
+}
+
+function renderCreditCards() {
+  const container = document.getElementById("creditCardsContainer");
+  if (!container) return;
+  const creditCardItems = products.filter((p) => p.category === "creditcards");
+  container.innerHTML = creditCardItems.map(creditCardProductCard).join("");
+}
+
+function renderCreditCardDetail() {
+  const container = document.getElementById("creditCardDetailContent");
+  if (!container) return;
+  
+  const product = products.find(p => p.id === state.selectedCreditCardId) || products[0];
+  if (!product) return;
+
+  const isCreditCard = product.category === "creditcards";
+
+  const backBtnContainer = document.getElementById("detailBackBtnContainer");
+  if (backBtnContainer) {
+    if (isCreditCard) {
+      backBtnContainer.innerHTML = `
+        <button class="back-link-btn" onclick="setView('creditcards')">
+          <i class="bi bi-arrow-left"></i> Back to Credit Cards
+        </button>
+      `;
+    } else {
+      backBtnContainer.innerHTML = `
+        <button class="back-link-btn" onclick="setView('cards')">
+          <i class="bi bi-arrow-left"></i> Back to Gift Cards
+        </button>
+      `;
+    }
+  }
+
+  const selectedIndex = product.selectedOptionIndex || 0;
+  const currentOpt = (product.options && product.options[selectedIndex]) || {
+    price: product.price || 499,
+    balance: product.balance || "1000 INR"
+  };
+
+  const displayPriceText = isCreditCard ? `$${product.price.toFixed(2)}` : formatMoney(currentOpt.price);
+  const vendorName = isCreditCard ? "PLATINUM CARDS" : "GC SHOP OFFICIAL";
+
+  const optionsMarkup = (!isCreditCard && product.options && product.options.length) ? `
+    <div class="shipping-method-box" style="background: #f8fafc; border: 1px solid #cbd5e1; margin-bottom: 20px;">
+      <label class="shipping-title">Select Card Balance & Value <span class="req">*</span></label>
+      <div class="card-option-selector">
+        <select class="option-select" data-option-select="${product.id}" style="width: 100%; padding: 10px 14px; font-size: 14px;">
+          ${product.options.map((opt, idx) => `
+            <option value="${idx}" ${idx === selectedIndex ? "selected" : ""}>
+              Get ${opt.balance} Balance — ${formatMoney(opt.price)}
+            </option>
+          `).join("")}
+        </select>
+      </div>
+    </div>
+  ` : "";
+
+  container.innerHTML = `
+    <!-- Main Product Showcase -->
+    <div class="card-detail-main-box">
+      <div class="card-detail-left">
+        <div class="card-detail-img-wrapper" style="${isCreditCard ? '' : 'background: #f8fafc; padding: 20px; text-align: center; border: 1px solid #e2e8f0;'}">
+          ${product.discountBadge ? `<span class="badge-discount">${product.discountBadge}</span>` : ""}
+          <span class="badge-new">NEW</span>
+          <img src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name}" style="${isCreditCard ? '' : 'max-height: 220px; object-fit: contain;'}" />
+          <div class="digital-tag-overlay" style="${isCreditCard ? '' : 'position: relative; margin-top: 12px; color: #1e293b; text-shadow: none; font-size: 16px;'}">Digital Voucher</div>
+        </div>
+        
+        <div class="shop-confidence-banner">
+          <div class="confidence-badge-title">Shop with confidence</div>
+          <p style="font-size: 11px; margin-top: 4px; color: #64748b;">Verified Seller & Instant Delivery</p>
+        </div>
+      </div>
+
+      <div class="card-detail-right">
+        <h1 class="card-detail-title-large">${product.name}</h1>
+        <div class="card-detail-vendor">Vendor: <span class="vendor-highlight">${vendorName}</span></div>
+        <div class="card-detail-views"><i class="bi bi-eye-fill" style="color: #ef4444;"></i> Product Views: ${142000 + (product.id * 143)}</div>
+
+        <div class="card-detail-price-box">
+          <span class="price-label">TOTAL PRICE</span>
+          <span class="price-value" style="color: #0f172a;">${displayPriceText}</span>
+        </div>
+
+        ${optionsMarkup}
+
+        <div class="shipping-method-box">
+          <label class="shipping-title">Shipping method <span class="req">*</span></label>
+          <div class="shipping-option">
+            <input type="radio" checked disabled />
+            <span>Instant Digital Delivery (by email & My Orders | 60 seconds)</span>
+          </div>
+        </div>
+
+        <div class="protection-and-buy-row">
+          <div class="buyer-protection-box">
+            <div class="shield-header">
+              <i class="bi bi-shield-check protection-icon"></i>
+              <strong class="protection-title">Buyer Protection</strong>
+            </div>
+            <ul class="protection-list">
+              <li><i class="bi bi-check2-square"></i> <strong>Full Refund</strong> if you don't receive your order</li>
+              <li><i class="bi bi-check2-square"></i> <strong>Full or Partial Refund</strong>, if item is not as described</li>
+            </ul>
+          </div>
+
+          <div class="purchase-controls-box">
+            <div class="payment-methods-badges">
+              <span class="pm-title">Payment methods</span>
+              <div class="crypto-icons">
+                <span class="crypto-badge in-upi"><i class="bi bi-wallet2"></i> Paytm</span>
+                <span class="crypto-badge in-upi"><i class="bi bi-phone"></i> PhonePe</span>
+                <span class="crypto-badge in-upi"><i class="bi bi-google"></i> GPay</span>
+                <span class="crypto-badge btc"><i class="bi bi-currency-bitcoin"></i> BTC</span>
+                <span class="crypto-badge bch">BCH</span>
+                <span class="crypto-badge eth">ETH</span>
+                <span class="crypto-badge xmr">XMR</span>
+                <span class="crypto-badge dash">DASH</span>
+                <span class="crypto-badge ltc">LTC</span>
+              </div>
+              <div style="font-size: 11px; color: #16a34a; font-weight: 500; margin-top: 4px; text-align: right;">
+                (GPay, Paytm, PhonePe for Indian users only)
+              </div>
+            </div>
+            <div class="add-to-cart-group">
+              <div class="qty-spin-box">
+                <input type="number" value="1" min="1" class="detail-qty-input" id="detailQtyInput" />
+              </div>
+              <button class="primary-add-cart-btn" onclick="addProductToCartWithQty(${product.id})">
+                <i class="bi bi-cart-plus-fill"></i> ADD TO CART
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description Section -->
+    <div class="card-detail-section">
+      <h2 class="section-heading">Description</h2>
+      <p class="desc-text">Official ${product.name} instant digital code & e-gift card for online shopping & account redemption.</p>
+      <p class="desc-text">100% genuine code directly redeemable on official store apps and website.</p>
+      
+      <p class="desc-text bold-lead" style="margin-top: 14px;">Once you purchase, you will receive in My Orders & Email:</p>
+      <ul class="desc-list">
+        <li>1) Official Gift Voucher Code / Card Details</li>
+        <li>2) Security PIN & Redemption Guide</li>
+        <li>3) 24/7 Priority Support Guarantee</li>
+      </ul>
+    </div>
+
+    <!-- Middle Content & FAQ Section -->
+    <div class="card-detail-section middle-info">
+      <h3 class="faq-heading">FAQ & Help</h3>
+      <div class="faq-list">
+        <div class="faq-item">
+          <strong class="faq-q">How fast will I get my digital voucher / card?</strong>
+          <p class="faq-a">Delivery is instant! As soon as payment is confirmed, your voucher details appear immediately under 'My Orders'.</p>
+        </div>
+        <div class="faq-item">
+          <strong class="faq-q">Which payment methods are accepted?</strong>
+          <p class="faq-a">We support GPay, Paytm, PhonePe for Indian users, as well as crypto (BTC, ETH, LTC) for international buyers.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Features Footer -->
+    <div class="card-detail-features-footer">
+      <div class="feature-box">
+        <i class="bi bi-hand-thumbs-up-fill feature-icon"></i>
+        <span class="feature-label">Large Assortment</span>
+      </div>
+      <div class="feature-box">
+        <i class="bi bi-shield-lock-fill feature-icon"></i>
+        <span class="feature-label">100% Secure Privacy</span>
+      </div>
+      <div class="feature-box">
+        <i class="bi bi-headset feature-icon"></i>
+        <span class="feature-label">Instant Support</span>
+      </div>
+    </div>
+  `;
+}
+
 function render() {
   renderCart();
   renderOrders();
@@ -565,12 +1510,17 @@ function render() {
   renderTickets();
   renderCounts();
   renderAuth();
+  renderCreditCards();
+  if (state.view === "carddetail") {
+    renderCreditCardDetail();
+  }
 }
 
 function filterProducts() {
   const term = document.getElementById("cardsSearch").value.trim().toLowerCase();
   const category = document.getElementById("categoryFilter").value;
   const filtered = products.filter((product) => {
+    if (product.category === "creditcards") return false;
     const categoryOk = category === "all" || product.category === category;
     const searchOk = !term || product.name.toLowerCase().includes(term);
     return categoryOk && searchOk;
@@ -765,6 +1715,21 @@ document.addEventListener("click", (event) => {
   if (methodButton) selectPaymentMethod(methodButton.dataset.method);
   if (event.target.closest("[data-open-add-money]")) document.getElementById("addMoneyDialog").showModal();
   if (event.target.closest(".forgot-btn")) showToast("Password reset backend will be connected in the next step");
+});
+
+document.addEventListener("change", (event) => {
+  const select = event.target.closest("[data-option-select]");
+  if (select) {
+    const id = Number(select.dataset.optionSelect);
+    const product = products.find(p => p.id === id);
+    if (product) {
+      product.selectedOptionIndex = Number(select.value);
+      const article = select.closest(".gift-card");
+      if (article) {
+        article.outerHTML = productCard(product);
+      }
+    }
+  }
 });
 
 document.getElementById("searchBtn").addEventListener("click", homeSearch);

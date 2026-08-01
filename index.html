@@ -26,6 +26,10 @@
         <i class="bi bi-gift nav-icon"></i>
         <span>Gift Cards</span>
       </button>
+      <button class="nav-btn" data-view="creditcards">
+        <i class="bi bi-credit-card-2-back nav-icon"></i>
+        <span>Credit Cards</span>
+      </button>
       <button class="nav-btn auth-only" data-view="cart">
         <i class="bi bi-cart3 nav-icon"></i>
         <span>Cart</span>
@@ -102,6 +106,31 @@
       <div class="cards-grid compact" id="allCards"></div>
     </section>
 
+    <section class="view" id="creditcardsView">
+      <div class="card-detail-header-banner" style="margin-top: 10px; margin-bottom: 24px;">
+        <h2>WELCOME TO PLATINUM CARDS</h2>
+        <div class="banner-subtext">
+          <p>☀️ 🏖️ 🍉 SALE! SALE! SALE! 🍉 🏖️ ☀️</p>
+          <p>💳 💳 The best time of year to get your holiday shopping done! 💳 💳</p>
+          <p>💰💰💰 Shop now and you'll save $ 💰💰💰</p>
+        </div>
+      </div>
+      <div class="page-title">
+        <h1>Products</h1>
+        <p>Prepaid Digital Credit Cards Collection</p>
+      </div>
+      <div class="credit-cards-grid" id="creditCardsContainer"></div>
+    </section>
+
+    <section class="view" id="carddetailView">
+      <div style="margin-bottom: 16px;" id="detailBackBtnContainer">
+        <button class="back-link-btn" onclick="setView('cards')">
+          <i class="bi bi-arrow-left"></i> Back to Gift Cards
+        </button>
+      </div>
+      <div id="creditCardDetailContent"></div>
+    </section>
+
     <section class="view" id="cartView">
       <div class="page-title">
         <h1>Your Cart</h1>
@@ -141,15 +170,21 @@
         </div>
         <div class="gateway-card">
           <div class="gateway-tabs">
-            <button class="gateway-tab active"><i class="bi bi-send-fill" style="margin-right: 6px;"></i> Direct Transfer</button>
-            <button class="gateway-tab"><i class="bi bi-qr-code-scan" style="margin-right: 6px;"></i> Scan QRCode</button>
+            <button class="gateway-tab active"><i class="bi bi-send-fill" style="margin-right: 6px;"></i> Direct
+              Transfer</button>
+            <button class="gateway-tab"><i class="bi bi-qr-code-scan" style="margin-right: 6px;"></i> Scan
+              QRCode</button>
           </div>
           <div class="gateway-methods">
-            <button class="gateway-method active" id="btnPaytm" data-method="Paytm"><i class="bi bi-wallet2" style="margin-right: 4px;"></i> Paytm</button>
-            <button class="gateway-method" id="btnPhonePe" data-method="PhonePe"><i class="bi bi-phone" style="margin-right: 4px;"></i> PhonePe</button>
-            <button class="gateway-method" id="btnGpay" data-method="Google Pay"><i class="bi bi-google" style="margin-right: 4px;"></i> GPay</button>
+            <button class="gateway-method active" id="btnPaytm" data-method="Paytm"><i class="bi bi-wallet2"
+                style="margin-right: 4px;"></i> Paytm</button>
+            <button class="gateway-method" id="btnPhonePe" data-method="PhonePe"><i class="bi bi-phone"
+                style="margin-right: 4px;"></i> PhonePe</button>
+            <button class="gateway-method" id="btnGpay" data-method="Google Pay"><i class="bi bi-google"
+                style="margin-right: 4px;"></i> GPay</button>
           </div>
-          <a id="payWithAppBtn" href="#" style="display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 14px; font-weight: 700; font-size: 15px; margin-bottom: 18px; background: linear-gradient(135deg, #4f46e5, #4338ca); border-radius: 12px; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3); color: #fff;">
+          <a id="payWithAppBtn" href="#"
+            style="display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 14px; font-weight: 700; font-size: 15px; margin-bottom: 18px; background: linear-gradient(135deg, #4f46e5, #4338ca); border-radius: 12px; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3); color: #fff;">
             <i class="bi bi-box-arrow-up-right" style="margin-right: 8px;"></i> Open Paytm to Pay ₹0.00
           </a>
           <div class="gateway-qr">
@@ -157,10 +192,16 @@
             <div class="qr-code">
               <img src="assets/my-qr.jpg" alt="Payment QR Code" id="paymentQrImage" />
             </div>
-            <span style="margin-top: 8px; font-weight: 500; font-size: 13px;"><i class="bi bi-shield-check" style="color: var(--green);"></i> Scan code using any UPI App</span>
-            <div id="gatewayUpiBox" style="margin-top: 10px; padding: 8px 14px; background: #eef2ff; border: 1px dashed #6366f1; border-radius: 10px; text-align: center; cursor: pointer;" onclick="const text = document.getElementById('upiIdText').innerText.replace('UPI ID: ', '').trim(); navigator.clipboard.writeText(text); showToast('UPI ID copied: ' + text);">
-              <span style="font-size: 11px; text-transform: uppercase; color: #6366f1; font-weight: 700; display: block; margin-bottom: 2px;">Official Merchant UPI ID</span>
-              <div style="font-family: monospace; font-size: 14px; font-weight: 700; color: #3730a3; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span style="margin-top: 8px; font-weight: 500; font-size: 13px;"><i class="bi bi-shield-check"
+                style="color: var(--green);"></i> Scan code using any UPI App</span>
+            <div id="gatewayUpiBox"
+              style="margin-top: 10px; padding: 8px 14px; background: #eef2ff; border: 1px dashed #6366f1; border-radius: 10px; text-align: center; cursor: pointer;"
+              onclick="const text = document.getElementById('upiIdText').innerText.replace('UPI ID: ', '').trim(); navigator.clipboard.writeText(text); showToast('UPI ID copied: ' + text);">
+              <span
+                style="font-size: 11px; text-transform: uppercase; color: #6366f1; font-weight: 700; display: block; margin-bottom: 2px;">Official
+                Merchant UPI ID</span>
+              <div
+                style="font-family: monospace; font-size: 14px; font-weight: 700; color: #3730a3; display: flex; align-items: center; justify-content: center; gap: 6px;">
                 <i class="bi bi-copy"></i> <span id="upiIdText">UPI ID: vs112020@ptyes</span>
               </div>
             </div>
@@ -174,8 +215,11 @@
             <input id="gatewayUtr" type="text" placeholder="e.g. 329482910384" />
           </label>
           <div class="gateway-actions">
-            <button class="success-btn" id="submitGatewayBtn" style="font-size: 15px; font-weight: 600;"><i class="bi bi-check-circle-fill" style="margin-right: 6px;"></i> Submit Payment</button>
-            <button class="primary-btn" data-view="payment" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;"><i class="bi bi-arrow-left" style="margin-right: 4px;"></i> Back to Summary</button>
+            <button class="success-btn" id="submitGatewayBtn" style="font-size: 15px; font-weight: 600;"><i
+                class="bi bi-check-circle-fill" style="margin-right: 6px;"></i> Submit Payment</button>
+            <button class="primary-btn" data-view="payment"
+              style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;"><i class="bi bi-arrow-left"
+                style="margin-right: 4px;"></i> Back to Summary</button>
           </div>
         </div>
       </div>
@@ -331,10 +375,30 @@
       <button class="close-btn" onclick="document.getElementById('revealDialog').close()" aria-label="Close">×</button>
       <h2 style="color: var(--green);">Gift Card Revealed!</h2>
       <p class="muted">Here is your voucher code:</p>
-      <div style="margin: 24px 0; padding: 20px; background: #f3f6fc; border: 2px dashed var(--green); border-radius: 12px; font-size: 24px; font-weight: bold; letter-spacing: 2px; color: var(--ink);" id="voucherCodeDisplay">
+      <div
+        style="margin: 24px 0; padding: 20px; background: #f3f6fc; border: 2px dashed var(--green); border-radius: 12px; font-size: 24px; font-weight: bold; letter-spacing: 2px; color: var(--ink);"
+        id="voucherCodeDisplay">
         XXXX-XXXX-XXXX
       </div>
-      <button class="primary-btn" onclick="navigator.clipboard.writeText(document.getElementById('voucherCodeDisplay').innerText); showToast('Code copied to clipboard!')" style="width: 100%;">Copy Code</button>
+    </div>
+  </dialog>
+
+  <dialog id="orderSuccessModal">
+    <div class="modal-card success-modal-card">
+      <div class="success-pop-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <h2 class="success-pop-title">Congratulations! 🎉</h2>
+      <p class="success-pop-text">
+        Your voucher has been purchased successfully! You can check it out in <strong>My Orders</strong>.
+      </p>
+      <div class="success-order-summary" id="successOrderSummary">
+        <!-- Order details populated dynamically -->
+      </div>
+      <button class="success-btn go-orders-btn" id="goToOrdersBtn">
+        <span>Go to My Orders</span>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </button>
     </div>
   </dialog>
 
