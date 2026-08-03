@@ -987,35 +987,19 @@ window.handlePaymentScreenshotUpload = function(event) {
     const dataUrl = e.target.result;
     state.paymentScreenshotData = dataUrl;
 
-    // Deterministically generate/extract 12-digit UTR from screenshot details
-    let hash = 0;
-    const key = file.name + file.size + (file.lastModified || Date.now());
-    for (let i = 0; i < key.length; i++) {
-      hash = ((hash << 5) - hash) + key.charCodeAt(i);
-      hash |= 0;
-    }
-    const seed = Math.abs(hash).toString();
-    const numPart = (seed + "9834018274918234").replace(/[^0-9]/g, "").slice(0, 12);
-    const utrNumber = numPart.padStart(12, "4");
-
-    state.detectedScreenshotUtr = utrNumber;
-
     const previewBox = document.getElementById("screenshotPreviewBox");
     const previewImg = document.getElementById("gatewayScreenshotPreview");
-    const utrVal = document.getElementById("detectedUtrValue");
 
     if (previewImg) previewImg.src = dataUrl;
-    if (utrVal) utrVal.textContent = utrNumber;
     if (previewBox) previewBox.classList.remove("hidden");
 
-    showToast("✅ Screenshot Uploaded! UTR: " + utrNumber);
+    showToast("✅ Payment Proof Screenshot Uploaded!");
   };
   reader.readAsDataURL(file);
 };
 
 window.removePaymentScreenshot = function() {
   state.paymentScreenshotData = null;
-  state.detectedScreenshotUtr = null;
   const input = document.getElementById("gatewayScreenshotInput");
   if (input) input.value = "";
   const previewBox = document.getElementById("screenshotPreviewBox");
@@ -1043,32 +1027,25 @@ function submitGatewayPayment() {
 
   if (!isAdmin) {
     // Normal user validation: Screenshot upload is compulsory
-    if (!state.paymentScreenshotData || !state.detectedScreenshotUtr) {
+    if (!state.paymentScreenshotData) {
       recordActivity(state.user ? state.user.email : "Guest", "Payment Failed", "No payment screenshot uploaded");
-      showToast("❌ Screenshot Compulsory! Payment screenshot upload karna zaroori hai.");
+      showToast("❌ Screenshot Required! Please upload your payment screenshot first.");
       return;
     }
 
-    // Must enter 12-digit UTR
+    // Must enter 12-digit UTR from payment receipt
     if (!utr || !/^\d{12}$/.test(utr)) {
       recordActivity(state.user ? state.user.email : "Guest", "Payment Failed", `Invalid UTR entered: "${utr || 'empty'}"`);
-      showToast("❌ Invalid UTR! Enter 12-digit UTR number.");
-      return;
-    }
-
-    // Must match exact screenshot UTR
-    if (utr !== state.detectedScreenshotUtr) {
-      recordActivity(state.user ? state.user.email : "Guest", "Payment Failed", `UTR Mismatch! Entered: ${utr}, Screenshot UTR: ${state.detectedScreenshotUtr}`);
-      showToast("❌ UTR Mismatch! Enter UTR me exact same UTR number dalein jo screenshot me dikh raha hai (" + state.detectedScreenshotUtr + ").");
+      showToast("❌ Invalid UTR! Please enter a valid 12-digit UTR number.");
       return;
     }
   } else {
     // Admin mode: Can skip or enter random UTR
     if (!utr) {
-      utr = state.detectedScreenshotUtr || Math.floor(100000000000 + Math.random() * 900000000000).toString();
+      utr = Math.floor(100000000000 + Math.random() * 900000000000).toString();
       document.getElementById("gatewayUtr").value = utr;
     }
-    showToast("⚡ Admin Mode: Payment auto-verified with UTR!");
+    showToast("⚡ Admin Mode: Payment auto-verified!");
   }
 
   clearInterval(state.gatewayInterval);
@@ -1156,6 +1133,7 @@ function submitGatewayPayment() {
       userEmail: userEmail,
       utrNumber: utr,
       screenshotUrl: state.paymentScreenshotData || null,
+      status: isAdmin ? "Approved" : "Pending Approval",
       voucherItems: orderItemsWithVouchers
     };
 
@@ -1171,7 +1149,7 @@ function submitGatewayPayment() {
     state.cart = [];
     state.pendingOrder = null;
 
-    recordActivity(userEmail, "Purchase Completed", `Order #${createdOrder.id} | Total: ₹${createdOrder.total} | UTR: ${utr}`);
+    recordActivity(userEmail, "Purchase Completed", `Order #${createdOrder.id} | Total: ₹${createdOrder.total} | UTR: ${utr} | Status: ${createdOrder.status}`);
 
     showOrderSuccessModal(createdOrder);
   }
@@ -1183,12 +1161,28 @@ function showOrderSuccessModal(order) {
   const modal = document.getElementById("orderSuccessModal");
   const summary = document.getElementById("successOrderSummary");
   const btn = document.getElementById("goToOrdersBtn");
+  const popTitle = modal ? modal.querySelector(".success-pop-title") : null;
+  const popText = modal ? modal.querySelector(".success-pop-text") : null;
+
+  const isPending = order.status === "Pending Approval";
+
+  if (popTitle) {
+    popTitle.textContent = isPending ? "Order Placed Successfully! ⏳" : "Congratulations! 🎉";
+  }
+  if (popText) {
+    popText.innerHTML = isPending
+      ? "Your payment screenshot & UTR are under <strong>Admin Verification</strong>. Once verified by Admin, your voucher code will be unlocked in <strong>My Orders</strong>!"
+      : "Your voucher has been purchased successfully! You can check it out in <strong>My Orders</strong>.";
+  }
 
   if (summary) {
     summary.innerHTML = `
       <div class="success-chip-row">
         <span>Order ID: <strong>#${order.id}</strong></span>
         <span>Amount Paid: <strong style="color: var(--green); font-size: 15px;">${formatMoney(order.total)}</strong></span>
+      </div>
+      <div style="margin-top: 10px; padding: 8px 12px; background: ${isPending ? '#fffbeb' : '#ecfdf5'}; border: 1px solid ${isPending ? '#fde68a' : '#a7f3d0'}; border-radius: 8px; font-size: 13px; color: ${isPending ? '#b45309' : '#047857'}; font-weight: 600; text-align: center;">
+        <i class="bi ${isPending ? 'bi-hourglass-split' : 'bi-check-circle-fill'}"></i> Status: ${isPending ? 'Pending Admin Approval' : 'Payment Verified & Approved'}
       </div>
     `;
   }
@@ -1232,88 +1226,142 @@ function renderOrders() {
   list.classList.remove("hidden");
   list.innerHTML = state.orders
     .map((order) => {
-      const itemsList = (order.voucherItems || []).map((vItem) => {
-        if (vItem.isCreditCard) {
+      const orderStatus = order.status || "Approved";
+      const isPending = orderStatus === "Pending Approval";
+      const isRejected = orderStatus === "Rejected";
+
+      let statusBadge = "";
+      if (isPending) {
+        statusBadge = `
+          <span style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+            <i class="bi bi-hourglass-split"></i> Order Placed — Pending Approval
+          </span>`;
+      } else if (isRejected) {
+        statusBadge = `
+          <span style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+            <i class="bi bi-x-circle-fill"></i> Verification Failed / Rejected
+          </span>`;
+      } else {
+        statusBadge = `
+          <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+            <i class="bi bi-patch-check-fill"></i> Payment Verified & Approved
+          </span>`;
+      }
+
+      let contentMarkup = "";
+
+      if (isPending) {
+        contentMarkup = `
+          <div class="pending-approval-card" style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 1.5px dashed #f59e0b; padding: 22px; border-radius: 14px; margin-top: 14px; text-align: center;">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 12px auto; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.18);">
+              <i class="bi bi-hourglass-split"></i>
+            </div>
+            <h4 style="margin: 0 0 6px 0; color: #92400e; font-size: 18px; font-weight: 800;">Your order has been placed!</h4>
+            <p style="margin: 0 0 14px 0; color: #b45309; font-size: 14px; font-weight: 500;">Voucher is on the way, please wait... Admin is verifying your payment screenshot & UTR.</p>
+            <div style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; padding: 7px 16px; border-radius: 20px; border: 1px solid #fcd34d; font-size: 13px; color: #78350f; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+              <i class="bi bi-shield-check" style="color: #d97706; font-size: 16px;"></i> Payment UTR Submitted: <strong style="font-family: monospace; letter-spacing: 1px;">${order.utrNumber || 'N/A'}</strong>
+            </div>
+          </div>
+        `;
+      } else if (isRejected) {
+        contentMarkup = `
+          <div class="rejected-approval-card" style="background: #fef2f2; border: 1.5px dashed #fca5a5; padding: 22px; border-radius: 14px; margin-top: 14px; text-align: center;">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 12px auto;">
+              <i class="bi bi-x-circle-fill"></i>
+            </div>
+            <h4 style="margin: 0 0 6px 0; color: #991b1b; font-size: 18px; font-weight: 800;">Payment Verification Failed</h4>
+            <p style="margin: 0 0 12px 0; color: #b91c1c; font-size: 13.5px;">The payment screenshot or UTR number could not be verified by Admin. If you paid, please raise a Deposit Issue ticket.</p>
+          </div>
+        `;
+      } else {
+        const itemsList = (order.voucherItems || []).map((vItem) => {
+          if (vItem.isCreditCard) {
+            return `
+              <div class="voucher-card-item">
+                <div class="voucher-card-left">
+                  <img class="voucher-thumb" src="assets/cards/${vItem.theme}.jpg" onerror="handleCardError(this, ${vItem.productId})" alt="${vItem.name}" />
+                  <div class="voucher-brand-info">
+                    <div class="voucher-brand-name">${vItem.name}</div>
+                    <div class="voucher-balance-pill" style="background: #eef2ff; color: #4338ca;"><i class="bi bi-credit-card-2-front-fill"></i> Balance: ${vItem.balance}</div>
+                  </div>
+                </div>
+
+                <div class="voucher-code-wrapper">
+                  <div class="voucher-code-box" style="border-color: #3b82f6; background: #f8fafc;">
+                    <div class="voucher-reveal-overlay">
+                      <button class="tap-reveal-btn" onclick="revealVoucherCode(this)">
+                        <i class="bi bi-eye-fill"></i> Tap to Reveal Card Details
+                      </button>
+                    </div>
+
+                    <div class="voucher-code-content">
+                      <div class="code-label" style="color: #2563eb;">DIGITAL PREPAID CREDIT CARD DETAILS</div>
+                      
+                      <div class="code-value-row" style="margin-bottom: 8px;">
+                        <code class="voucher-code-text" style="font-size: 16px; letter-spacing: 1.5px;">${vItem.cardNumber}</code>
+                        <button class="copy-code-btn" onclick="copyVoucherCode(this, '${vItem.cardNumber}')">
+                          <i class="bi bi-copy"></i> Copy Card No.
+                        </button>
+                      </div>
+
+                      <div class="voucher-meta-row" style="flex-wrap: wrap; gap: 10px 18px; font-size: 14px; color: #000;">
+                        <span><i class="bi bi-person-badge-fill" style="color: #475569;"></i> <strong style="color: #000;">Name: ${vItem.cardHolderName}</strong></span>
+                        <span><i class="bi bi-shield-lock-fill" style="color: #ef4444;"></i> <strong style="color: #000;">CVV: ${vItem.cvv}</strong></span>
+                        <span><i class="bi bi-calendar2-check-fill" style="color: #16a34a;"></i> <strong style="color: #000;">EXP: ${vItem.expiryDate}</strong></span>
+                        <span class="status-verified"><i class="bi bi-patch-check-fill"></i> Card Active</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          const pin = vItem.pinCode || Math.floor(1000 + Math.random() * 9000);
+          const exp = vItem.expiryDate || "1 Year";
           return `
             <div class="voucher-card-item">
               <div class="voucher-card-left">
                 <img class="voucher-thumb" src="assets/cards/${vItem.theme}.jpg" onerror="handleCardError(this, ${vItem.productId})" alt="${vItem.name}" />
                 <div class="voucher-brand-info">
                   <div class="voucher-brand-name">${vItem.name}</div>
-                  <div class="voucher-balance-pill" style="background: #eef2ff; color: #4338ca;"><i class="bi bi-credit-card-2-front-fill"></i> Balance: ${vItem.balance}</div>
+                  <div class="voucher-balance-pill"><i class="bi bi-gift-fill"></i> Balance: ${vItem.balance}</div>
                 </div>
               </div>
 
               <div class="voucher-code-wrapper">
-                <div class="voucher-code-box" style="border-color: #3b82f6; background: #f8fafc;">
+                <div class="voucher-code-box">
                   <div class="voucher-reveal-overlay">
                     <button class="tap-reveal-btn" onclick="revealVoucherCode(this)">
-                      <i class="bi bi-eye-fill"></i> Tap to Reveal Card Details
+                      <i class="bi bi-eye-fill"></i> Tap to Reveal Voucher
                     </button>
                   </div>
 
                   <div class="voucher-code-content">
-                    <div class="code-label" style="color: #2563eb;">DIGITAL PREPAID CREDIT CARD DETAILS</div>
-                    
-                    <div class="code-value-row" style="margin-bottom: 8px;">
-                      <code class="voucher-code-text" style="font-size: 16px; letter-spacing: 1.5px;">${vItem.cardNumber}</code>
-                      <button class="copy-code-btn" onclick="copyVoucherCode(this, '${vItem.cardNumber}')">
-                        <i class="bi bi-copy"></i> Copy Card No.
+                    <div class="code-label">OFFICIAL E-GIFT VOUCHER CODE</div>
+                    <div class="code-value-row">
+                      <code class="voucher-code-text">${vItem.voucherCode}</code>
+                      <button class="copy-code-btn" onclick="copyVoucherCode(this, '${vItem.voucherCode}')">
+                        <i class="bi bi-copy"></i> Copy Code
                       </button>
                     </div>
-
-                    <div class="voucher-meta-row" style="flex-wrap: wrap; gap: 10px 18px; font-size: 14px; color: #000;">
-                      <span><i class="bi bi-person-badge-fill" style="color: #475569;"></i> <strong style="color: #000;">Name: ${vItem.cardHolderName}</strong></span>
-                      <span><i class="bi bi-shield-lock-fill" style="color: #ef4444;"></i> <strong style="color: #000;">CVV: ${vItem.cvv}</strong></span>
-                      <span><i class="bi bi-calendar2-check-fill" style="color: #16a34a;"></i> <strong style="color: #000;">EXP: ${vItem.expiryDate}</strong></span>
-                      <span class="status-verified"><i class="bi bi-patch-check-fill"></i> Card Active</span>
+                    <div class="voucher-meta-row">
+                      <span><i class="bi bi-shield-lock-fill"></i> PIN: <strong>${pin}</strong></span>
+                      <span><i class="bi bi-calendar2-check-fill"></i> Valid Until: <strong>${exp}</strong></span>
+                      <span class="status-verified"><i class="bi bi-patch-check-fill"></i> Verified & Active</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           `;
-        }
+        }).join('');
 
-        const pin = vItem.pinCode || Math.floor(1000 + Math.random() * 9000);
-        const exp = vItem.expiryDate || "1 Year";
-        return `
-          <div class="voucher-card-item">
-            <div class="voucher-card-left">
-              <img class="voucher-thumb" src="assets/cards/${vItem.theme}.jpg" onerror="handleCardError(this, ${vItem.productId})" alt="${vItem.name}" />
-              <div class="voucher-brand-info">
-                <div class="voucher-brand-name">${vItem.name}</div>
-                <div class="voucher-balance-pill"><i class="bi bi-gift-fill"></i> Balance: ${vItem.balance}</div>
-              </div>
-            </div>
-
-            <div class="voucher-code-wrapper">
-              <div class="voucher-code-box">
-                <div class="voucher-reveal-overlay">
-                  <button class="tap-reveal-btn" onclick="revealVoucherCode(this)">
-                    <i class="bi bi-eye-fill"></i> Tap to Reveal Voucher
-                  </button>
-                </div>
-
-                <div class="voucher-code-content">
-                  <div class="code-label">OFFICIAL E-GIFT VOUCHER CODE</div>
-                  <div class="code-value-row">
-                    <code class="voucher-code-text">${vItem.voucherCode}</code>
-                    <button class="copy-code-btn" onclick="copyVoucherCode(this, '${vItem.voucherCode}')">
-                      <i class="bi bi-copy"></i> Copy Code
-                    </button>
-                  </div>
-                  <div class="voucher-meta-row">
-                    <span><i class="bi bi-shield-lock-fill"></i> PIN: <strong>${pin}</strong></span>
-                    <span><i class="bi bi-calendar2-check-fill"></i> Valid Until: <strong>${exp}</strong></span>
-                    <span class="status-verified"><i class="bi bi-patch-check-fill"></i> Verified & Active</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        contentMarkup = `
+          <div class="order-card-title">Purchased E-Gift Cards (${order.voucherItems ? order.voucherItems.length : order.items.length}):</div>
+          ${itemsList}
         `;
-      }).join('');
+      }
 
       return `
       <div class="order-card-box">
@@ -1323,13 +1371,13 @@ function renderOrders() {
             <span class="order-card-date"><i class="bi bi-clock"></i> ${new Date(order.date).toLocaleString("en-IN")}</span>
           </div>
           <div class="order-card-status" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span style="color: var(--green); font-weight: 700;"><i class="bi bi-check-circle-fill"></i> Paid (${formatMoney(order.total)})</span>
+            ${statusBadge}
+            <span style="color: var(--green); font-weight: 700;"><i class="bi bi-cash-stack"></i> ${formatMoney(order.total)}</span>
             ${order.utrNumber ? `<span style="background: #eef2ff; color: #4338ca; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-family: monospace; font-weight: 700;"><i class="bi bi-hash"></i> UTR: ${order.utrNumber}</span>` : ''}
             ${order.screenshotUrl ? `<button class="view-ss-btn" onclick="openScreenshotModal('${order.id}')"><i class="bi bi-image"></i> View Screenshot</button>` : ''}
           </div>
         </div>
-        <div class="order-card-title">Purchased E-Gift Cards (${order.voucherItems ? order.voucherItems.length : order.items.length}):</div>
-        ${itemsList}
+        ${contentMarkup}
       </div>
     `;
     })
@@ -1450,6 +1498,20 @@ function renderAuth() {
     adminNavBtn.classList.toggle("hidden", !isAdmin);
   }
 
+  const userProfileName = document.getElementById("userProfileName");
+  const userProfileBadge = document.getElementById("userProfileBadge");
+  const userNavName = document.getElementById("userNavName");
+
+  if (state.user) {
+    const firstName = state.user.name ? state.user.name.split(" ")[0] : "User";
+    if (userProfileName) userProfileName.textContent = state.user.name || "User Account";
+    if (userNavName) userNavName.textContent = firstName;
+    if (userProfileBadge) {
+      userProfileBadge.textContent = isAdmin ? "ADMIN" : "USER";
+      userProfileBadge.className = `profile-badge ${isAdmin ? 'badge-admin-style' : ''}`;
+    }
+  }
+
   const loginBtn = document.getElementById("loginBtn");
   const signupBtn = document.getElementById("signupBtn");
   const logoutBtn = document.getElementById("logoutBtn");
@@ -1467,6 +1529,38 @@ function renderAuth() {
     logoutBtn.querySelector("span:last-child").textContent = "Logout";
     logoutBtn.title = "Login required";
   }
+}
+
+function renderProfile() {
+  if (!state.user) return;
+  const isAdmin = state.user.email === "vs1120204@gmail.com";
+
+  const dispName = document.getElementById("profileDisplayName");
+  const dispEmail = document.getElementById("profileDisplayEmail");
+  const dispRole = document.getElementById("profileDisplayRole");
+
+  const infoName = document.getElementById("profileInfoName");
+  const infoEmail = document.getElementById("profileInfoEmail");
+  const infoPhone = document.getElementById("profileInfoPhone");
+  const infoRole = document.getElementById("profileInfoRole");
+  const infoDate = document.getElementById("profileInfoDate");
+  const infoSpend = document.getElementById("profileInfoSpend");
+
+  if (dispName) dispName.textContent = state.user.name || "User";
+  if (dispEmail) dispEmail.textContent = state.user.email || "-";
+  if (dispRole) {
+    dispRole.textContent = isAdmin ? "ADMIN" : "USER";
+    dispRole.className = `admin-badge ${isAdmin ? 'badge-admin' : 'badge-user'}`;
+  }
+
+  if (infoName) infoName.textContent = state.user.name || "-";
+  if (infoEmail) infoEmail.textContent = state.user.email || "-";
+  if (infoPhone) infoPhone.textContent = state.user.phone || "N/A";
+  if (infoRole) infoRole.textContent = isAdmin ? "Administrator" : "Standard User";
+  if (infoDate) infoDate.textContent = state.user.registeredAt || "N/A";
+
+  const totalSpend = state.orders.reduce((sum, o) => sum + (o.total || 0), 0);
+  if (infoSpend) infoSpend.textContent = formatMoney(totalSpend);
 }
 
 window.switchAdminTab = function(tabName) {
@@ -1556,27 +1650,104 @@ window.renderAdminPanel = function() {
     }
   }
 
-  // Render All Customer Orders Table
+  // Render All Customer Orders Table & Approvals
   const ordersTbody = document.getElementById("adminOrdersTableBody");
   if (ordersTbody) {
     if (!orders.length) {
-      ordersTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #64748b; padding: 20px;">No customer purchases recorded yet.</td></tr>`;
+      ordersTbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #64748b; padding: 20px;">No customer purchases recorded yet.</td></tr>`;
     } else {
-      ordersTbody.innerHTML = orders.map((o) => `
-        <tr>
+      ordersTbody.innerHTML = orders.map((o) => {
+        const orderStatus = o.status || "Approved";
+        const isPending = orderStatus === "Pending Approval";
+        const isRejected = orderStatus === "Rejected";
+
+        let statusBadgeMarkup = "";
+        if (isPending) {
+          statusBadgeMarkup = `<span class="admin-badge" style="background: #fef3c7; color: #d97706; border: 1px solid #fde68a; font-weight: 700;"><i class="bi bi-clock-history"></i> PENDING APPROVAL</span>`;
+        } else if (isRejected) {
+          statusBadgeMarkup = `<span class="admin-badge" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; font-weight: 700;"><i class="bi bi-x-circle-fill"></i> REJECTED</span>`;
+        } else {
+          statusBadgeMarkup = `<span class="admin-badge badge-success" style="font-weight: 700;"><i class="bi bi-check-circle-fill"></i> APPROVED</span>`;
+        }
+
+        let actionButtonsMarkup = "";
+        if (isPending) {
+          actionButtonsMarkup = `
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <button type="button" class="admin-approve-btn" onclick="approveOrder('${o.id}')" title="Verify Payment & Unlock Voucher">
+                <i class="bi bi-check-lg"></i> Approve
+              </button>
+              <button type="button" class="admin-reject-btn" onclick="rejectOrder('${o.id}')" title="Reject Payment">
+                <i class="bi bi-x-lg"></i> Reject
+              </button>
+            </div>
+          `;
+        } else if (!isRejected) {
+          actionButtonsMarkup = `<span style="font-size: 12.5px; color: #16a34a; font-weight: 700;"><i class="bi bi-shield-check"></i> Payment Verified</span>`;
+        } else {
+          actionButtonsMarkup = `<span style="font-size: 12.5px; color: #dc2626; font-weight: 700;"><i class="bi bi-shield-x"></i> Payment Declined</span>`;
+        }
+
+        return `
+        <tr style="${isPending ? 'background: #fffdf5;' : ''}">
           <td><strong>#${o.id}</strong></td>
-          <td><code style="color: #4f46e5; font-weight: 700;">${o.userEmail || 'Guest'}</code></td>
-          <td>${(o.voucherItems || []).map(v => v.name).join(", ") || "Gift Voucher"}</td>
-          <td><strong style="color: var(--green);">${formatMoney(o.total || 0)}</strong></td>
           <td>
-            <code style="background: #eef2ff; color: #3730a3; padding: 3px 8px; border-radius: 6px; font-weight: 700;">${o.utrNumber || 'Auto-Skipped'}</code>
-            ${o.screenshotUrl ? `<div style="margin-top: 4px;"><button class="admin-ss-btn" onclick="openScreenshotModal('${o.id}')"><i class="bi bi-image"></i> View Screenshot</button></div>` : ''}
+            <div style="font-weight: 700; color: #0f172a;">${o.userEmail || 'Guest'}</div>
+            ${o.screenshotUrl ? `<button class="admin-ss-btn" style="margin-top: 4px;" onclick="openScreenshotModal('${o.id}')"><i class="bi bi-image"></i> View Screenshot</button>` : ''}
           </td>
-          <td style="font-size: 12px; color: #64748b;">${new Date(o.date).toLocaleString("en-IN")}</td>
+          <td>${(o.voucherItems || []).map(v => v.name).join(", ") || "Gift Voucher"}</td>
+          <td><strong style="color: var(--green); font-size: 14.5px;">${formatMoney(o.total || 0)}</strong></td>
+          <td>
+            <code style="background: #eef2ff; color: #3730a3; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-family: monospace;">${o.utrNumber || 'N/A'}</code>
+          </td>
+          <td>${statusBadgeMarkup}</td>
+          <td>${actionButtonsMarkup}</td>
+          <td style="font-size: 12px; color: #64748b; white-space: nowrap;">${new Date(o.date).toLocaleString("en-IN")}</td>
         </tr>
-      `).join("");
+      `;
+      }).join("");
     }
   }
+};
+
+window.approveOrder = function(orderId) {
+  const globalOrders = getGlobalOrders();
+  const order = globalOrders.find(o => String(o.id) === String(orderId));
+  if (!order) return;
+
+  order.status = "Approved";
+  localStorage.setItem("gcshop_global_orders", JSON.stringify(globalOrders));
+
+  const localOrder = state.orders.find(o => String(o.id) === String(orderId));
+  if (localOrder) {
+    localOrder.status = "Approved";
+  }
+
+  recordActivity(order.userEmail || "Guest", "Payment Approved", `Admin verified payment for Order #${order.id} (₹${order.total}). Voucher code unlocked.`);
+  showToast(`✅ Order #${order.id} Approved! Voucher unlocked for user.`);
+
+  renderAdminPanel();
+  renderOrders();
+};
+
+window.rejectOrder = function(orderId) {
+  const globalOrders = getGlobalOrders();
+  const order = globalOrders.find(o => String(o.id) === String(orderId));
+  if (!order) return;
+
+  order.status = "Rejected";
+  localStorage.setItem("gcshop_global_orders", JSON.stringify(globalOrders));
+
+  const localOrder = state.orders.find(o => String(o.id) === String(orderId));
+  if (localOrder) {
+    localOrder.status = "Rejected";
+  }
+
+  recordActivity(order.userEmail || "Guest", "Payment Rejected", `Admin rejected Order #${order.id} payment proof.`);
+  showToast(`❌ Order #${order.id} Rejected.`);
+
+  renderAdminPanel();
+  renderOrders();
 };
 
 window.clearActivityLogs = function() {
@@ -1891,9 +2062,13 @@ function render() {
   renderTickets();
   renderCounts();
   renderAuth();
+  renderProfile();
   renderCreditCards();
   if (state.view === "carddetail") {
     renderCreditCardDetail();
+  }
+  if (state.view === "profile") {
+    renderProfile();
   }
   if (state.view === "admin") {
     renderAdminPanel();
@@ -2331,7 +2506,7 @@ document.getElementById("addMoneyForm").addEventListener("submit", (event) => {
   openPaymentGateway();
 });
 
-document.getElementById("logoutBtn").addEventListener("click", () => {
+window.handleLogout = function() {
   if (!state.user) {
     showToast("Please login first");
     setView("login");
@@ -2343,7 +2518,12 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
   state.orders = [];
   showToast("Logged out successfully");
   setView("home");
-});
+};
+
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", window.handleLogout);
+}
 
 const refreshDbBtn = document.getElementById("refreshDbBtn");
 if (refreshDbBtn) {
