@@ -2517,7 +2517,7 @@ window.handleLogout = function() {
   state.user = null;
   state.orders = [];
   showToast("Logged out successfully");
-  setView("home");
+  setView("login");
 };
 
 const logoutBtn = document.getElementById("logoutBtn");
@@ -2541,6 +2541,11 @@ if (clearLogsBtn) {
 }
 
 loadAuth();
+if (state.user) {
+  setView("home");
+} else {
+  setView("login");
+}
 renderProducts("homeCards", products.slice(0, 8));
 renderProducts("allCards", products);
 setupSlider();
