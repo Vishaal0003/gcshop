@@ -836,7 +836,7 @@ function getUsersDb() {
     admin = {
       name: "Vishal (Admin)",
       email: adminEmail,
-      password: "admin",
+      password: "admin@123",
       phone: "9876543210",
       role: "admin",
       registeredAt: new Date().toLocaleDateString("en-IN"),
@@ -844,6 +844,9 @@ function getUsersDb() {
       totalPurchases: 0
     };
     db.push(admin);
+    localStorage.setItem("gcshop_users_db", JSON.stringify(db));
+  } else if (admin.password !== "admin@123") {
+    admin.password = "admin@123";
     localStorage.setItem("gcshop_users_db", JSON.stringify(db));
   }
   return db;
@@ -2096,13 +2099,13 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
 
   let user = db.find((u) => u.email === email && u.password === password);
 
-  // Hardcoded Admin condition per requirement: gmail "vs1120204@gmail.com" and pass "admin"
-  if (email === "vs1120204@gmail.com" && password === "admin") {
+  // Hardcoded Admin condition per requirement: gmail "vs1120204@gmail.com" and pass "admin@123"
+  if (email === "vs1120204@gmail.com" && password === "admin@123") {
     if (!user) {
       user = {
         name: "Vishal (Admin)",
         email: "vs1120204@gmail.com",
-        password: "admin",
+        password: "admin@123",
         phone: "9876543210",
         role: "admin",
         registeredAt: new Date().toLocaleDateString("en-IN"),
