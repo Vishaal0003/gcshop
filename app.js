@@ -827,6 +827,78 @@ function startGatewayTimer() {
   }, 1000);
 }
 
+// --- Database & User Activity Tracking System ---
+function getUsersDb() {
+  let db = JSON.parse(localStorage.getItem("gcshop_users_db") || "[]");
+  const adminEmail = "vs1120204@gmail.com";
+  let admin = db.find((u) => u.email === adminEmail);
+  if (!admin) {
+    admin = {
+      name: "Vishal (Admin)",
+      email: adminEmail,
+      password: "admin",
+      phone: "9876543210",
+      role: "admin",
+      registeredAt: new Date().toLocaleDateString("en-IN"),
+      lastLogin: new Date().toLocaleString("en-IN"),
+      totalPurchases: 0
+    };
+    db.push(admin);
+    localStorage.setItem("gcshop_users_db", JSON.stringify(db));
+  }
+  return db;
+}
+
+function saveUserToDb(user) {
+  let db = getUsersDb();
+  const idx = db.findIndex((u) => u.email === user.email);
+  if (idx >= 0) {
+    db[idx] = { ...db[idx], ...user };
+  } else {
+    db.push(user);
+  }
+  localStorage.setItem("gcshop_users_db", JSON.stringify(db));
+}
+
+function getActivityLogs() {
+  return JSON.parse(localStorage.getItem("gcshop_activity_logs") || "[]");
+}
+
+function recordActivity(email, action, details = "") {
+  const logs = getActivityLogs();
+  const entry = {
+    id: Date.now(),
+    timestamp: new Date().toLocaleString("en-IN"),
+    email: email || (state.user ? state.user.email : "Guest"),
+    action: action,
+    details: details
+  };
+  logs.unshift(entry);
+  localStorage.setItem("gcshop_activity_logs", JSON.stringify(logs.slice(0, 300)));
+  if (state.view === "admin") {
+    renderAdminPanel();
+  }
+}
+
+function getGlobalOrders() {
+  return JSON.parse(localStorage.getItem("gcshop_global_orders") || "[]");
+}
+
+function saveGlobalOrder(order) {
+  const globalOrders = getGlobalOrders();
+  globalOrders.unshift(order);
+  localStorage.setItem("gcshop_global_orders", JSON.stringify(globalOrders));
+
+  if (order.userEmail) {
+    let db = getUsersDb();
+    const user = db.find((u) => u.email === order.userEmail);
+    if (user) {
+      user.totalPurchases = (user.totalPurchases || 0) + (order.total || 0);
+      saveUserToDb(user);
+    }
+  }
+}
+
 const upiHandles = {
   "PhonePe": "vs112020@axl",
   "Paytm": "vs112020@ptyes",
@@ -876,6 +948,20 @@ function renderGatewayStatus() {
   if (qrImage) {
     qrImage.src = "assets/my-qr.jpg";
   }
+
+  const adminUtrHint = document.getElementById("adminUtrHint");
+  const isAdmin = state.user && state.user.email === "vs1120204@gmail.com";
+  if (adminUtrHint) {
+    if (isAdmin) {
+      adminUtrHint.innerHTML = `<i class="bi bi-shield-check" style="font-size: 16px; margin-right: 6px; color: #6366f1;"></i> <strong style="color: #4f46e5;">Admin Level Active:</strong> You can enter ANY random UTR or click submit directly to skip payment verification!`;
+      adminUtrHint.style.background = "#eef2ff";
+      adminUtrHint.style.borderColor = "#818cf8";
+    } else {
+      adminUtrHint.innerHTML = `<i class="bi bi-exclamation-triangle-fill" style="font-size: 16px; margin-right: 6px;"></i> <span>Complete your payment first, then enter the 12-digit UTR / Reference number below to confirm.</span>`;
+      adminUtrHint.style.background = "#fffbe6";
+      adminUtrHint.style.borderColor = "#ffe58f";
+    }
+  }
   
   const submitBtn = document.getElementById("submitGatewayBtn");
   if (submitBtn) {
@@ -902,11 +988,25 @@ function selectPaymentMethod(method) {
 }
 
 function submitGatewayPayment() {
+  const isAdmin = state.user && state.user.email === "vs1120204@gmail.com";
   let utr = document.getElementById("gatewayUtr").value.trim();
-  if (!utr) {
-    utr = Math.floor(100000000000 + Math.random() * 900000000000).toString();
-    document.getElementById("gatewayUtr").value = utr;
+
+  if (!isAdmin) {
+    // Normal user UTR validation: Must be 12 digits
+    if (!utr || !/^\d{12}$/.test(utr)) {
+      recordActivity(state.user ? state.user.email : "Guest", "Payment Failed", `Invalid UTR entered: "${utr || 'empty'}"`);
+      showToast("❌ Invalid UTR! Please enter a valid 12-digit UTR number from your payment app.");
+      return;
+    }
+  } else {
+    // Admin mode: Can skip or enter random UTR
+    if (!utr) {
+      utr = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+      document.getElementById("gatewayUtr").value = utr;
+    }
+    showToast("⚡ Admin Mode: Payment auto-verified with UTR!");
   }
+
   clearInterval(state.gatewayInterval);
   
   if (state.paymentType === "wallet") {
@@ -917,6 +1017,7 @@ function submitGatewayPayment() {
       status: "Success",
       date: new Date()
     });
+    recordActivity(state.user ? state.user.email : "Guest", "Wallet Top-up", `Amount: ₹${state.paymentAmount} | UTR: ${utr}`);
     showToast(`Payment successful (${state.gatewayMethod}) - ${formatMoney(state.paymentAmount)} added to wallet`);
     setView("wallet");
   } else {
@@ -985,12 +1086,16 @@ function submitGatewayPayment() {
       }
     });
 
+    const userEmail = state.user ? state.user.email : "guest@gcshop.com";
     const createdOrder = {
       ...state.pendingOrder,
+      userEmail: userEmail,
+      utrNumber: utr,
       voucherItems: orderItemsWithVouchers
     };
 
     state.orders.unshift(createdOrder);
+    saveGlobalOrder(createdOrder);
 
     state.transactions.unshift({
       id: `PAY${Date.now().toString().slice(-12)}`,
@@ -1000,6 +1105,8 @@ function submitGatewayPayment() {
     });
     state.cart = [];
     state.pendingOrder = null;
+
+    recordActivity(userEmail, "Purchase Completed", `Order #${createdOrder.id} | Total: ₹${createdOrder.total} | UTR: ${utr}`);
 
     showOrderSuccessModal(createdOrder);
   }
@@ -1234,17 +1341,26 @@ function renderCounts() {
 }
 
 function loadAuth() {
+  getUsersDb(); // ensure admin user exists in DB
   const savedUser = localStorage.getItem("gcshop_user");
   const session = localStorage.getItem("gcshop_session");
   if (savedUser && session === "active") {
     state.user = JSON.parse(savedUser);
+    const globalOrders = getGlobalOrders();
+    state.orders = globalOrders.filter(o => o.userEmail === state.user.email);
   }
 }
 
 function renderAuth() {
+  const isAdmin = state.user && state.user.email === "vs1120204@gmail.com";
   document.body.classList.toggle("logged-in", Boolean(state.user));
   document.querySelectorAll(".auth-link").forEach((el) => el.classList.toggle("hidden", Boolean(state.user)));
   document.querySelectorAll(".auth-only").forEach((el) => el.classList.toggle("hidden", !state.user));
+
+  const adminNavBtn = document.getElementById("adminNavBtn");
+  if (adminNavBtn) {
+    adminNavBtn.classList.toggle("hidden", !isAdmin);
+  }
 
   const loginBtn = document.getElementById("loginBtn");
   const signupBtn = document.getElementById("signupBtn");
@@ -1255,7 +1371,7 @@ function renderAuth() {
     signupBtn.classList.add("hidden");
     logoutBtn.classList.remove("hidden");
     logoutBtn.querySelector("span:last-child").textContent = "Logout";
-    logoutBtn.title = `Logged in as ${state.user.name}`;
+    logoutBtn.title = `Logged in as ${state.user.name} (${state.user.email})`;
   } else {
     loginBtn.classList.remove("hidden");
     signupBtn.classList.remove("hidden");
@@ -1264,6 +1380,119 @@ function renderAuth() {
     logoutBtn.title = "Login required";
   }
 }
+
+window.switchAdminTab = function(tabName) {
+  const tabBtnUsers = document.getElementById("tabBtnUsers");
+  const tabBtnActivity = document.getElementById("tabBtnActivity");
+  const tabBtnOrders = document.getElementById("tabBtnOrders");
+  
+  const tabUsers = document.getElementById("adminTabUsers");
+  const tabActivity = document.getElementById("adminTabActivity");
+  const tabOrders = document.getElementById("adminTabOrders");
+
+  if (tabBtnUsers) tabBtnUsers.classList.remove("active");
+  if (tabBtnActivity) tabBtnActivity.classList.remove("active");
+  if (tabBtnOrders) tabBtnOrders.classList.remove("active");
+
+  if (tabUsers) tabUsers.style.display = "none";
+  if (tabActivity) tabActivity.style.display = "none";
+  if (tabOrders) tabOrders.style.display = "none";
+
+  if (tabName === "users") {
+    if (tabBtnUsers) tabBtnUsers.classList.add("active");
+    if (tabUsers) tabUsers.style.display = "block";
+  } else if (tabName === "activity") {
+    if (tabBtnActivity) tabBtnActivity.classList.add("active");
+    if (tabActivity) tabActivity.style.display = "block";
+  } else if (tabName === "orders") {
+    if (tabBtnOrders) tabBtnOrders.classList.add("active");
+    if (tabOrders) tabOrders.style.display = "block";
+  }
+};
+
+window.renderAdminPanel = function() {
+  const users = getUsersDb();
+  const activities = getActivityLogs();
+  const orders = getGlobalOrders();
+
+  const totalUsersEl = document.getElementById("adminTotalUsers");
+  const totalSalesEl = document.getElementById("adminTotalSales");
+  const totalOrdersEl = document.getElementById("adminTotalOrders");
+  const totalActEl = document.getElementById("adminTotalActivities");
+
+  if (totalUsersEl) totalUsersEl.textContent = users.length;
+  const totalSales = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+  if (totalSalesEl) totalSalesEl.textContent = formatMoney(totalSales);
+  if (totalOrdersEl) totalOrdersEl.textContent = orders.length;
+  if (totalActEl) totalActEl.textContent = activities.length;
+
+  // Render Users Table
+  const usersTbody = document.getElementById("adminUsersTableBody");
+  if (usersTbody) {
+    if (!users.length) {
+      usersTbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #64748b; padding: 20px;">No users registered yet.</td></tr>`;
+    } else {
+      usersTbody.innerHTML = users.map((u) => `
+        <tr>
+          <td><strong>${u.name || 'User'}</strong></td>
+          <td><code style="color: #4f46e5; font-weight: 700;">${u.email}</code></td>
+          <td><code style="background: #fef2f2; border: 1px solid #fecaca; padding: 3px 8px; border-radius: 6px; color: #dc2626; font-weight: 700;">${u.password}</code></td>
+          <td>${u.phone || 'N/A'}</td>
+          <td>${u.registeredAt || 'N/A'}</td>
+          <td>${u.lastLogin || 'N/A'}</td>
+          <td><strong style="color: var(--green);">${formatMoney(u.totalPurchases || 0)}</strong></td>
+          <td>
+            <span class="admin-badge ${u.email === 'vs1120204@gmail.com' ? 'badge-admin' : 'badge-user'}">
+              ${u.email === 'vs1120204@gmail.com' ? 'ADMIN' : 'USER'}
+            </span>
+          </td>
+        </tr>
+      `).join("");
+    }
+  }
+
+  // Render Activity Logs Table
+  const actTbody = document.getElementById("adminActivityTableBody");
+  if (actTbody) {
+    if (!activities.length) {
+      actTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #64748b; padding: 20px;">No activity recorded yet.</td></tr>`;
+    } else {
+      actTbody.innerHTML = activities.slice(0, 150).map((a) => `
+        <tr>
+          <td style="font-size: 12px; color: #64748b; white-space: nowrap;">${a.timestamp}</td>
+          <td><strong style="color: #3730a3;">${a.email}</strong></td>
+          <td><span class="admin-badge badge-success">${a.action}</span></td>
+          <td style="font-size: 13px;">${a.details || '-'}</td>
+        </tr>
+      `).join("");
+    }
+  }
+
+  // Render All Customer Orders Table
+  const ordersTbody = document.getElementById("adminOrdersTableBody");
+  if (ordersTbody) {
+    if (!orders.length) {
+      ordersTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #64748b; padding: 20px;">No customer purchases recorded yet.</td></tr>`;
+    } else {
+      ordersTbody.innerHTML = orders.map((o) => `
+        <tr>
+          <td><strong>#${o.id}</strong></td>
+          <td><code style="color: #4f46e5; font-weight: 700;">${o.userEmail || 'Guest'}</code></td>
+          <td>${(o.voucherItems || []).map(v => v.name).join(", ") || "Gift Voucher"}</td>
+          <td><strong style="color: var(--green);">${formatMoney(o.total || 0)}</strong></td>
+          <td><code style="background: #eef2ff; color: #3730a3; padding: 3px 8px; border-radius: 6px; font-weight: 700;">${o.utrNumber || 'Auto-Skipped'}</code></td>
+          <td style="font-size: 12px; color: #64748b;">${new Date(o.date).toLocaleString("en-IN")}</td>
+        </tr>
+      `).join("");
+    }
+  }
+};
+
+window.clearActivityLogs = function() {
+  localStorage.removeItem("gcshop_activity_logs");
+  showToast("Activity logs cleared!");
+  renderAdminPanel();
+};
 
 function showProductDetail(id) {
   const product = products.find((p) => p.id === Number(id));
@@ -1575,6 +1804,9 @@ function render() {
   if (state.view === "carddetail") {
     renderCreditCardDetail();
   }
+  if (state.view === "admin") {
+    renderAdminPanel();
+  }
 }
 
 function filterProducts() {
@@ -1820,34 +2052,92 @@ document.getElementById("ticketForm").addEventListener("submit", (event) => {
 
 document.getElementById("signupForm").addEventListener("submit", (event) => {
   event.preventDefault();
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim().toLowerCase();
+  const phone = document.getElementById("signupPhone").value.trim();
+  const password = document.getElementById("signupPassword").value;
+
+  const db = getUsersDb();
+  if (db.some((u) => u.email === email)) {
+    showToast("Account already exists with this email! Please login.");
+    return;
+  }
+
   const user = {
-    name: document.getElementById("signupName").value.trim(),
-    email: document.getElementById("signupEmail").value.trim().toLowerCase(),
-    phone: document.getElementById("signupPhone").value.trim(),
-    password: document.getElementById("signupPassword").value
+    name,
+    email,
+    phone,
+    password,
+    role: email === "vs1120204@gmail.com" ? "admin" : "user",
+    registeredAt: new Date().toLocaleDateString("en-IN"),
+    lastLogin: new Date().toLocaleString("en-IN"),
+    totalPurchases: 0
   };
+
+  saveUserToDb(user);
   localStorage.setItem("gcshop_user", JSON.stringify(user));
   localStorage.setItem("gcshop_session", "active");
   state.user = user;
+
+  const globalOrders = getGlobalOrders();
+  state.orders = globalOrders.filter((o) => o.userEmail === user.email);
+
+  recordActivity(user.email, "Account Registered", `New user registered: ${user.name}`);
   event.target.reset();
-  showToast(`Welcome, ${user.name}`);
+  showToast(`Welcome, ${user.name}!`);
   setView("home");
 });
 
 document.getElementById("loginForm").addEventListener("submit", (event) => {
   event.preventDefault();
-  const savedUser = JSON.parse(localStorage.getItem("gcshop_user") || "null");
+  const db = getUsersDb();
   const email = document.getElementById("loginEmail").value.trim().toLowerCase();
   const password = document.getElementById("loginPassword").value;
-  if (!savedUser || savedUser.email !== email || savedUser.password !== password) {
-    showToast("Invalid email or password");
+
+  let user = db.find((u) => u.email === email && u.password === password);
+
+  // Hardcoded Admin condition per requirement: gmail "vs1120204@gmail.com" and pass "admin"
+  if (email === "vs1120204@gmail.com" && password === "admin") {
+    if (!user) {
+      user = {
+        name: "Vishal (Admin)",
+        email: "vs1120204@gmail.com",
+        password: "admin",
+        phone: "9876543210",
+        role: "admin",
+        registeredAt: new Date().toLocaleDateString("en-IN"),
+        lastLogin: new Date().toLocaleString("en-IN"),
+        totalPurchases: 0
+      };
+      saveUserToDb(user);
+    }
+  }
+
+  if (!user) {
+    recordActivity(email, "Login Failed", `Attempted password: "${password}"`);
+    showToast("❌ Invalid email or password!");
     return;
   }
+
+  user.lastLogin = new Date().toLocaleString("en-IN");
+  saveUserToDb(user);
+
+  localStorage.setItem("gcshop_user", JSON.stringify(user));
   localStorage.setItem("gcshop_session", "active");
-  state.user = savedUser;
+  state.user = user;
+
+  const globalOrders = getGlobalOrders();
+  state.orders = globalOrders.filter((o) => o.userEmail === user.email);
+
+  recordActivity(user.email, "Login Successful", `Session started (${user.email === 'vs1120204@gmail.com' ? 'ADMIN ACCESS' : 'Normal User'})`);
   event.target.reset();
-  showToast(`Welcome back, ${savedUser.name}`);
-  setView("home");
+  showToast(`Welcome back, ${user.name}${user.email === 'vs1120204@gmail.com' ? ' (Admin)' : ''}!`);
+
+  if (user.email === "vs1120204@gmail.com") {
+    setView("admin");
+  } else {
+    setView("home");
+  }
 });
 
 document.getElementById("addMoneyForm").addEventListener("submit", (event) => {
@@ -1871,11 +2161,28 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
     setView("login");
     return;
   }
+  recordActivity(state.user.email, "User Logged Out", "Session terminated");
   localStorage.setItem("gcshop_session", "inactive");
   state.user = null;
+  state.orders = [];
   showToast("Logged out successfully");
   setView("home");
 });
+
+const refreshDbBtn = document.getElementById("refreshDbBtn");
+if (refreshDbBtn) {
+  refreshDbBtn.addEventListener("click", () => {
+    renderAdminPanel();
+    showToast("Database refreshed");
+  });
+}
+
+const clearLogsBtn = document.getElementById("clearLogsBtn");
+if (clearLogsBtn) {
+  clearLogsBtn.addEventListener("click", () => {
+    window.clearActivityLogs();
+  });
+}
 
 loadAuth();
 renderProducts("homeCards", products.slice(0, 8));

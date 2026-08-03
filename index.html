@@ -49,6 +49,10 @@
         <i class="bi bi-wallet2 nav-icon"></i>
         <span>Wallet ⌄</span>
       </button>
+      <button class="nav-btn auth-only hidden" id="adminNavBtn" data-view="admin" style="color: #818cf8;">
+        <i class="bi bi-shield-lock nav-icon"></i>
+        <span>Admin Panel</span>
+      </button>
       <button class="nav-btn auth-link" id="loginBtn" data-view="login">
         <i class="bi bi-box-arrow-in-right nav-icon"></i>
         <span>Login</span>
@@ -332,6 +336,147 @@
           <button class="success-btn" type="submit">Create Account</button>
           <p class="auth-switch">Already have an account? <button type="button" data-view="login">Login</button></p>
         </form>
+      </div>
+    </section>
+
+    <section class="view" id="adminView">
+      <div class="page-title">
+        <h1><i class="bi bi-shield-lock-fill" style="color: #6366f1;"></i> Admin Dashboard & Database</h1>
+        <p>Live user logins, credentials, activity tracking &amp; purchase management</p>
+      </div>
+
+      <div class="admin-dashboard-shell">
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <div class="stat-icon" style="background: rgba(99, 102, 241, 0.15); color: #6366f1;">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Total Users Registered</span>
+              <strong class="stat-val" id="adminTotalUsers">0</strong>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+              <i class="bi bi-currency-rupee"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Total Purchases Sales</span>
+              <strong class="stat-val" id="adminTotalSales">₹0.00</strong>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+              <i class="bi bi-bag-check-fill"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Total Orders Placed</span>
+              <strong class="stat-val" id="adminTotalOrders">0</strong>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="stat-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">
+              <i class="bi bi-activity"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Activity Log Events</span>
+              <strong class="stat-val" id="adminTotalActivities">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-subtabs">
+          <button class="admin-tab-btn active" id="tabBtnUsers" onclick="switchAdminTab('users')">
+            <i class="bi bi-database-fill-gear"></i> Users & Credentials DB
+          </button>
+          <button class="admin-tab-btn" id="tabBtnActivity" onclick="switchAdminTab('activity')">
+            <i class="bi bi-clock-history"></i> Real-time Activity Logs
+          </button>
+          <button class="admin-tab-btn" id="tabBtnOrders" onclick="switchAdminTab('orders')">
+            <i class="bi bi-receipt-cutoff"></i> All Customer Purchases
+          </button>
+        </div>
+
+        <div class="admin-tab-content active" id="adminTabUsers">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h2><i class="bi bi-database"></i> Registered Users & Password Database</h2>
+              <button class="primary-btn" id="refreshDbBtn" style="min-height: 36px; padding: 0 14px; font-size: 13px;">
+                <i class="bi bi-arrow-clockwise"></i> Refresh DB
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>User / Name</th>
+                    <th>Gmail / Email</th>
+                    <th>Password</th>
+                    <th>Phone</th>
+                    <th>Registered Date</th>
+                    <th>Last Login</th>
+                    <th>Total Purchases</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUsersTableBody">
+                  <!-- User rows injected dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-tab-content" id="adminTabActivity" style="display: none;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h2><i class="bi bi-activity"></i> Live User Activity & Login Log</h2>
+              <button class="primary-btn" id="clearLogsBtn" style="min-height: 36px; padding: 0 14px; font-size: 13px; background: #ef4444;">
+                <i class="bi bi-trash"></i> Clear Logs
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Time Stamp</th>
+                    <th>User Gmail / Email</th>
+                    <th>Activity Event</th>
+                    <th>Details / UTR Number</th>
+                  </tr>
+                </thead>
+                <tbody id="adminActivityTableBody">
+                  <!-- Activity logs injected dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-tab-content" id="adminTabOrders" style="display: none;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h2><i class="bi bi-bag-check-fill"></i> All Customer Purchase Records</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer Email</th>
+                    <th>Items Purchased</th>
+                    <th>Amount Paid</th>
+                    <th>UTR / Ref Number</th>
+                    <th>Date & Time</th>
+                  </tr>
+                </thead>
+                <tbody id="adminOrdersTableBody">
+                  <!-- Orders injected dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
