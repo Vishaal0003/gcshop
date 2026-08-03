@@ -274,13 +274,13 @@ label textarea {
   position: relative;
   margin: 18px auto 0;
   width: 100%;
-  max-width: 850px;
-  aspect-ratio: 21 / 9;
+  max-width: 960px;
+  aspect-ratio: 3.5 / 1;
   height: auto;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: 0 14px 40px rgba(25, 102, 255, 0.12);
-  background: transparent;
+  background: #0a0a1a;
 }
 
 .ad-track {
@@ -291,19 +291,14 @@ label textarea {
 }
 
 .ad-slide {
+  position: relative;
   min-width: 100%;
   height: 100%;
-  background-size: 100% 100%;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 12px;
+  border-radius: 16px;
   flex-shrink: 0;
-  image-rendering: high-quality;
-  image-rendering: -webkit-optimize-contrast;
-}
-
-.ad-slide {
-  position: relative;
 }
 
 .ad-overlay {
@@ -385,12 +380,76 @@ label textarea {
 }
 
 @media (max-width: 800px) {
+  .ad-carousel {
+    aspect-ratio: 3 / 1;
+    border-radius: 12px;
+    margin-top: 14px;
+  }
+
+  .ad-slide {
+    border-radius: 12px;
+  }
 
   .ad-prev,
   .ad-next {
-    width: 40px;
-    height: 40px;
-    font-size: 20px
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .ad-prev { left: 6px; }
+  .ad-next { right: 6px; }
+
+  .ad-dots {
+    bottom: 8px;
+    gap: 6px;
+  }
+
+  .ad-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .ad-dot.active {
+    width: 22px;
+    height: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ad-carousel {
+    aspect-ratio: 2.8 / 1;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+
+  .ad-slide {
+    border-radius: 10px;
+  }
+
+  .ad-prev,
+  .ad-next {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .ad-prev { left: 4px; }
+  .ad-next { right: 4px; }
+
+  .ad-dots {
+    bottom: 6px;
+    gap: 4px;
+  }
+
+  .ad-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .ad-dot.active {
+    width: 18px;
+    height: 6px;
   }
 }
 

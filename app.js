@@ -1587,43 +1587,39 @@ function setupAdCarousel() {
   const next = carousel.querySelector('.ad-next');
   const dotsWrap = carousel.querySelector('.ad-dots');
 
-  const placeholders = [
-    posterDataUrl('Exclusive coupon for you!', 'Up to ₹100 Already applied', 0),
-    posterDataUrl('Up to 70% off', 'Deals on headphones • JBL | boAt', 1),
-    posterDataUrl('Starting ₹99', 'Bestselling mobile accessories', 2)
+  // 6 slides: 3 credit card ads + 3 gift card ads
+  const slideCount = 6;
+  const fallbacks = [
+    posterDataUrl('Digital Visa Prepaid Cards', 'Up to 40% OFF • Instant Delivery', 0),
+    posterDataUrl('MasterCard Prepaid Bundle', 'Buy 3 Cards, Save 20% • Limited Time', 1),
+    posterDataUrl('AMEX Summer Sale', '10 Cards Bundle • Save 40% Today', 4),
+    posterDataUrl('Gift Card Mega Sale', 'Flat 90% OFF on All Gift Cards', 3),
+    posterDataUrl('Gaming Gift Cards', 'Steam • Xbox • Play Store — Starting ₹649', 2),
+    posterDataUrl('Food & Delivery Deals', 'Swiggy • Zomato • Blinkit — Up to 90% OFF', 0)
   ];
 
-  const localPaths = [
-    'assets/ads/ad1.png', 'assets/ads/ad1.jpg', 'assets/ads/ad1.jpeg',
-    'assets/ads/ad2.png', 'assets/ads/ad2.jpg', 'assets/ads/ad2.jpeg',
-    'assets/ads/ad3.png', 'assets/ads/ad3.jpg', 'assets/ads/ad3.jpeg'
-  ];
+  const posters = fallbacks.slice();
 
-  const posters = placeholders.slice();
   track.innerHTML = posters.map((src, i) => `
-    <div class="ad-slide" style="background-image:url('${src}')" role="img">
-    </div>
+    <div class="ad-slide" style="background-image:url('${src}')" role="img"></div>
   `).join('');
 
-  // try loading local images and replace slides when they succeed
-  localPaths.forEach((path) => {
-    // Determine which slide index this path belongs to (ad1 -> 0, ad2 -> 1, ad3 -> 2)
-    const match = path.match(/ad(\d+)\./);
-    if (!match) return;
-    const idx = Number(match[1]) - 1;
-    if (idx < 0 || idx >= posters.length) return;
+  // Load actual images from ads folder and replace fallbacks
+  const extensions = ['png', 'jpg', 'jpeg'];
+  for (let i = 1; i <= slideCount; i++) {
+    extensions.forEach(ext => {
+      const path = `assets/ads/ad${i}.${ext}`;
+      const idx = i - 1;
+      const img = new Image();
+      img.onload = () => {
+        posters[idx] = path;
+        const slide = track.children[idx];
+        if (slide) slide.style.backgroundImage = `url('${path}')`;
+      };
+      img.src = path;
+    });
+  }
 
-    const img = new Image();
-    img.onload = () => {
-      posters[idx] = path;
-      const slide = track.children[idx];
-      if (slide) slide.style.backgroundImage = `url('${path}')`;
-    };
-    img.onerror = () => {
-      // ignore — keep placeholder
-    };
-    img.src = path;
-  });
   dotsWrap.innerHTML = posters.map((_, i) => `<button class="ad-dot ${i === 0 ? 'active' : ''}" data-ad="${i}" aria-label="Show ad ${i + 1}"></button>`).join('');
 
   function goTo(index) {
@@ -1632,14 +1628,8 @@ function setupAdCarousel() {
     dotsWrap.querySelectorAll('.ad-dot').forEach((d, i) => d.classList.toggle('active', i === state.adIndex));
   }
 
-  prev.addEventListener('click', () => {
-    goTo(state.adIndex - 1);
-    restart();
-  });
-  next.addEventListener('click', () => {
-    goTo(state.adIndex + 1);
-    restart();
-  });
+  prev.addEventListener('click', () => { goTo(state.adIndex - 1); restart(); });
+  next.addEventListener('click', () => { goTo(state.adIndex + 1); restart(); });
   dotsWrap.addEventListener('click', (e) => {
     const b = e.target.closest('[data-ad]');
     if (!b) return;
@@ -1647,9 +1637,7 @@ function setupAdCarousel() {
     restart();
   });
 
-  function advance() {
-    goTo(state.adIndex + 1);
-  }
+  function advance() { goTo(state.adIndex + 1); }
   function restart() {
     clearInterval(state.adInterval);
     state.adInterval = setInterval(advance, 4200);
@@ -1658,7 +1646,23 @@ function setupAdCarousel() {
   carousel.addEventListener('mouseenter', () => clearInterval(state.adInterval));
   carousel.addEventListener('mouseleave', () => restart());
 
-  // init
+  // Touch/swipe support for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  carousel.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    clearInterval(state.adInterval);
+  }, { passive: true });
+  carousel.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goTo(state.adIndex + 1);
+      else goTo(state.adIndex - 1);
+    }
+    restart();
+  }, { passive: true });
+
   goTo(0);
   restart();
 }
