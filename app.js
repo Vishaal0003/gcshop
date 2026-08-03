@@ -243,157 +243,169 @@ const products = [
   },
   {
     id: 101,
-    name: "DIGITAL Visa Prepaid 1 Card Total Balance...",
+    name: "DIGITAL Visa Prepaid 1 Card (Balance: $990.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 110,
     origPrice: null,
-    discountBadge: null,
+    discountBadge: "9x VALUE",
     newBadge: true,
-    balance: "$110.00",
+    usdBalance: 990,
+    balance: "$990.00 USD",
     stock: true,
     theme: "visa"
   },
   {
     id: 102,
-    name: "DIGITAL Visa Prepaid 3 Cards Total Balance...",
+    name: "DIGITAL Visa Prepaid 3 Cards (Balance: $2,790.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 279,
     origPrice: 350,
-    discountBadge: "-20 %",
+    discountBadge: "10x VALUE",
     newBadge: true,
-    balance: "$350.00",
+    usdBalance: 2790,
+    balance: "$2,790.00 USD",
     stock: true,
     theme: "visa"
   },
   {
     id: 103,
-    name: "DIGITAL Visa Prepaid 5 Cards Total Balance...",
+    name: "DIGITAL Visa Prepaid 5 Cards (Balance: $4,510.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 410,
     origPrice: 590,
-    discountBadge: "-31 %",
+    discountBadge: "11x VALUE",
     newBadge: true,
-    balance: "$590.00",
-    stock: true,
+    usdBalance: 4510,
+    balance: "$4,510.00 USD",
+    stock: false,
     theme: "visa"
   },
   {
     id: 104,
-    name: "DIGITAL Visa Prepaid 10 Cards Total Balance...",
+    name: "DIGITAL Visa Prepaid 10 Cards (Balance: $8,520.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 710,
     origPrice: 1190,
-    discountBadge: "-40 %",
+    discountBadge: "12x VALUE",
     newBadge: true,
-    balance: "$1190.00",
+    usdBalance: 8520,
+    balance: "$8,520.00 USD",
     stock: true,
     theme: "visa"
   },
   {
     id: 105,
-    name: "DIGITAL MasterCard Prepaid 1 Card Total Balance...",
+    name: "DIGITAL MasterCard Prepaid 1 Card (Balance: $880.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 110,
     origPrice: null,
-    discountBadge: null,
+    discountBadge: "8x VALUE",
     newBadge: true,
-    balance: "$110.00",
+    usdBalance: 880,
+    balance: "$880.00 USD",
     stock: true,
     theme: "mastercard"
   },
   {
     id: 106,
-    name: "DIGITAL MasterCard Prepaid 3 Cards Total Balance...",
+    name: "DIGITAL MasterCard Prepaid 3 Cards (Balance: $2,511.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 279,
     origPrice: 350,
-    discountBadge: "-20 %",
+    discountBadge: "9x VALUE",
     newBadge: true,
-    balance: "$350.00",
+    usdBalance: 2511,
+    balance: "$2,511.00 USD",
     stock: true,
     theme: "mastercard"
   },
   {
     id: 107,
-    name: "DIGITAL MasterCard Prepaid 5 Cards Total Balance...",
+    name: "DIGITAL MasterCard Prepaid 5 Cards (Balance: $4,100.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 410,
     origPrice: 590,
-    discountBadge: "-31 %",
+    discountBadge: "10x VALUE",
     newBadge: true,
-    balance: "$590.00",
-    stock: true,
+    usdBalance: 4100,
+    balance: "$4,100.00 USD",
+    stock: false,
     theme: "mastercard"
   },
   {
     id: 108,
-    name: "DIGITAL MasterCard Prepaid 10 Cards Total Balance...",
+    name: "DIGITAL MasterCard Prepaid 10 Cards (Balance: $8,520.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 710,
     origPrice: 1190,
-    discountBadge: "-40 %",
+    discountBadge: "12x VALUE",
     newBadge: true,
-    balance: "$1190.00",
+    usdBalance: 8520,
+    balance: "$8,520.00 USD",
     stock: true,
     theme: "mastercard"
   },
   {
     id: 109,
-    name: "American Express Prepaid 1 Card Total Balance...",
+    name: "American Express Prepaid 1 Card (Balance: $990.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 110,
     origPrice: null,
-    discountBadge: null,
+    discountBadge: "9x VALUE",
     newBadge: true,
-    balance: "$110.00",
+    usdBalance: 990,
+    balance: "$990.00 USD",
     stock: true,
     theme: "amex"
   },
   {
     id: 110,
-    name: "American Express Prepaid 3 Cards Total Balance...",
+    name: "American Express Prepaid 3 Cards (Balance: $2,790.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 279,
     origPrice: 350,
-    discountBadge: "-20 %",
+    discountBadge: "10x VALUE",
     newBadge: true,
-    balance: "$350.00",
+    usdBalance: 2790,
+    balance: "$2,790.00 USD",
     stock: true,
     theme: "amex"
   },
   {
     id: 111,
-    name: "American Express Prepaid 5 Cards Total Balance...",
+    name: "American Express Prepaid 5 Cards (Balance: $4,510.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 410,
     origPrice: 590,
-    discountBadge: "-31 %",
+    discountBadge: "11x VALUE",
     newBadge: true,
-    balance: "$590.00",
+    usdBalance: 4510,
+    balance: "$4,510.00 USD",
     stock: true,
     theme: "amex"
   },
   {
     id: 112,
-    name: "American Express Prepaid 10 Cards Total Balance...",
+    name: "American Express Prepaid 10 Cards (Balance: $8,520.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 710,
     origPrice: 1190,
-    discountBadge: "-40 %",
+    discountBadge: "12x VALUE",
     newBadge: true,
-    balance: "$1190.00",
+    usdBalance: 8520,
+    balance: "$8,520.00 USD",
     stock: true,
     theme: "amex"
   }
@@ -420,6 +432,8 @@ const state = {
 
 const formatMoney = (value) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(value);
+
+const USD_TO_INR = 95.25;
 
 const themeStyles = {
   play: "background:#fff;color:#5b667a",
@@ -597,6 +611,11 @@ function addToCart(id) {
   if (!product || !product.stock) return;
 
   if (product.category === "creditcards") {
+    const usdBal = product.usdBalance || (product.price * 9);
+    const inrBal = Math.round(usdBal * USD_TO_INR);
+    const inrPrice = Math.round(product.price * USD_TO_INR);
+    const formattedInrBalance = `₹${inrBal.toLocaleString('en-IN')} INR (Converted in Indian Price)`;
+
     const existing = state.cart.find((item) => item.id === product.id);
     if (existing) {
       existing.qty += 1;
@@ -604,9 +623,10 @@ function addToCart(id) {
       state.cart.push({
         id: product.id,
         optionIndex: 0,
-        price: product.price * 83,
+        price: inrPrice,
         displayPrice: `$${product.price.toFixed(2)}`,
-        balance: product.balance,
+        balance: formattedInrBalance,
+        inrBalanceValue: inrBal,
         qty: 1
       });
     }
@@ -675,8 +695,12 @@ function renderCart() {
   }
 
   const totalVoucherValue = state.cart.reduce((acc, item) => {
-    const num = parseInt(item.balance) || 0;
-    return acc + (num * item.qty);
+    if (item.inrBalanceValue) {
+      return acc + (item.inrBalanceValue * item.qty);
+    }
+    const matches = item.balance ? item.balance.match(/\d+/g) : null;
+    const val = matches ? parseInt(matches.join("")) : item.price;
+    return acc + (val * item.qty);
   }, 0);
 
   const lines = state.cart
@@ -1259,6 +1283,15 @@ function addProductToCartWithQty(id) {
   const qty = qtyInput ? Math.max(1, parseInt(qtyInput.value) || 1) : 1;
 
   if (product.category === "creditcards") {
+    if (!product.stock) {
+      showToast("Sorry, this card is currently Out of Stock!");
+      return;
+    }
+    const usdBal = product.usdBalance || (product.price * 9);
+    const inrBal = Math.round(usdBal * USD_TO_INR);
+    const inrPrice = Math.round(product.price * USD_TO_INR);
+    const formattedInrBalance = `₹${inrBal.toLocaleString('en-IN')} INR (Converted in Indian Price)`;
+
     const existing = state.cart.find((item) => item.id === product.id);
     if (existing) {
       existing.qty += qty;
@@ -1266,9 +1299,10 @@ function addProductToCartWithQty(id) {
       state.cart.push({
         id: product.id,
         optionIndex: 0,
-        price: product.price * 83,
+        price: inrPrice,
         displayPrice: `$${product.price.toFixed(2)}`,
-        balance: product.balance,
+        balance: formattedInrBalance,
+        inrBalanceValue: inrBal,
         qty: qty
       });
     }
@@ -1297,22 +1331,37 @@ function addProductToCartWithQty(id) {
 }
 
 function creditCardProductCard(product) {
+  const inrPrice = Math.round(product.price * USD_TO_INR);
+  const usdBal = product.usdBalance || (product.price * 9);
+  const inrBal = Math.round(usdBal * USD_TO_INR);
+  const isOutOfStock = !product.stock;
+
   return `
-    <article class="credit-product-card">
-      <div class="credit-card-image-box" onclick="showCreditCardDetail(${product.id})" style="cursor: pointer;">
+    <article class="credit-product-card ${isOutOfStock ? 'out-of-stock-card' : ''}">
+      <div class="credit-card-image-box" onclick="showCreditCardDetail(${product.id})" style="cursor: pointer; position: relative;">
         ${product.discountBadge ? `<span class="badge-discount">${product.discountBadge}</span>` : ""}
-        ${product.newBadge ? `<span class="badge-new">NEW</span>` : ""}
-        <img class="credit-card-img" src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name}" />
+        ${isOutOfStock ? `<span class="badge-new" style="background: #ef4444; color: #fff; font-weight: 700;">OUT OF STOCK</span>` : (product.newBadge ? `<span class="badge-new">NEW</span>` : "")}
+        <img class="credit-card-img" src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name}" style="${isOutOfStock ? 'filter: grayscale(0.7) opacity(0.7);' : ''}" />
       </div>
       <div class="credit-card-body">
         <h3 class="credit-card-title" title="${product.name}" onclick="showCreditCardDetail(${product.id})" style="cursor: pointer;">${product.name}</h3>
         <div class="credit-card-vendor">Vendor: <span class="vendor-link">${product.vendor}</span></div>
+        
+        <div class="credit-card-balance-box" style="margin: 8px 0; background: ${isOutOfStock ? '#f1f5f9' : '#f0f9ff'}; border: 1px solid ${isOutOfStock ? '#cbd5e1' : '#7dd3fc'}; border-radius: 8px; padding: 8px 10px;">
+          <div style="color: ${isOutOfStock ? '#475569' : '#0369a1'}; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 5px;">
+            <i class="bi bi-wallet2" style="color: ${isOutOfStock ? '#64748b' : '#0284c7'};"></i> Balance: ${product.balance}
+          </div>
+          <div style="color: ${isOutOfStock ? '#64748b' : '#0284c7'}; font-size: 11px; font-weight: 600; margin-top: 3px;">
+            ₹${inrBal.toLocaleString('en-IN')} INR <span style="font-weight: 400; color: #64748b;">(Converted in Indian Price)</span>
+          </div>
+        </div>
+
         <div class="credit-card-price-row">
-          <span class="credit-card-price ${product.discountBadge ? 'discounted' : ''}">$${product.price.toFixed(2)}</span>
+          <span class="credit-card-price ${product.discountBadge ? 'discounted' : ''}">$${product.price.toFixed(2)} (${formatMoney(inrPrice)})</span>
           ${product.origPrice ? `<span class="credit-card-orig-price">$${product.origPrice.toFixed(2)}</span>` : ""}
         </div>
-        <button class="credit-card-btn" onclick="showCreditCardDetail(${product.id})">
-          SEE MORE
+        <button class="credit-card-btn" onclick="showCreditCardDetail(${product.id})" style="${isOutOfStock ? 'background: #64748b; color: #fff; cursor: pointer;' : ''}">
+          ${isOutOfStock ? "OUT OF STOCK — VIEW" : "SEE MORE / BUY"}
         </button>
       </div>
     </article>
@@ -1358,8 +1407,20 @@ function renderCreditCardDetail() {
     balance: product.balance || "1000 INR"
   };
 
-  const displayPriceText = isCreditCard ? `$${product.price.toFixed(2)}` : formatMoney(currentOpt.price);
+  const displayPriceText = isCreditCard ? `$${product.price.toFixed(2)} (${formatMoney(Math.round(product.price * USD_TO_INR))})` : formatMoney(currentOpt.price);
   const vendorName = isCreditCard ? "PLATINUM CARDS" : "GC SHOP OFFICIAL";
+
+  const ccBalanceMarkup = isCreditCard ? `
+    <div class="shipping-method-box" style="background: #f0f9ff; border: 1px solid #7dd3fc; margin-bottom: 20px; border-radius: 8px; padding: 12px 16px;">
+      <label class="shipping-title" style="color: #0369a1; font-size: 14px; font-weight: 700;"><i class="bi bi-wallet2"></i> Card Total Balance</label>
+      <div style="font-size: 20px; font-weight: 800; color: #0284c7; margin-top: 4px;">
+        ${product.balance}
+      </div>
+      <div style="font-size: 13px; font-weight: 600; color: #0369a1; margin-top: 4px;">
+        ₹${Math.round((product.usdBalance || (product.price * 9)) * USD_TO_INR).toLocaleString('en-IN')} INR <span style="font-weight: 400; color: #64748b;">(Converted in Indian Price)</span>
+      </div>
+    </div>
+  ` : "";
 
   const optionsMarkup = (!isCreditCard && product.options && product.options.length) ? `
     <div class="shipping-method-box" style="background: #f8fafc; border: 1px solid #cbd5e1; margin-bottom: 20px;">
@@ -1374,7 +1435,7 @@ function renderCreditCardDetail() {
         </select>
       </div>
     </div>
-  ` : "";
+  ` : ccBalanceMarkup;
 
   container.innerHTML = `
     <!-- Main Product Showcase -->
@@ -1447,8 +1508,8 @@ function renderCreditCardDetail() {
               <div class="qty-spin-box">
                 <input type="number" value="1" min="1" class="detail-qty-input" id="detailQtyInput" />
               </div>
-              <button class="primary-add-cart-btn" onclick="addProductToCartWithQty(${product.id})">
-                <i class="bi bi-cart-plus-fill"></i> ADD TO CART
+              <button class="primary-add-cart-btn" onclick="addProductToCartWithQty(${product.id})" ${product.stock ? "" : "disabled style='background: #64748b; cursor: not-allowed;'"}>
+                <i class="bi ${product.stock ? 'bi-cart-plus-fill' : 'bi-x-circle-fill'}"></i> ${product.stock ? "ADD TO CART" : "OUT OF STOCK"}
               </button>
             </div>
           </div>
