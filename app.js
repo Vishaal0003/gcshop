@@ -2053,6 +2053,50 @@ document.getElementById("ticketForm").addEventListener("submit", (event) => {
   renderTickets();
 });
 
+// --- Password Strength & Auto-Suggestion System ---
+function evaluatePasswordStrength(password) {
+  if (!password) return { width: "0%", color: "#ef4444", text: "Strength: Too short" };
+  let score = 0;
+  if (password.length >= 8) score++;
+  if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) score++;
+
+  if (score <= 1) {
+    return { width: "25%", color: "#ef4444", text: "Strength: Weak (Add numbers & special chars)" };
+  } else if (score === 2) {
+    return { width: "50%", color: "#f59e0b", text: "Strength: Medium (Add uppercase & special chars)" };
+  } else if (score === 3) {
+    return { width: "75%", color: "#3b82f6", text: "Strength: Good (Add special symbols)" };
+  } else {
+    return { width: "100%", color: "#10b981", text: "Strength: Strong 💪" };
+  }
+}
+
+function updatePwdMeter(inputId, fillId, textId) {
+  const input = document.getElementById(inputId);
+  const fill = document.getElementById(fillId);
+  const text = document.getElementById(textId);
+  if (!input || !fill || !text) return;
+  const result = evaluatePasswordStrength(input.value);
+  fill.style.width = result.width;
+  fill.style.backgroundColor = result.color;
+  text.textContent = result.text;
+  text.style.color = result.color;
+}
+
+window.useSuggestedPassword = function(inputId, codeId, fillId, textId) {
+  const codeEl = document.getElementById(codeId);
+  const inputEl = document.getElementById(inputId);
+  if (codeEl && inputEl) {
+    inputEl.value = codeEl.textContent.trim();
+    inputEl.type = "text";
+    setTimeout(() => { inputEl.type = "password"; }, 2500);
+    updatePwdMeter(inputId, fillId, textId);
+    showToast("Suggested strong password applied!");
+  }
+};
+
 document.getElementById("signupForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const name = document.getElementById("signupName").value.trim();
@@ -2078,18 +2122,59 @@ document.getElementById("signupForm").addEventListener("submit", (event) => {
   };
 
   saveUserToDb(user);
-  localStorage.setItem("gcshop_user", JSON.stringify(user));
-  localStorage.setItem("gcshop_session", "active");
-  state.user = user;
-
-  const globalOrders = getGlobalOrders();
-  state.orders = globalOrders.filter((o) => o.userEmail === user.email);
-
   recordActivity(user.email, "Account Registered", `New user registered: ${user.name}`);
   event.target.reset();
-  showToast(`Welcome, ${user.name}!`);
-  setView("home");
+
+  // Redirect to login page as requested by user
+  const loginEmailInput = document.getElementById("loginEmail");
+  if (loginEmailInput) loginEmailInput.value = email;
+
+  showToast("Account created successfully! Please login with your credentials.");
+  setView("login");
 });
+
+const forgotForm = document.getElementById("forgotForm");
+if (forgotForm) {
+  forgotForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const email = document.getElementById("forgotEmail").value.trim().toLowerCase();
+    const newPassword = document.getElementById("forgotPassword").value;
+
+    let db = getUsersDb();
+    let user = db.find((u) => u.email === email);
+
+    if (!user) {
+      showToast("❌ No registered account found with this email!");
+      return;
+    }
+
+    user.password = newPassword;
+    saveUserToDb(user);
+
+    recordActivity(user.email, "Password Reset", "User successfully reset password");
+    event.target.reset();
+
+    const loginEmailInput = document.getElementById("loginEmail");
+    if (loginEmailInput) loginEmailInput.value = email;
+
+    showToast("Password updated successfully! Please login with your new password.");
+    setView("login");
+  });
+}
+
+const signupPwdInput = document.getElementById("signupPassword");
+if (signupPwdInput) {
+  signupPwdInput.addEventListener("input", () => {
+    updatePwdMeter("signupPassword", "signupPwdFill", "signupPwdText");
+  });
+}
+
+const forgotPwdInput = document.getElementById("forgotPassword");
+if (forgotPwdInput) {
+  forgotPwdInput.addEventListener("input", () => {
+    updatePwdMeter("forgotPassword", "forgotPwdFill", "forgotPwdText");
+  });
+}
 
 document.getElementById("loginForm").addEventListener("submit", (event) => {
   event.preventDefault();

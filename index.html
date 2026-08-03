@@ -306,7 +306,7 @@
             Password
             <input id="loginPassword" type="password" required />
           </label>
-          <button class="forgot-btn" type="button">Forgot password?</button>
+          <button class="forgot-btn" id="forgotBtn" type="button" data-view="forgot">Forgot password?</button>
           <button class="success-btn" type="submit">Login</button>
           <p class="auth-switch">Don't have an account? <button type="button" data-view="signup">Sign up</button></p>
         </form>
@@ -333,8 +333,65 @@
             Password
             <input id="signupPassword" type="password" minlength="6" required />
           </label>
-          <button class="success-btn" type="submit">Create Account</button>
+
+          <div class="pwd-strength-container" id="signupPwdMeter">
+            <div class="pwd-strength-bar">
+              <div class="pwd-strength-fill" id="signupPwdFill"></div>
+            </div>
+            <div class="pwd-strength-text" id="signupPwdText">Strength: Weak</div>
+            <div class="pwd-suggestion-box" id="signupPwdSuggestion">
+              <div class="pwd-suggestion-header">
+                <i class="bi bi-shield-check" style="color: #6366f1;"></i> Suggested Strong Password:
+              </div>
+              <div class="pwd-suggestion-code">
+                <code id="signupSuggestedCode">GcShop#9824!K</code>
+                <button type="button" class="pwd-use-btn" onclick="useSuggestedPassword('signupPassword', 'signupSuggestedCode', 'signupPwdFill', 'signupPwdText')">
+                  <i class="bi bi-magic"></i> Use Suggested
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button class="success-btn" type="submit" style="margin-top: 10px;">Create Account</button>
           <p class="auth-switch">Already have an account? <button type="button" data-view="login">Login</button></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="view" id="forgotView">
+      <div class="auth-layout">
+        <form class="content-card auth-card" id="forgotForm">
+          <h2>Reset Password</h2>
+          <p class="muted" style="margin-bottom: 16px; font-size: 13.5px;">Enter your registered Email address to set a new password.</p>
+          <label>
+            Registered Email *
+            <input id="forgotEmail" type="email" placeholder="name@example.com" required />
+          </label>
+          <label>
+            New Password *
+            <input id="forgotPassword" type="password" minlength="6" placeholder="Enter new password" required />
+          </label>
+
+          <div class="pwd-strength-container" id="forgotPwdMeter">
+            <div class="pwd-strength-bar">
+              <div class="pwd-strength-fill" id="forgotPwdFill"></div>
+            </div>
+            <div class="pwd-strength-text" id="forgotPwdText">Strength: Weak</div>
+            <div class="pwd-suggestion-box" id="forgotPwdSuggestion">
+              <div class="pwd-suggestion-header">
+                <i class="bi bi-shield-check" style="color: #6366f1;"></i> Suggested Strong Password:
+              </div>
+              <div class="pwd-suggestion-code">
+                <code id="forgotSuggestedCode">ShopKey#8472!X</code>
+                <button type="button" class="pwd-use-btn" onclick="useSuggestedPassword('forgotPassword', 'forgotSuggestedCode', 'forgotPwdFill', 'forgotPwdText')">
+                  <i class="bi bi-magic"></i> Use Suggested
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button class="success-btn" type="submit" style="margin-top: 10px;">Update Password</button>
+          <p class="auth-switch">Remember your password? <button type="button" data-view="login">Back to Login</button></p>
         </form>
       </div>
     </section>
