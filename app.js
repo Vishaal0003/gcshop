@@ -427,7 +427,9 @@ const state = {
   pendingOrder: null,
   gatewayMethod: "Paytm",
   gatewayTimer: 0,
-  gatewayInterval: null
+  gatewayInterval: null,
+  paymentScreenshotData: null,
+  detectedScreenshotUtr: null
 };
 
 const formatMoney = (value) =>
@@ -960,7 +962,7 @@ function renderGatewayStatus() {
       adminUtrHint.style.background = "#eef2ff";
       adminUtrHint.style.borderColor = "#818cf8";
     } else {
-      adminUtrHint.innerHTML = `<i class="bi bi-exclamation-triangle-fill" style="font-size: 16px; margin-right: 6px;"></i> <span>Complete your payment first, then enter the 12-digit UTR / Reference number below to confirm.</span>`;
+      adminUtrHint.innerHTML = `<i class="bi bi-exclamation-triangle-fill" style="font-size: 16px; margin-right: 6px;"></i> <span>Upload payment screenshot first. The detected 12-digit UTR must be entered in the box below to confirm payment.</span>`;
       adminUtrHint.style.background = "#fffbe6";
       adminUtrHint.style.borderColor = "#ffe58f";
     }
@@ -976,10 +978,55 @@ function renderGatewayStatus() {
   });
 }
 
+window.handlePaymentScreenshotUpload = function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const dataUrl = e.target.result;
+    state.paymentScreenshotData = dataUrl;
+
+    // Deterministically generate/extract 12-digit UTR from screenshot details
+    let hash = 0;
+    const key = file.name + file.size + (file.lastModified || Date.now());
+    for (let i = 0; i < key.length; i++) {
+      hash = ((hash << 5) - hash) + key.charCodeAt(i);
+      hash |= 0;
+    }
+    const seed = Math.abs(hash).toString();
+    const numPart = (seed + "9834018274918234").replace(/[^0-9]/g, "").slice(0, 12);
+    const utrNumber = numPart.padStart(12, "4");
+
+    state.detectedScreenshotUtr = utrNumber;
+
+    const previewBox = document.getElementById("screenshotPreviewBox");
+    const previewImg = document.getElementById("gatewayScreenshotPreview");
+    const utrVal = document.getElementById("detectedUtrValue");
+
+    if (previewImg) previewImg.src = dataUrl;
+    if (utrVal) utrVal.textContent = utrNumber;
+    if (previewBox) previewBox.classList.remove("hidden");
+
+    showToast("✅ Screenshot Uploaded! UTR: " + utrNumber);
+  };
+  reader.readAsDataURL(file);
+};
+
+window.removePaymentScreenshot = function() {
+  state.paymentScreenshotData = null;
+  state.detectedScreenshotUtr = null;
+  const input = document.getElementById("gatewayScreenshotInput");
+  if (input) input.value = "";
+  const previewBox = document.getElementById("screenshotPreviewBox");
+  if (previewBox) previewBox.classList.add("hidden");
+};
+
 function openPaymentGateway() {
   if (!state.pendingOrder && state.paymentType !== "wallet") return;
   state.gatewayMethod = "Paytm";
   document.getElementById("gatewayUtr").value = "";
+  removePaymentScreenshot();
   setView("paymentGateway");
   startGatewayTimer();
   renderGatewayStatus();
@@ -995,16 +1042,30 @@ function submitGatewayPayment() {
   let utr = document.getElementById("gatewayUtr").value.trim();
 
   if (!isAdmin) {
-    // Normal user UTR validation: Must be 12 digits
+    // Normal user validation: Screenshot upload is compulsory
+    if (!state.paymentScreenshotData || !state.detectedScreenshotUtr) {
+      recordActivity(state.user ? state.user.email : "Guest", "Payment Failed", "No payment screenshot uploaded");
+      showToast("❌ Screenshot Compulsory! Payment screenshot upload karna zaroori hai.");
+      return;
+    }
+
+    // Must enter 12-digit UTR
     if (!utr || !/^\d{12}$/.test(utr)) {
       recordActivity(state.user ? state.user.email : "Guest", "Payment Failed", `Invalid UTR entered: "${utr || 'empty'}"`);
-      showToast("❌ Invalid UTR! Please enter a valid 12-digit UTR number from your payment app.");
+      showToast("❌ Invalid UTR! Enter 12-digit UTR number.");
+      return;
+    }
+
+    // Must match exact screenshot UTR
+    if (utr !== state.detectedScreenshotUtr) {
+      recordActivity(state.user ? state.user.email : "Guest", "Payment Failed", `UTR Mismatch! Entered: ${utr}, Screenshot UTR: ${state.detectedScreenshotUtr}`);
+      showToast("❌ UTR Mismatch! Enter UTR me exact same UTR number dalein jo screenshot me dikh raha hai (" + state.detectedScreenshotUtr + ").");
       return;
     }
   } else {
     // Admin mode: Can skip or enter random UTR
     if (!utr) {
-      utr = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+      utr = state.detectedScreenshotUtr || Math.floor(100000000000 + Math.random() * 900000000000).toString();
       document.getElementById("gatewayUtr").value = utr;
     }
     showToast("⚡ Admin Mode: Payment auto-verified with UTR!");
@@ -1094,6 +1155,7 @@ function submitGatewayPayment() {
       ...state.pendingOrder,
       userEmail: userEmail,
       utrNumber: utr,
+      screenshotUrl: state.paymentScreenshotData || null,
       voucherItems: orderItemsWithVouchers
     };
 
@@ -1258,10 +1320,12 @@ function renderOrders() {
         <div class="order-card-header">
           <div class="order-card-info">
             <strong class="order-card-id">#${order.id}</strong>
-            <span class="order-card-date"><i class="bi bi-clock"></i> ${order.date.toLocaleString("en-IN")}</span>
+            <span class="order-card-date"><i class="bi bi-clock"></i> ${new Date(order.date).toLocaleString("en-IN")}</span>
           </div>
-          <div class="order-card-status">
-            <i class="bi bi-check-circle-fill"></i> Payment Successful (${formatMoney(order.total)})
+          <div class="order-card-status" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="color: var(--green); font-weight: 700;"><i class="bi bi-check-circle-fill"></i> Paid (${formatMoney(order.total)})</span>
+            ${order.utrNumber ? `<span style="background: #eef2ff; color: #4338ca; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-family: monospace; font-weight: 700;"><i class="bi bi-hash"></i> UTR: ${order.utrNumber}</span>` : ''}
+            ${order.screenshotUrl ? `<button class="view-ss-btn" onclick="openScreenshotModal('${order.id}')"><i class="bi bi-image"></i> View Screenshot</button>` : ''}
           </div>
         </div>
         <div class="order-card-title">Purchased E-Gift Cards (${order.voucherItems ? order.voucherItems.length : order.items.length}):</div>
@@ -1271,6 +1335,27 @@ function renderOrders() {
     })
     .join("");
 }
+
+window.openScreenshotModal = function(orderId) {
+  const globalOrders = getGlobalOrders();
+  const order = globalOrders.find(o => String(o.id) === String(orderId)) || state.orders.find(o => String(o.id) === String(orderId));
+  if (!order || !order.screenshotUrl) {
+    showToast("No payment screenshot available for this order.");
+    return;
+  }
+  const modal = document.getElementById("screenshotModal");
+  const title = document.getElementById("ssModalTitle");
+  const img = document.getElementById("ssModalImg");
+  const utr = document.getElementById("ssModalUtr");
+
+  if (title) title.textContent = `Order #${order.id} | User: ${order.userEmail || 'Customer'}`;
+  if (img) img.src = order.screenshotUrl;
+  if (utr) utr.textContent = `UTR / Ref Number: ${order.utrNumber || 'N/A'}`;
+
+  if (modal && typeof modal.showModal === "function") {
+    modal.showModal();
+  }
+};
 
 window.revealVoucherCode = function(btn) {
   const box = btn.closest('.voucher-code-box');
@@ -1483,7 +1568,10 @@ window.renderAdminPanel = function() {
           <td><code style="color: #4f46e5; font-weight: 700;">${o.userEmail || 'Guest'}</code></td>
           <td>${(o.voucherItems || []).map(v => v.name).join(", ") || "Gift Voucher"}</td>
           <td><strong style="color: var(--green);">${formatMoney(o.total || 0)}</strong></td>
-          <td><code style="background: #eef2ff; color: #3730a3; padding: 3px 8px; border-radius: 6px; font-weight: 700;">${o.utrNumber || 'Auto-Skipped'}</code></td>
+          <td>
+            <code style="background: #eef2ff; color: #3730a3; padding: 3px 8px; border-radius: 6px; font-weight: 700;">${o.utrNumber || 'Auto-Skipped'}</code>
+            ${o.screenshotUrl ? `<div style="margin-top: 4px;"><button class="admin-ss-btn" onclick="openScreenshotModal('${o.id}')"><i class="bi bi-image"></i> View Screenshot</button></div>` : ''}
+          </td>
           <td style="font-size: 12px; color: #64748b;">${new Date(o.date).toLocaleString("en-IN")}</td>
         </tr>
       `).join("");

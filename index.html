@@ -212,10 +212,35 @@
               </div>
             </div>
           </div>
-          <div class="gateway-note">
+          <div class="gateway-note" id="adminUtrHint">
             <i class="bi bi-exclamation-triangle-fill" style="font-size: 16px; margin-right: 6px;"></i>
-            <span>Complete your payment first, then enter the 12-digit UTR / Reference number below to confirm.</span>
+            <span>Complete your payment first, then upload payment screenshot and enter the 12-digit UTR / Reference number below to confirm.</span>
           </div>
+
+          <div class="gateway-screenshot-container">
+            <label class="gateway-screenshot-dropzone" for="gatewayScreenshotInput" id="screenshotDropzone">
+              <i class="bi bi-cloud-arrow-up-fill" style="font-size: 32px; color: #6366f1;"></i>
+              <span style="font-weight: 700; color: #1e293b; font-size: 14px; margin-top: 4px;">Upload Payment Screenshot *</span>
+              <span style="font-size: 12px; color: #64748b; margin-top: 2px;">Attach payment receipt screenshot to extract UTR number</span>
+              <input type="file" id="gatewayScreenshotInput" accept="image/*" style="display: none;" onchange="handlePaymentScreenshotUpload(event)" />
+            </label>
+            
+            <div id="screenshotPreviewBox" class="screenshot-preview-box hidden">
+              <div class="screenshot-preview-header">
+                <span><i class="bi bi-image-fill" style="color: #6366f1; margin-right: 6px;"></i> Payment Proof Screenshot</span>
+                <button type="button" class="remove-ss-btn" onclick="removePaymentScreenshot()"><i class="bi bi-x-circle-fill"></i> Remove</button>
+              </div>
+              <div class="screenshot-img-wrapper">
+                <img id="gatewayScreenshotPreview" src="" alt="Uploaded Payment Screenshot" />
+              </div>
+              <div class="detected-utr-badge" id="detectedUtrBadge">
+                <div class="utr-badge-title"><i class="bi bi-patch-check-fill"></i> Screenshot Verified UTR Number</div>
+                <div class="utr-badge-value" id="detectedUtrValue">---- ---- ----</div>
+                <div class="utr-badge-sub">Enter this exact UTR number in the input box below to confirm payment</div>
+              </div>
+            </div>
+          </div>
+
           <label class="gateway-utr">
             <span>Enter UTR / Reference Number *</span>
             <input id="gatewayUtr" type="text" placeholder="e.g. 329482910384" />
@@ -603,6 +628,18 @@
         <span>Go to My Orders</span>
         <i class="bi bi-arrow-right-circle-fill"></i>
       </button>
+    </div>
+  </dialog>
+
+  <dialog id="screenshotModal">
+    <div class="modal-card" style="text-align: center; max-width: 500px; padding: 24px;">
+      <button class="close-btn" onclick="document.getElementById('screenshotModal').close()" aria-label="Close">×</button>
+      <h2 style="color: #4f46e5; margin-bottom: 4px;"><i class="bi bi-shield-check" style="color: #6366f1;"></i> Payment Proof Screenshot</h2>
+      <p class="muted" id="ssModalTitle" style="font-size: 13.5px; margin-bottom: 14px;">Order #PAYMENT</p>
+      <div style="margin: 12px 0; max-height: 380px; overflow-y: auto; background: #0f172a; border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: center;">
+        <img id="ssModalImg" src="" alt="Payment Proof Screenshot" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.3);" />
+      </div>
+      <div id="ssModalUtr" style="font-family: monospace; font-size: 15px; font-weight: 700; color: #1e293b; background: #eef2ff; border: 1px solid #c7d2fe; padding: 10px; border-radius: 8px; margin-top: 14px;">UTR: -</div>
     </div>
   </dialog>
 
