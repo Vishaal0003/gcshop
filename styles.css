@@ -40,6 +40,56 @@ button {
   cursor: pointer;
 }
 
+/* Floating Header Sale Ticker Banner */
+.floating-header-sale-banner {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(90deg, #991b1b, #c2410c, #15803d, #1e40af, #991b1b);
+  background-size: 300% 100%;
+  animation: bgGradientMove 8s ease infinite;
+  color: #ffffff;
+  padding: 8px 0;
+  font-size: 13.5px;
+  font-weight: 400; /* Non-bold font as requested */
+  letter-spacing: 0.4px;
+  position: relative;
+  z-index: 25;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes bgGradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.ticker-scroll-content {
+  display: flex;
+  white-space: nowrap;
+  width: max-content;
+  animation: framerFloatRightToLeft 24s linear infinite;
+  will-change: transform;
+}
+
+.ticker-scroll-content span {
+  font-weight: 400; /* Regular non-bold font */
+  display: inline-block;
+  padding-right: 50px;
+}
+
+.floating-header-sale-banner:hover .ticker-scroll-content {
+  animation-play-state: paused;
+}
+
+@keyframes framerFloatRightToLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .topbar {
   position: sticky;
   top: 0;
@@ -66,19 +116,7 @@ button {
 }
 
 .global-discount-badge {
-  position: absolute;
-  top: 100%;
-  left: 28px;
-  background: linear-gradient(90deg, #ff4b4b, #ff8a00);
-  color: #fff;
-  padding: 6px 16px;
-  border-radius: 0 0 10px 10px;
-  font-weight: 700;
-  font-size: 14px;
-  box-shadow: 0 6px 16px rgba(255, 75, 75, 0.35);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  z-index: 15;
+  display: none;
 }
 
 .brand {
@@ -393,8 +431,13 @@ label textarea {
     font-size: 18px;
   }
 
-  .ad-prev { left: 6px; }
-  .ad-next { right: 6px; }
+  .ad-prev {
+    left: 6px;
+  }
+
+  .ad-next {
+    right: 6px;
+  }
 
   .ad-dots {
     bottom: 8px;
@@ -430,8 +473,13 @@ label textarea {
     font-size: 16px;
   }
 
-  .ad-prev { left: 4px; }
-  .ad-next { right: 4px; }
+  .ad-prev {
+    left: 4px;
+  }
+
+  .ad-next {
+    right: 4px;
+  }
 
   .ad-dots {
     bottom: 6px;
@@ -880,7 +928,8 @@ label textarea {
   width: fit-content;
 }
 
-.price-box, .value-box {
+.price-box,
+.value-box {
   display: flex;
   flex-direction: column;
 }
@@ -1819,7 +1868,8 @@ dialog::backdrop {
     padding: 6px 10px;
   }
 
-  .pay-price, .get-val {
+  .pay-price,
+  .get-val {
     font-size: 14px;
   }
 
@@ -2082,9 +2132,20 @@ dialog::backdrop {
 }
 
 @keyframes popInScale {
-  0% { transform: scale(0); opacity: 0; }
-  80% { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  80% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .success-pop-title {
@@ -2400,7 +2461,7 @@ dialog::backdrop {
   align-items: center;
   gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .back-link-btn:hover {
@@ -2416,7 +2477,7 @@ dialog::backdrop {
   border-radius: 8px;
   border: 1px solid #e2e8f0;
   margin-bottom: 24px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .card-detail-header-banner h2 {
@@ -2443,7 +2504,7 @@ dialog::backdrop {
   grid-template-columns: 280px 1fr;
   gap: 36px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .card-detail-img-wrapper {
@@ -2452,7 +2513,7 @@ dialog::backdrop {
   border-radius: 8px;
   overflow: hidden;
   background: linear-gradient(135deg, #0f172a, #1e293b);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .card-detail-img-wrapper img {
@@ -2470,7 +2531,7 @@ dialog::backdrop {
   color: #ffffff;
   font-weight: 600;
   font-size: 18px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .shop-confidence-banner {
@@ -2579,7 +2640,7 @@ dialog::backdrop {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .shield-header {
@@ -2704,7 +2765,7 @@ dialog::backdrop {
   border-radius: 8px;
   padding: 28px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
 }
 
 .section-heading {
@@ -2794,7 +2855,7 @@ dialog::backdrop {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   text-align: center;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
 }
 
 .feature-box {
@@ -2854,20 +2915,24 @@ dialog::backdrop {
   }
 
   /* Catalog Mobile Responsiveness */
-  .cards-grid, .credit-cards-grid {
+  .cards-grid,
+  .credit-cards-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 
-  .gift-card, .credit-product-card {
+  .gift-card,
+  .credit-product-card {
     padding: 10px;
   }
 
-  .gift-card-title, .credit-card-title {
+  .gift-card-title,
+  .credit-card-title {
     font-size: 14px;
   }
 
-  .card-btn, .credit-card-btn {
+  .card-btn,
+  .credit-card-btn {
     padding: 8px 10px;
     font-size: 12px;
   }
@@ -2947,7 +3012,8 @@ dialog::backdrop {
     white-space: nowrap;
   }
 
-  .cards-grid, .credit-cards-grid {
+  .cards-grid,
+  .credit-cards-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
@@ -3162,6 +3228,7 @@ dialog::backdrop {
   .admin-stats-grid {
     grid-template-columns: 1fr;
   }
+
   .admin-subtabs {
     flex-direction: column;
   }
@@ -3361,7 +3428,8 @@ dialog::backdrop {
   font-weight: 600;
 }
 
-.view-ss-btn, .admin-ss-btn {
+.view-ss-btn,
+.admin-ss-btn {
   background: #eef2ff;
   color: #4f46e5;
   border: 1px solid #c7d2fe;
@@ -3376,7 +3444,8 @@ dialog::backdrop {
   transition: all 0.15s ease;
 }
 
-.view-ss-btn:hover, .admin-ss-btn:hover {
+.view-ss-btn:hover,
+.admin-ss-btn:hover {
   background: #e0e7ff;
   color: #3730a3;
 }
@@ -3570,4 +3639,140 @@ dialog::backdrop {
 .admin-reject-btn:hover {
   background: #dc2626;
   transform: translateY(-1px);
+}
+
+/* Independence Day Sale Timeline Banner */
+.independence-timeline-banner {
+  margin: 20px 0;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffffff 50%, #f0fdf4 100%);
+  border: 2px solid #fdba74;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(234, 88, 12, 0.08);
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed #fed7aa;
+}
+
+.timeline-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.live-pill {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  background: #ffffff;
+  border-radius: 50%;
+  animation: pulseDotAnim 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseDotAnim {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.4); }
+}
+
+.timeline-main-title {
+  margin: 0;
+  font-size: clamp(18px, 2.2vw, 24px);
+  font-weight: 500;
+  color: #9a3412;
+}
+
+.timeline-dates-badge {
+  background: #fff3ed;
+  border: 1px solid #ffedd5;
+  color: #c2410c;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timeline-discounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.timeline-discount-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid #ffedd5;
+  border-left: 4px solid #ea580c;
+  padding: 12px 16px;
+  border-radius: 10px;
+}
+
+.timeline-discount-card.alt {
+  border-left-color: #16a34a;
+  border-color: #dcfce7;
+  background: #f0fdf4;
+}
+
+.disc-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.disc-info strong {
+  display: block;
+  font-size: 13.5px;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.disc-info small {
+  display: block;
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.card-orig-price-crossed {
+  text-decoration: line-through;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+  margin-right: 6px;
+}
+
+.badge-200-off {
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  display: inline-block;
 }

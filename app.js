@@ -7,11 +7,11 @@ const products = [
     theme: "play",
     selectedOptionIndex: 0,
     options: [
-      { price: 649, balance: "3500 INR" },
-      { price: 999, balance: "5000 INR" },
-      { price: 1499, balance: "7500 INR" },
-      { price: 1999, balance: "10000 INR" },
-      { price: 3999, balance: "20000 INR" }
+      { price: 449, origPrice: 649, balance: "3500" },
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 1699, origPrice: 1999, balance: "10000" },
+      { price: 3699, origPrice: 3999, balance: "20000" }
     ]
   },
   {
@@ -22,11 +22,11 @@ const products = [
     theme: "flipkart",
     selectedOptionIndex: 0,
     options: [
-      { price: 999, balance: "5000 INR" },
-      { price: 1449, balance: "7500 INR" },
-      { price: 1999, balance: "10000 INR" },
-      { price: 2499, balance: "12500 INR" },
-      { price: 4999, balance: "25000 INR" }
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1149, origPrice: 1449, balance: "7500" },
+      { price: 1699, origPrice: 1999, balance: "10000" },
+      { price: 2199, origPrice: 2499, balance: "12500" },
+      { price: 4699, origPrice: 4999, balance: "25000" }
     ]
   },
   {
@@ -37,25 +37,25 @@ const products = [
     theme: "amazonpay",
     selectedOptionIndex: 0,
     options: [
-      { price: 699, balance: "3500 INR" },
-      { price: 949, balance: "5000 INR" },
-      { price: 1499, balance: "7500 INR" },
-      { price: 2049, balance: "10000 INR" },
-      { price: 4949, balance: "25000 INR" }
+      { price: 499, origPrice: 699, balance: "3500" },
+      { price: 699, origPrice: 949, balance: "5000" },
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 1749, origPrice: 2049, balance: "10000" },
+      { price: 4649, origPrice: 4949, balance: "25000" }
     ]
   },
   {
     id: 4,
     name: "APPLE",
     category: "shopping",
-    stock: true,
+    stock: false,
     theme: "apple",
     selectedOptionIndex: 0,
     options: [
-      { price: 649, balance: "3500 INR" },
-      { price: 999, balance: "5000 INR" },
-      { price: 1949, balance: "10000 INR" },
-      { price: 3999, balance: "20000 INR" }
+      { price: 449, origPrice: 649, balance: "3500" },
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1649, origPrice: 1949, balance: "10000" },
+      { price: 3699, origPrice: 3999, balance: "20000" }
     ]
   },
   {
@@ -66,10 +66,10 @@ const products = [
     theme: "swiggy",
     selectedOptionIndex: 0,
     options: [
-      { price: 599, balance: "3000 INR" },
-      { price: 999, balance: "5000 INR" },
-      { price: 1499, balance: "7500 INR" },
-      { price: 1999, balance: "10000 INR" }
+      { price: 399, origPrice: 599, balance: "3000" },
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 1699, origPrice: 1999, balance: "10000" }
     ]
   },
   {
@@ -80,10 +80,10 @@ const products = [
     theme: "zomato",
     selectedOptionIndex: 0,
     options: [
-      { price: 649, balance: "3000 INR" },
-      { price: 1049, balance: "5000 INR" },
-      { price: 1499, balance: "7500 INR" },
-      { price: 1999, balance: "10000 INR" }
+      { price: 449, origPrice: 649, balance: "3000" },
+      { price: 799, origPrice: 1049, balance: "5000" },
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 1699, origPrice: 1999, balance: "10000" }
     ]
   },
   {
@@ -94,10 +94,10 @@ const products = [
     theme: "blinkit",
     selectedOptionIndex: 0,
     options: [
-      { price: 649, balance: "3000 INR" },
-      { price: 999, balance: "5000 INR" },
-      { price: 1499, balance: "7500 INR" },
-      { price: 1949, balance: "10000 INR" }
+      { price: 449, origPrice: 649, balance: "3000" },
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 1649, origPrice: 1949, balance: "10000" }
     ]
   },
   {
@@ -108,24 +108,24 @@ const products = [
     theme: "pvr",
     selectedOptionIndex: 0,
     options: [
-      { price: 649, balance: "3000 INR" },
-      { price: 999, balance: "5000 INR" },
-      { price: 1499, balance: "7500 INR" },
-      { price: 1999, balance: "10000 INR" }
+      { price: 449, origPrice: 649, balance: "3000" },
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 1699, origPrice: 1999, balance: "10000" }
     ]
   },
   {
     id: 9,
     name: "JIO DIGITAL",
     category: "entertainment",
-    stock: true,
+    stock: false,
     theme: "jio",
     selectedOptionIndex: 0,
     options: [
-      { price: 649, balance: "3000 INR" },
-      { price: 999, balance: "5000 INR" },
-      { price: 1499, balance: "7500 INR" },
-      { price: 1999, balance: "10000 INR" }
+      { price: 449, origPrice: 649, balance: "3000" },
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 1699, origPrice: 1999, balance: "10000" }
     ]
   },
   {
@@ -136,11 +136,11 @@ const products = [
     theme: "steam",
     selectedOptionIndex: 0,
     options: [
-      { price: 649, balance: "3500 INR" },
-      { price: 999, balance: "5000 INR" },
-      { price: 1499, balance: "7500 INR" },
-      { price: 1999, balance: "10000 INR" },
-      { price: 3949, balance: "20000 INR" }
+      { price: 449, origPrice: 649, balance: "3500" },
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 1699, origPrice: 1999, balance: "10000" },
+      { price: 3649, origPrice: 3949, balance: "20000" }
     ]
   },
   {
@@ -151,10 +151,10 @@ const products = [
     theme: "xbox",
     selectedOptionIndex: 0,
     options: [
-      { price: 649, balance: "3500 INR" },
-      { price: 999, balance: "5000 INR" },
-      { price: 1499, balance: "7500 INR" },
-      { price: 1999, balance: "10000 INR" }
+      { price: 449, origPrice: 649, balance: "3500" },
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 1699, origPrice: 1999, balance: "10000" }
     ]
   },
   {
@@ -165,8 +165,8 @@ const products = [
     theme: "bigbasket",
     selectedOptionIndex: 0,
     options: [
-      { price: 999, balance: "5000 INR" },
-      { price: 1999, balance: "10000 INR" }
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1699, origPrice: 1999, balance: "10000" }
     ]
   },
   {
@@ -177,20 +177,20 @@ const products = [
     theme: "bestbuy",
     selectedOptionIndex: 0,
     options: [
-      { price: 999, balance: "5000 INR" },
-      { price: 1999, balance: "10000 INR" }
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1699, origPrice: 1999, balance: "10000" }
     ]
   },
   {
     id: 14,
     name: "ETSY",
     category: "shopping",
-    stock: true,
+    stock: false,
     theme: "etsy",
     selectedOptionIndex: 0,
     options: [
-      { price: 999, balance: "5000 INR" },
-      { price: 1999, balance: "10000 INR" }
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1699, origPrice: 1999, balance: "10000" }
     ]
   },
   {
@@ -201,20 +201,20 @@ const products = [
     theme: "target",
     selectedOptionIndex: 0,
     options: [
-      { price: 999, balance: "5000 INR" },
-      { price: 1999, balance: "10000 INR" }
+      { price: 749, origPrice: 999, balance: "5000" },
+      { price: 1699, origPrice: 1999, balance: "10000" }
     ]
   },
   {
     id: 16,
     name: "WALMART",
     category: "shopping",
-    stock: true,
+    stock: false,
     theme: "walmart",
     selectedOptionIndex: 0,
     options: [
-      { price: 1499, balance: "7500 INR" },
-      { price: 2499, balance: "12500 INR" }
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 2199, origPrice: 2499, balance: "12500" }
     ]
   },
   {
@@ -225,8 +225,8 @@ const products = [
     theme: "shopify",
     selectedOptionIndex: 0,
     options: [
-      { price: 1499, balance: "7500 INR" },
-      { price: 2499, balance: "12500 INR" }
+      { price: 1199, origPrice: 1499, balance: "7500" },
+      { price: 2199, origPrice: 2499, balance: "12500" }
     ]
   },
   {
@@ -237,8 +237,8 @@ const products = [
     theme: "amazon",
     selectedOptionIndex: 0,
     options: [
-      { price: 1999, balance: "10000 INR" },
-      { price: 4999, balance: "25000 INR" }
+      { price: 1699, origPrice: 1999, balance: "10000" },
+      { price: 4699, origPrice: 4999, balance: "25000" }
     ]
   },
   {
@@ -246,9 +246,9 @@ const products = [
     name: "DIGITAL Visa Prepaid 1 Card (Balance: $990.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 110,
-    origPrice: null,
-    discountBadge: "9x VALUE",
+    price: 22,
+    origPrice: 110,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 990,
     balance: "$990.00 USD",
@@ -260,9 +260,9 @@ const products = [
     name: "DIGITAL Visa Prepaid 3 Cards (Balance: $2,790.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 279,
-    origPrice: 350,
-    discountBadge: "10x VALUE",
+    price: 56,
+    origPrice: 279,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 2790,
     balance: "$2,790.00 USD",
@@ -274,9 +274,9 @@ const products = [
     name: "DIGITAL Visa Prepaid 5 Cards (Balance: $4,510.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 410,
-    origPrice: 590,
-    discountBadge: "11x VALUE",
+    price: 82,
+    origPrice: 410,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 4510,
     balance: "$4,510.00 USD",
@@ -288,9 +288,9 @@ const products = [
     name: "DIGITAL Visa Prepaid 10 Cards (Balance: $8,520.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 710,
-    origPrice: 1190,
-    discountBadge: "12x VALUE",
+    price: 142,
+    origPrice: 710,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 8520,
     balance: "$8,520.00 USD",
@@ -302,9 +302,9 @@ const products = [
     name: "DIGITAL MasterCard Prepaid 1 Card (Balance: $880.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 110,
-    origPrice: null,
-    discountBadge: "8x VALUE",
+    price: 22,
+    origPrice: 110,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 880,
     balance: "$880.00 USD",
@@ -316,9 +316,9 @@ const products = [
     name: "DIGITAL MasterCard Prepaid 3 Cards (Balance: $2,511.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 279,
-    origPrice: 350,
-    discountBadge: "9x VALUE",
+    price: 56,
+    origPrice: 279,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 2511,
     balance: "$2,511.00 USD",
@@ -330,9 +330,9 @@ const products = [
     name: "DIGITAL MasterCard Prepaid 5 Cards (Balance: $4,100.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 410,
-    origPrice: 590,
-    discountBadge: "10x VALUE",
+    price: 82,
+    origPrice: 410,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 4100,
     balance: "$4,100.00 USD",
@@ -344,9 +344,9 @@ const products = [
     name: "DIGITAL MasterCard Prepaid 10 Cards (Balance: $8,520.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 710,
-    origPrice: 1190,
-    discountBadge: "12x VALUE",
+    price: 142,
+    origPrice: 710,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 8520,
     balance: "$8,520.00 USD",
@@ -358,9 +358,9 @@ const products = [
     name: "American Express Prepaid 1 Card (Balance: $990.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 110,
-    origPrice: null,
-    discountBadge: "9x VALUE",
+    price: 22,
+    origPrice: 110,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 990,
     balance: "$990.00 USD",
@@ -372,13 +372,13 @@ const products = [
     name: "American Express Prepaid 3 Cards (Balance: $2,790.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 279,
-    origPrice: 350,
-    discountBadge: "10x VALUE",
+    price: 56,
+    origPrice: 279,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 2790,
     balance: "$2,790.00 USD",
-    stock: true,
+    stock: false,
     theme: "amex"
   },
   {
@@ -386,9 +386,9 @@ const products = [
     name: "American Express Prepaid 5 Cards (Balance: $4,510.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 410,
-    origPrice: 590,
-    discountBadge: "11x VALUE",
+    price: 82,
+    origPrice: 410,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 4510,
     balance: "$4,510.00 USD",
@@ -400,13 +400,13 @@ const products = [
     name: "American Express Prepaid 10 Cards (Balance: $8,520.00)",
     category: "creditcards",
     vendor: "Platinum",
-    price: 710,
-    origPrice: 1190,
-    discountBadge: "12x VALUE",
+    price: 142,
+    origPrice: 710,
+    discountBadge: "80% OFF",
     newBadge: true,
     usdBalance: 8520,
     balance: "$8,520.00 USD",
-    stock: true,
+    stock: false,
     theme: "amex"
   }
 ];
@@ -548,15 +548,19 @@ function productCard(product) {
   const selectedIndex = product.selectedOptionIndex || 0;
   const currentOpt = (product.options && product.options[selectedIndex]) || {
     price: product.price || 499,
+    origPrice: (product.price || 499) + 250,
     balance: product.balance || "1000 INR"
   };
 
+  const origOptPrice = currentOpt.origPrice || (currentOpt.price + 250);
+  const isOutOfStock = !product.stock;
+
   const optionsMarkup = product.options && product.options.length ? `
     <div class="card-option-selector">
-      <select class="option-select" data-option-select="${product.id}">
+      <select class="option-select" data-option-select="${product.id}" ${isOutOfStock ? 'disabled' : ''}>
         ${product.options.map((opt, idx) => `
           <option value="${idx}" ${idx === selectedIndex ? "selected" : ""}>
-            Get ${opt.balance} Balance
+            Get ${opt.balance} Balance — ${formatMoney(opt.price)}
           </option>
         `).join("")}
       </select>
@@ -564,27 +568,28 @@ function productCard(product) {
   ` : "";
 
   return `
-    <article class="gift-card">
-      <div class="gift-art-wrapper" onclick="showProductDetail(${product.id})" style="cursor: pointer;">
-        ${product.discountBadge ? `<span class="badge-discount">${product.discountBadge}</span>` : ""}
-        ${product.newBadge ? `<span class="badge-new">NEW</span>` : ""}
-        <img class="gift-art-img" src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name} gift card" />
+    <article class="gift-card ${isOutOfStock ? 'out-of-stock-card' : ''}">
+      <div class="gift-art-wrapper" onclick="showProductDetail(${product.id})" style="cursor: pointer; position: relative;">
+        <span class="badge-discount" style="background: linear-gradient(135deg, #ef4444, #dc2626); font-weight: 800;">SALE</span>
+        ${isOutOfStock ? `<span class="badge-new" style="background: #ef4444; color: #fff; font-weight: 700;">OUT OF STOCK</span>` : (product.newBadge ? `<span class="badge-new">NEW</span>` : "")}
+        <img class="gift-art-img" src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name} gift card" style="${isOutOfStock ? 'filter: grayscale(0.7) opacity(0.7);' : ''}" />
       </div>
       <div class="gift-body">
         <h3 class="gift-card-title" onclick="showProductDetail(${product.id})" style="cursor: pointer;" title="Click for details">${product.name}</h3>
         <div class="gift-card-vendor">Vendor: <span class="vendor-link">GC Shop</span></div>
         ${optionsMarkup}
-        <div class="price-row">
-          <div class="price-info">
-            <span class="price-val">${formatMoney(currentOpt.price)}</span>
+        <div class="price-row" style="margin-top: 10px;">
+          <div class="price-info" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            <span class="card-orig-price-crossed">${formatMoney(origOptPrice)}</span>
+            <span class="price-val" style="color: #e11d48; font-weight: 700; font-size: 16px;">${formatMoney(currentOpt.price)}</span>
           </div>
-          <span class="stock">${product.stock ? "In stock" : "Sold out"}</span>
+          <span class="stock" style="color: ${isOutOfStock ? '#ef4444' : '#16a34a'}; font-weight: 700;">${product.stock ? "In stock" : "Sold out"}</span>
         </div>
         <div style="display: flex; gap: 8px; margin-top: 10px;">
           <button class="card-btn" onclick="showProductDetail(${product.id})" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; flex: 1;">
             DETAILS
           </button>
-          <button class="card-btn" data-add="${product.id}" ${product.stock ? "" : "disabled"} style="flex: 1;">
+          <button class="card-btn" data-add="${product.id}" ${product.stock ? "" : "disabled"} style="flex: 1; ${isOutOfStock ? 'background: #64748b; color: #fff;' : ''}">
             ${product.stock ? "Add to Cart" : "SOLD OUT"}
           </button>
         </div>
@@ -1065,7 +1070,7 @@ function submitGatewayPayment() {
     if (!state.pendingOrder) {
       state.pendingOrder = {
         id: `ORD${Date.now().toString().slice(-8)}`,
-        items: state.cart.length ? [...state.cart] : [{ id: products[0].id, qty: 1, price: products[0].price, balance: "1000 INR" }],
+        items: state.cart.length ? [...state.cart] : [{ id: products[0].id, qty: 1, price: products[0].price, balance: "1000" }],
         total: state.paymentAmount || 499,
         date: new Date()
       };
@@ -1827,10 +1832,13 @@ function creditCardProductCard(product) {
   const inrBal = Math.round(usdBal * USD_TO_INR);
   const isOutOfStock = !product.stock;
 
+  const origPriceUsd = product.origPrice || (product.price * 5);
+  const origPriceInr = Math.round(origPriceUsd * USD_TO_INR);
+
   return `
     <article class="credit-product-card ${isOutOfStock ? 'out-of-stock-card' : ''}">
       <div class="credit-card-image-box" onclick="showCreditCardDetail(${product.id})" style="cursor: pointer; position: relative;">
-        ${product.discountBadge ? `<span class="badge-discount">${product.discountBadge}</span>` : ""}
+        <span class="badge-discount" style="background: linear-gradient(135deg, #10b981, #059669); font-weight: 800;">80% OFF</span>
         ${isOutOfStock ? `<span class="badge-new" style="background: #ef4444; color: #fff; font-weight: 700;">OUT OF STOCK</span>` : (product.newBadge ? `<span class="badge-new">NEW</span>` : "")}
         <img class="credit-card-img" src="assets/cards/${product.theme}.jpg" onerror="handleCardError(this, ${product.id})" alt="${product.name}" style="${isOutOfStock ? 'filter: grayscale(0.7) opacity(0.7);' : ''}" />
       </div>
@@ -1847,9 +1855,14 @@ function creditCardProductCard(product) {
           </div>
         </div>
 
-        <div class="credit-card-price-row">
-          <span class="credit-card-price ${product.discountBadge ? 'discounted' : ''}">$${product.price.toFixed(2)} (${formatMoney(inrPrice)})</span>
-          ${product.origPrice ? `<span class="credit-card-orig-price">$${product.origPrice.toFixed(2)}</span>` : ""}
+        <div class="credit-card-price-row" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="card-orig-price-crossed">$${origPriceUsd.toFixed(2)} (${formatMoney(origPriceInr)})</span>
+            <span style="background: #10b981; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">80% OFF</span>
+          </div>
+          <span class="credit-card-price discounted" style="font-size: 16px; font-weight: 800; color: #e11d48;">
+            $${product.price.toFixed(2)} (${formatMoney(inrPrice)})
+          </span>
         </div>
         <button class="credit-card-btn" onclick="showCreditCardDetail(${product.id})" style="${isOutOfStock ? 'background: #64748b; color: #fff; cursor: pointer;' : ''}">
           ${isOutOfStock ? "OUT OF STOCK — VIEW" : "SEE MORE / BUY"}
@@ -1898,7 +1911,20 @@ function renderCreditCardDetail() {
     balance: product.balance || "1000 INR"
   };
 
-  const displayPriceText = isCreditCard ? `$${product.price.toFixed(2)} (${formatMoney(Math.round(product.price * USD_TO_INR))})` : formatMoney(currentOpt.price);
+  const origPriceUsd = product.origPrice || (product.price * 5);
+  const origPriceInr = Math.round(origPriceUsd * USD_TO_INR);
+  const inrPrice = Math.round(product.price * USD_TO_INR);
+
+  const displayPriceText = isCreditCard
+    ? `<div style="display:flex; flex-direction:column; gap: 2px;">
+        <span style="font-size: 14px; text-decoration: line-through; color: #94a3b8; font-weight: 500;">Original: $${origPriceUsd.toFixed(2)} (${formatMoney(origPriceInr)})</span>
+        <span style="color: #e11d48; font-weight: 800; font-size: 22px;">$${product.price.toFixed(2)} (${formatMoney(inrPrice)}) <span style="background: #10b981; color: #fff; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; vertical-align: middle;">80% OFF</span></span>
+       </div>`
+    : `<div style="display:flex; flex-direction:column; gap: 2px;">
+        <span style="font-size: 14px; text-decoration: line-through; color: #94a3b8; font-weight: 500;">Original: ${formatMoney(currentOpt.origPrice || (currentOpt.price + 250))}</span>
+        <span style="color: #e11d48; font-weight: 800; font-size: 22px;">${formatMoney(currentOpt.price)} <span style="background: #dc2626; color: #fff; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; vertical-align: middle;">SAVE ₹${(currentOpt.origPrice || (currentOpt.price + 250)) - currentOpt.price}</span></span>
+       </div>`;
+
   const vendorName = isCreditCard ? "PLATINUM CARDS" : "GC SHOP OFFICIAL";
 
   const ccBalanceMarkup = isCreditCard ? `
@@ -1917,7 +1943,7 @@ function renderCreditCardDetail() {
     <div class="shipping-method-box" style="background: #f8fafc; border: 1px solid #cbd5e1; margin-bottom: 20px;">
       <label class="shipping-title">Select Card Balance & Value <span class="req">*</span></label>
       <div class="card-option-selector">
-        <select class="option-select" data-option-select="${product.id}" style="width: 100%; padding: 10px 14px; font-size: 14px;">
+        <select class="option-select" data-option-select="${product.id}" style="width: 100%; padding: 10px 14px; font-size: 14px;" ${!product.stock ? 'disabled' : ''}>
           ${product.options.map((opt, idx) => `
             <option value="${idx}" ${idx === selectedIndex ? "selected" : ""}>
               Get ${opt.balance} Balance — ${formatMoney(opt.price)}
@@ -2146,10 +2172,10 @@ function setupAdCarousel() {
   const next = carousel.querySelector('.ad-next');
   const dotsWrap = carousel.querySelector('.ad-dots');
 
-  // 6 slides: 3 credit card ads + 3 gift card ads
+  // 6 slides: 15th August Independence Day Sale + credit card ads + gift card ads
   const slideCount = 6;
   const fallbacks = [
-    posterDataUrl('Digital Visa Prepaid Cards', 'Up to 40% OFF • Instant Delivery', 0),
+    'assets/ads/independence.png',
     posterDataUrl('MasterCard Prepaid Bundle', 'Buy 3 Cards, Save 20% • Limited Time', 1),
     posterDataUrl('AMEX Summer Sale', '10 Cards Bundle • Save 40% Today', 4),
     posterDataUrl('Gift Card Mega Sale', 'Flat 90% OFF on All Gift Cards', 3),
@@ -2551,3 +2577,4 @@ renderProducts("allCards", products);
 setupSlider();
 setupAdCarousel();
 render();
+

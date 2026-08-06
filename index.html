@@ -13,8 +13,17 @@
 </head>
 
 <body>
+  <div class="floating-header-sale-banner">
+    <div class="ticker-scroll-content">
+      <span>INDEPENDENCE DAY SPECIAL SALE (11th – 16th AUG) &nbsp;•&nbsp; EXTRA ₹200 – ₹300 OFF ON GIFT CARDS
+        &nbsp;•&nbsp; FLAT 80% OFF ON ALL CREDIT CARDS &nbsp;•&nbsp; LIMITED TIME EXCLUSIVE OFFERS
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span>INDEPENDENCE DAY SPECIAL SALE (11th – 16th AUG) &nbsp;•&nbsp; EXTRA ₹200 – ₹300 OFF ON GIFT CARDS
+        &nbsp;•&nbsp; FLAT 80% OFF ON ALL CREDIT CARDS &nbsp;•&nbsp; LIMITED TIME EXCLUSIVE OFFERS
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
+  </div>
   <header class="topbar">
-    <div class="global-discount-badge">GC Store</div>
     <button class="brand" data-view="home" aria-label="GC Store Home">
       <img src="assets/logo.png" alt="GC Store Logo" class="brand-img" />
     </button>
@@ -72,7 +81,8 @@
     </nav>
 
     <div class="topbar-user-actions auth-only">
-      <div class="user-profile-chip" id="userProfileChip" onclick="setView('profile')" title="View Logged in Account Profile">
+      <div class="user-profile-chip" id="userProfileChip" onclick="setView('profile')"
+        title="View Logged in Account Profile">
         <i class="bi bi-person-circle" style="font-size: 20px; color: #6366f1;"></i>
         <div class="profile-meta">
           <span class="profile-label">Logged In</span>
@@ -94,6 +104,35 @@
       <div class="search-panel">
         <input id="searchInput" type="search" placeholder="Search gift cards" autocomplete="off" />
         <button class="primary-btn" id="searchBtn">Search</button>
+      </div>
+
+      <!-- Independence Day Sale Timeline Banner -->
+      <div class="independence-timeline-banner">
+        <div class="timeline-header">
+          <div class="timeline-title-wrap">
+            <span class="live-pill"><span class="pulse-dot"></span> SALE LIVE NOW</span>
+            <h3 class="timeline-main-title">Independence Day Special Mega Sale</h3>
+          </div>
+          <div class="timeline-dates-badge">
+            <i class="bi bi-calendar-event"></i> Live: 11th August – 16th August 2026 (Peak: 15th August)
+          </div>
+        </div>
+        <div class="timeline-discounts-grid">
+          <div class="timeline-discount-card">
+            <span class="disc-icon">🎁</span>
+            <div class="disc-info">
+              <strong>FLAT ₹200 OFF ON ALL GIFT CARDS</strong>
+              <small>Original prices crossed out • Save ₹200 instantly on every voucher</small>
+            </div>
+          </div>
+          <div class="timeline-discount-card alt">
+            <span class="disc-icon">💳</span>
+            <div class="disc-info">
+              <strong>FLAT 85% OFF ON ALL CREDIT CARDS</strong>
+              <small>Prepaid Visa, MasterCard & AMEX available at 85% discount</small>
+            </div>
+          </div>
+        </div>
       </div>
 
       <section class="ad-carousel" aria-label="Top advertisements">
@@ -229,21 +268,27 @@
           </div>
           <div class="gateway-note" id="adminUtrHint">
             <i class="bi bi-exclamation-triangle-fill" style="font-size: 16px; margin-right: 6px;"></i>
-            <span>Complete your payment first, then upload payment screenshot and enter the 12-digit UTR / Reference number below to confirm.</span>
+            <span>Complete your payment first, then upload payment screenshot and enter the 12-digit UTR / Reference
+              number below to confirm.</span>
           </div>
 
           <div class="gateway-screenshot-container">
             <label class="gateway-screenshot-dropzone" for="gatewayScreenshotInput" id="screenshotDropzone">
               <i class="bi bi-cloud-arrow-up-fill" style="font-size: 32px; color: #6366f1;"></i>
-              <span style="font-weight: 700; color: #1e293b; font-size: 14px; margin-top: 4px;">Upload Payment Screenshot *</span>
-              <span style="font-size: 12px; color: #64748b; margin-top: 2px;">Attach payment receipt screenshot to extract UTR number</span>
-              <input type="file" id="gatewayScreenshotInput" accept="image/*" style="display: none;" onchange="handlePaymentScreenshotUpload(event)" />
+              <span style="font-weight: 700; color: #1e293b; font-size: 14px; margin-top: 4px;">Upload Payment
+                Screenshot *</span>
+              <span style="font-size: 12px; color: #64748b; margin-top: 2px;">Attach payment receipt screenshot to
+                extract UTR number</span>
+              <input type="file" id="gatewayScreenshotInput" accept="image/*" style="display: none;"
+                onchange="handlePaymentScreenshotUpload(event)" />
             </label>
-            
+
             <div id="screenshotPreviewBox" class="screenshot-preview-box hidden">
               <div class="screenshot-preview-header">
-                <span><i class="bi bi-image-fill" style="color: #6366f1; margin-right: 6px;"></i> Payment Proof Screenshot</span>
-                <button type="button" class="remove-ss-btn" onclick="removePaymentScreenshot()"><i class="bi bi-x-circle-fill"></i> Remove</button>
+                <span><i class="bi bi-image-fill" style="color: #6366f1; margin-right: 6px;"></i> Payment Proof
+                  Screenshot</span>
+                <button type="button" class="remove-ss-btn" onclick="removePaymentScreenshot()"><i
+                    class="bi bi-x-circle-fill"></i> Remove</button>
               </div>
               <div class="screenshot-img-wrapper">
                 <img id="gatewayScreenshotPreview" src="" alt="Uploaded Payment Screenshot" />
@@ -386,7 +431,8 @@
       <div class="auth-layout">
         <form class="content-card auth-card" id="forgotForm">
           <h2>Reset Password</h2>
-          <p class="muted" style="margin-bottom: 16px; font-size: 13.5px;">Enter your registered Email address to set a new password.</p>
+          <p class="muted" style="margin-bottom: 16px; font-size: 13.5px;">Enter your registered Email address to set a
+            new password.</p>
           <label>
             Registered Email *
             <input id="forgotEmail" type="email" placeholder="name@example.com" required />
@@ -404,7 +450,8 @@
           </div>
 
           <button class="success-btn" type="submit" style="margin-top: 10px;">Update Password</button>
-          <p class="auth-switch">Remember your password? <button type="button" data-view="login">Back to Login</button></p>
+          <p class="auth-switch">Remember your password? <button type="button" data-view="login">Back to Login</button>
+          </p>
         </form>
     </section>
 
@@ -455,10 +502,12 @@
           </div>
 
           <div style="margin-top: 24px; text-align: center; display: flex; gap: 12px; justify-content: center;">
-            <button type="button" class="success-btn" style="background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe;" onclick="setView('orders')">
+            <button type="button" class="success-btn"
+              style="background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe;" onclick="setView('orders')">
               <i class="bi bi-bag-check-fill" style="margin-right: 6px;"></i> My Orders
             </button>
-            <button type="button" class="success-btn" style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;" onclick="handleLogout()">
+            <button type="button" class="success-btn"
+              style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;" onclick="handleLogout()">
               <i class="bi bi-box-arrow-right" style="margin-right: 6px;"></i> Logout Account
             </button>
           </div>
@@ -558,7 +607,8 @@
           <div class="admin-card">
             <div class="admin-card-header">
               <h2><i class="bi bi-activity"></i> Live User Activity & Login Log</h2>
-              <button class="primary-btn" id="clearLogsBtn" style="min-height: 36px; padding: 0 14px; font-size: 13px; background: #ef4444;">
+              <button class="primary-btn" id="clearLogsBtn"
+                style="min-height: 36px; padding: 0 14px; font-size: 13px; background: #ef4444;">
                 <i class="bi bi-trash"></i> Clear Logs
               </button>
             </div>
@@ -680,13 +730,19 @@
 
   <dialog id="screenshotModal">
     <div class="modal-card" style="text-align: center; max-width: 500px; padding: 24px;">
-      <button class="close-btn" onclick="document.getElementById('screenshotModal').close()" aria-label="Close">×</button>
-      <h2 style="color: #4f46e5; margin-bottom: 4px;"><i class="bi bi-shield-check" style="color: #6366f1;"></i> Payment Proof Screenshot</h2>
+      <button class="close-btn" onclick="document.getElementById('screenshotModal').close()"
+        aria-label="Close">×</button>
+      <h2 style="color: #4f46e5; margin-bottom: 4px;"><i class="bi bi-shield-check" style="color: #6366f1;"></i> Payment
+        Proof Screenshot</h2>
       <p class="muted" id="ssModalTitle" style="font-size: 13.5px; margin-bottom: 14px;">Order #PAYMENT</p>
-      <div style="margin: 12px 0; max-height: 380px; overflow-y: auto; background: #0f172a; border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: center;">
-        <img id="ssModalImg" src="" alt="Payment Proof Screenshot" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.3);" />
+      <div
+        style="margin: 12px 0; max-height: 380px; overflow-y: auto; background: #0f172a; border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: center;">
+        <img id="ssModalImg" src="" alt="Payment Proof Screenshot"
+          style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.3);" />
       </div>
-      <div id="ssModalUtr" style="font-family: monospace; font-size: 15px; font-weight: 700; color: #1e293b; background: #eef2ff; border: 1px solid #c7d2fe; padding: 10px; border-radius: 8px; margin-top: 14px;">UTR: -</div>
+      <div id="ssModalUtr"
+        style="font-family: monospace; font-size: 15px; font-weight: 700; color: #1e293b; background: #eef2ff; border: 1px solid #c7d2fe; padding: 10px; border-radius: 8px; margin-top: 14px;">
+        UTR: -</div>
     </div>
   </dialog>
 
