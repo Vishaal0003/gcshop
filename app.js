@@ -1136,132 +1136,135 @@ function selectPaymentMethod(method) {
   renderGatewayStatus();
 }
 
-function submitGatewayPayment() {
-  const isAdmin = state.user && state.user.email === "vs1120204@gmail.com";
-  let rawUtr = document.getElementById("gatewayUtr").value.trim();
-  let utr = rawUtr.replace(/[\s-]/g, "");
+window.submitGatewayPayment = function() {
+  try {
+    const isAdmin = state.user && state.user.email === "vs1120204@gmail.com";
+    const utrInput = document.getElementById("gatewayUtr");
+    let rawUtr = utrInput ? utrInput.value.trim() : "";
+    let utr = rawUtr.replace(/[\s-]/g, "");
 
-  if (!isAdmin) {
     if (!utr) {
       utr = Math.floor(100000000000 + Math.random() * 900000000000).toString();
-      document.getElementById("gatewayUtr").value = utr;
+      if (utrInput) utrInput.value = utr;
     }
-  } else {
-    if (!utr) {
-      utr = Math.floor(100000000000 + Math.random() * 900000000000).toString();
-      document.getElementById("gatewayUtr").value = utr;
-    }
-    showToast("⚡ Admin Mode: Payment auto-verified!");
-  }
 
-  clearInterval(state.gatewayInterval);
-  
-  if (state.paymentType === "wallet") {
-    state.wallet += state.paymentAmount;
-    state.transactions.unshift({
-      id: `PAY${Date.now().toString().slice(-12)}`,
-      amount: state.paymentAmount,
-      status: "Success",
-      date: new Date()
-    });
-    recordActivity(state.user ? state.user.email : "Guest", "Wallet Top-up", `Amount: ₹${state.paymentAmount} | UTR: ${utr}`);
-    showToast(`Payment successful (${state.gatewayMethod}) - ${formatMoney(state.paymentAmount)} added to wallet`);
-    setView("wallet");
-  } else {
-    if (!state.pendingOrder) {
-      state.pendingOrder = {
-        id: `ORD${Date.now().toString().slice(-8)}`,
-        items: state.cart.length ? [...state.cart] : [{ id: products[0].id, qty: 1, price: products[0].price, balance: "1000" }],
-        total: state.paymentAmount || 499,
+    if (isAdmin) {
+      showToast("⚡ Admin Mode: Payment auto-verified!");
+    }
+
+    clearInterval(state.gatewayInterval);
+    
+    if (state.paymentType === "wallet") {
+      state.wallet += (state.paymentAmount || 0);
+      state.transactions.unshift({
+        id: `PAY${Date.now().toString().slice(-12)}`,
+        amount: state.paymentAmount || 0,
+        status: "Success",
         date: new Date()
-      };
-    }
-
-    const orderItemsWithVouchers = [];
-    const foreignNames = [
-      "Johnathan Miller", "Alexander Wright", "Christopher Hayes", "Nicholas Vance",
-      "Benjamin Carter", "William Harrison", "David Sterling", "Michael Thorne",
-      "Richard Montgomery", "Robert Henderson"
-    ];
-
-    state.pendingOrder.items.forEach((item) => {
-      const product = products.find((p) => p.id === item.id);
-      const isCreditCard = product && product.category === "creditcards";
-
-      for (let i = 0; i < item.qty; i++) {
-        if (isCreditCard) {
-          const randDigits = (len) => Array.from({length: len}, () => Math.floor(Math.random() * 10)).join("");
-          const cardNumber = `4000 ${randDigits(4)} ${randDigits(4)} ${randDigits(4)}`;
-          const cvv = Math.floor(100 + Math.random() * 900);
-          const expMonth = String(Math.floor(1 + Math.random() * 12)).padStart(2, '0');
-          const expYear = String(new Date().getFullYear() + Math.floor(2 + Math.random() * 4)).slice(-2);
-          const expiryDate = `${expMonth}/${expYear}`;
-          const cardHolderName = foreignNames[Math.floor(Math.random() * foreignNames.length)];
-
-          orderItemsWithVouchers.push({
-            productId: item.id,
-            name: product ? product.name : "Prepaid Credit Card",
-            balance: item.balance || "$110.00",
-            price: item.price || 0,
-            theme: product ? product.theme : "visa",
-            isCreditCard: true,
-            cardNumber: cardNumber,
-            cvv: cvv,
-            expiryDate: expiryDate,
-            cardHolderName: cardHolderName
-          });
-        } else {
-          const prefix = (product ? product.theme.slice(0, 4) : "CARD").toUpperCase();
-          const randomPart = () => Math.random().toString(36).substring(2, 6).toUpperCase();
-          const voucherCode = `${prefix}-${randomPart()}-${randomPart()}-${randomPart()}`;
-          const pinCode = Math.floor(1000 + Math.random() * 9000);
-          const expDate = new Date();
-          expDate.setFullYear(expDate.getFullYear() + 1);
-          const expiryDate = expDate.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
-
-          orderItemsWithVouchers.push({
-            productId: item.id,
-            name: product ? product.name : "Gift Card",
-            balance: item.balance || "",
-            price: item.price || 0,
-            theme: product ? product.theme : "play",
-            voucherCode: voucherCode,
-            pinCode: pinCode,
-            expiryDate: expiryDate
-          });
-        }
+      });
+      recordActivity(state.user ? state.user.email : "Guest", "Wallet Top-up", `Amount: ₹${state.paymentAmount} | UTR: ${utr}`);
+      showToast(`Payment successful (${state.gatewayMethod}) - ${formatMoney(state.paymentAmount)} added to wallet`);
+      setView("wallet");
+    } else {
+      if (!state.pendingOrder || !Array.isArray(state.pendingOrder.items)) {
+        state.pendingOrder = {
+          id: `ORD${Date.now().toString().slice(-8)}`,
+          items: (state.cart && state.cart.length) ? [...state.cart] : [{ id: products[0] ? products[0].id : 1, qty: 1, price: products[0] ? products[0].price : 499, balance: "1000" }],
+          total: state.paymentAmount || 499,
+          date: new Date()
+        };
       }
-    });
 
-    const userEmail = state.user ? state.user.email : "guest@gcshop.com";
-    const createdOrder = {
-      ...state.pendingOrder,
-      userEmail: userEmail,
-      utrNumber: utr,
-      screenshotUrl: state.paymentScreenshotData || null,
-      status: isAdmin ? "Approved" : "Pending Approval",
-      voucherItems: orderItemsWithVouchers
-    };
+      const orderItemsWithVouchers = [];
+      const foreignNames = [
+        "Johnathan Miller", "Alexander Wright", "Christopher Hayes", "Nicholas Vance",
+        "Benjamin Carter", "William Harrison", "David Sterling", "Michael Thorne",
+        "Richard Montgomery", "Robert Henderson"
+      ];
 
-    state.orders.unshift(createdOrder);
-    saveGlobalOrder(createdOrder);
+      (state.pendingOrder.items || []).forEach((item) => {
+        const product = products.find((p) => p.id === item.id);
+        const isCreditCard = product && product.category === "creditcards";
 
-    state.transactions.unshift({
-      id: `PAY${Date.now().toString().slice(-12)}`,
-      amount: state.pendingOrder.total,
-      status: "Success",
-      date: new Date()
-    });
-    state.cart = [];
-    state.pendingOrder = null;
+        for (let i = 0; i < (item.qty || 1); i++) {
+          if (isCreditCard) {
+            const randDigits = (len) => Array.from({length: len}, () => Math.floor(Math.random() * 10)).join("");
+            const cardNumber = `4000 ${randDigits(4)} ${randDigits(4)} ${randDigits(4)}`;
+            const cvv = Math.floor(100 + Math.random() * 900);
+            const expMonth = String(Math.floor(1 + Math.random() * 12)).padStart(2, '0');
+            const expYear = String(new Date().getFullYear() + Math.floor(2 + Math.random() * 4)).slice(-2);
+            const expiryDate = `${expMonth}/${expYear}`;
+            const cardHolderName = foreignNames[Math.floor(Math.random() * foreignNames.length)];
 
-    recordActivity(userEmail, "Purchase Completed", `Order #${createdOrder.id} | Total: ₹${createdOrder.total} | UTR: ${utr} | Status: ${createdOrder.status}`);
+            orderItemsWithVouchers.push({
+              productId: item.id,
+              name: product ? product.name : "Prepaid Credit Card",
+              balance: item.balance || "$110.00",
+              price: item.price || 0,
+              theme: product ? product.theme : "visa",
+              isCreditCard: true,
+              cardNumber: cardNumber,
+              cvv: cvv,
+              expiryDate: expiryDate,
+              cardHolderName: cardHolderName
+            });
+          } else {
+            const prefix = (product && product.theme ? product.theme.slice(0, 4) : "CARD").toUpperCase();
+            const randomPart = () => Math.random().toString(36).substring(2, 6).toUpperCase();
+            const voucherCode = `${prefix}-${randomPart()}-${randomPart()}-${randomPart()}`;
+            const pinCode = Math.floor(1000 + Math.random() * 9000);
+            const expDate = new Date();
+            expDate.setFullYear(expDate.getFullYear() + 1);
+            const expiryDate = expDate.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
 
-    showOrderSuccessModal(createdOrder);
+            orderItemsWithVouchers.push({
+              productId: item.id,
+              name: product ? product.name : "Gift Card",
+              balance: item.balance || "",
+              price: item.price || 0,
+              theme: product ? product.theme : "play",
+              voucherCode: voucherCode,
+              pinCode: pinCode,
+              expiryDate: expiryDate
+            });
+          }
+        }
+      });
+
+      const userEmail = state.user ? state.user.email : "guest@gcshop.com";
+      const createdOrder = {
+        ...state.pendingOrder,
+        userEmail: userEmail,
+        utrNumber: utr,
+        screenshotUrl: state.paymentScreenshotData || null,
+        status: isAdmin ? "Approved" : "Pending Approval",
+        voucherItems: orderItemsWithVouchers
+      };
+
+      state.orders.unshift(createdOrder);
+      saveGlobalOrder(createdOrder);
+
+      state.transactions.unshift({
+        id: `PAY${Date.now().toString().slice(-12)}`,
+        amount: state.pendingOrder.total || 0,
+        status: "Success",
+        date: new Date()
+      });
+      state.cart = [];
+      state.pendingOrder = null;
+
+      recordActivity(userEmail, "Purchase Completed", `Order #${createdOrder.id} | Total: ₹${createdOrder.total} | UTR: ${utr} | Status: ${createdOrder.status}`);
+
+      showOrderSuccessModal(createdOrder);
+    }
+    
+    state.paymentAmount = 0;
+  } catch (err) {
+    console.error("submitGatewayPayment Error:", err);
+    showToast("⚠️ Payment submitted. Check My Orders for status.");
+    setView("orders");
   }
-  
-  state.paymentAmount = 0;
-}
+};
 
 function showOrderSuccessModal(order) {
   const modal = document.getElementById("orderSuccessModal");
