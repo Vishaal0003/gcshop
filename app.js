@@ -835,11 +835,22 @@ function startGatewayTimer() {
 }
 
 // --- Database & User Activity Tracking System & Backend API Sync ---
-const API_BASE = window.location.origin.includes("http") ? window.location.origin : "http://localhost:3000";
+function getApiBase() {
+  if (window.location.protocol.startsWith("http")) {
+    const port = window.location.port;
+    const hostname = window.location.hostname || "localhost";
+    if (port === "3000") {
+      return window.location.origin;
+    }
+    return `${window.location.protocol}//${hostname}:3000`;
+  }
+  return "http://localhost:3000";
+}
 
 async function syncWithBackend() {
   try {
-    const res = await fetch(`${API_BASE}/api/sync`);
+    const apiBase = getApiBase();
+    const res = await fetch(`${apiBase}/api/sync`);
     if (!res.ok) return;
     const data = await res.json();
     if (data.users) localStorage.setItem("gcshop_users_db", JSON.stringify(data.users));
@@ -856,8 +867,8 @@ async function syncWithBackend() {
   }
 }
 
-// Auto-poll central server every 3 seconds for live multi-device approval & login sync
-setInterval(syncWithBackend, 3000);
+// Auto-poll central server every 2 seconds for live multi-device approval & login sync
+setInterval(syncWithBackend, 2000);
 
 function getUsersDb() {
   let db = JSON.parse(localStorage.getItem("gcshop_users_db") || "[]");
@@ -893,7 +904,7 @@ function saveUserToDb(user) {
   }
   localStorage.setItem("gcshop_users_db", JSON.stringify(db));
 
-  fetch(`${API_BASE}/api/users`, {
+  fetch(`${getApiBase()}/api/users`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user)
@@ -916,7 +927,7 @@ function recordActivity(email, action, details = "") {
   logs.unshift(entry);
   localStorage.setItem("gcshop_activity_logs", JSON.stringify(logs.slice(0, 300)));
 
-  fetch(`${API_BASE}/api/activity`, {
+  fetch(`${getApiBase()}/api/activity`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(entry)
@@ -933,7 +944,12 @@ function getGlobalOrders() {
 
 function saveGlobalOrder(order) {
   const globalOrders = getGlobalOrders();
-  globalOrders.unshift(order);
+  const existingIdx = globalOrders.findIndex(o => String(o.id) === String(order.id));
+  if (existingIdx >= 0) {
+    globalOrders[existingIdx] = order;
+  } else {
+    globalOrders.unshift(order);
+  }
   localStorage.setItem("gcshop_global_orders", JSON.stringify(globalOrders));
 
   if (order.userEmail) {
@@ -945,11 +961,11 @@ function saveGlobalOrder(order) {
     }
   }
 
-  fetch(`${API_BASE}/api/orders`, {
+  fetch(`${getApiBase()}/api/orders`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(order)
-  }).catch(() => {});
+  }).then(() => syncWithBackend()).catch((err) => console.error("Save order API error:", err));
 }
 
 const upiHandles = {
@@ -1768,7 +1784,7 @@ window.approveOrder = function(orderId) {
     if (localOrder) localOrder.status = "Approved";
   }
 
-  fetch(`${API_BASE}/api/orders/approve`, {
+  fetch(`${getApiBase()}/api/orders/approve`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ orderId })
@@ -1791,7 +1807,7 @@ window.rejectOrder = function(orderId) {
     if (localOrder) localOrder.status = "Rejected";
   }
 
-  fetch(`${API_BASE}/api/orders/reject`, {
+  fetch(`${getApiBase()}/api/orders/reject`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ orderId })
@@ -1806,7 +1822,7 @@ window.rejectOrder = function(orderId) {
 
 window.clearActivityLogs = function() {
   localStorage.removeItem("gcshop_activity_logs");
-  fetch(`${API_BASE}/api/activity`, { method: "DELETE" }).catch(() => {});
+  fetch(`${getApiBase()}/api/activity`, { method: "DELETE" }).catch(() => {});
   showToast("Activity logs cleared!");
   renderAdminPanel();
 };

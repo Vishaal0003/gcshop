@@ -158,6 +158,8 @@ app.post('/api/orders', (req, res) => {
     return res.status(400).json({ error: "Invalid order data" });
   }
 
+  console.log(`[APPROVAL REQUEST] New order #${order.id} received from ${order.userEmail || 'Guest'} (UTR: ${order.utrNumber || 'N/A'})`);
+
   // Remove duplicate if exists
   db.orders = db.orders.filter(o => String(o.id) !== String(order.id));
   db.orders.unshift(order);
@@ -196,6 +198,7 @@ app.post('/api/orders/approve', (req, res) => {
   });
 
   writeDb(db);
+  console.log(`[ORDER APPROVED] Order #${order.id} approved by admin`);
   res.json({ success: true, order });
 });
 
@@ -221,6 +224,7 @@ app.post('/api/orders/reject', (req, res) => {
   });
 
   writeDb(db);
+  console.log(`[ORDER REJECTED] Order #${order.id} rejected by admin`);
   res.json({ success: true, order });
 });
 
@@ -252,6 +256,7 @@ app.delete('/api/activity', (req, res) => {
   res.json({ success: true });
 });
 
-app.listen(PORT, () => {
-  console.log(`GCShop Central Backend Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`GCShop Central Backend Server running on http://0.0.0.0:${PORT}`);
+  console.log(`Live Multi-Device API ready at http://localhost:${PORT}/api/sync`);
 });
