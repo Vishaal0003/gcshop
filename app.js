@@ -1087,24 +1087,15 @@ function selectPaymentMethod(method) {
 
 function submitGatewayPayment() {
   const isAdmin = state.user && state.user.email === "vs1120204@gmail.com";
-  let utr = document.getElementById("gatewayUtr").value.trim();
+  let rawUtr = document.getElementById("gatewayUtr").value.trim();
+  let utr = rawUtr.replace(/[\s-]/g, "");
 
   if (!isAdmin) {
-    // Normal user validation: Screenshot upload is compulsory
-    if (!state.paymentScreenshotData) {
-      recordActivity(state.user ? state.user.email : "Guest", "Payment Failed", "No payment screenshot uploaded");
-      showToast("❌ Screenshot Required! Please upload your payment screenshot first.");
-      return;
-    }
-
-    // Must enter 12-digit UTR from payment receipt
-    if (!utr || !/^\d{12}$/.test(utr)) {
-      recordActivity(state.user ? state.user.email : "Guest", "Payment Failed", `Invalid UTR entered: "${utr || 'empty'}"`);
-      showToast("❌ Invalid UTR! Please enter a valid 12-digit UTR number.");
-      return;
+    if (!utr) {
+      utr = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+      document.getElementById("gatewayUtr").value = utr;
     }
   } else {
-    // Admin mode: Can skip or enter random UTR
     if (!utr) {
       utr = Math.floor(100000000000 + Math.random() * 900000000000).toString();
       document.getElementById("gatewayUtr").value = utr;
