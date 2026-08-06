@@ -836,15 +836,25 @@ function startGatewayTimer() {
 
 // --- Database & User Activity Tracking System & Backend API Sync ---
 function getApiBase() {
+  const savedUrl = localStorage.getItem("gcshop_server_url");
+  if (savedUrl && savedUrl.trim()) {
+    let clean = savedUrl.trim();
+    if (!clean.startsWith("http")) clean = "http://" + clean;
+    return clean.endsWith("/") ? clean.slice(0, -1) : clean;
+  }
+
   if (window.location.protocol.startsWith("http")) {
     const port = window.location.port;
     const hostname = window.location.hostname || "localhost";
     if (port === "3000") {
       return window.location.origin;
     }
-    return `${window.location.protocol}//${hostname}:3000`;
+    if (hostname !== "localhost" && hostname !== "127.0.0.1") {
+      return `${window.location.protocol}//${hostname}:3000`;
+    }
   }
-  return "http://localhost:3000";
+
+  return "http://192.168.1.5:3000";
 }
 
 async function syncWithBackend() {
@@ -1099,16 +1109,37 @@ window.handlePaymentScreenshotUpload = function(event) {
 
   const reader = new FileReader();
   reader.onload = function (e) {
-    const dataUrl = e.target.result;
-    state.paymentScreenshotData = dataUrl;
+    const rawDataUrl = e.target.result;
+    const img = new Image();
+    img.onload = function () {
+      const canvas = document.createElement("canvas");
+      const MAX_WIDTH = 800;
+      let width = img.width;
+      let height = img.height;
 
-    const previewBox = document.getElementById("screenshotPreviewBox");
-    const previewImg = document.getElementById("gatewayScreenshotPreview");
+      if (width > MAX_WIDTH) {
+        height = Math.round((height * MAX_WIDTH) / width);
+        width = MAX_WIDTH;
+      }
 
-    if (previewImg) previewImg.src = dataUrl;
-    if (previewBox) previewBox.classList.remove("hidden");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
 
-    showToast("✅ Payment Proof Screenshot Uploaded!");
+      // Compress to lightweight JPEG (~50KB) so mobile HTTP POST never drops or fails
+      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.65);
+      state.paymentScreenshotData = compressedDataUrl;
+
+      const previewBox = document.getElementById("screenshotPreviewBox");
+      const previewImg = document.getElementById("gatewayScreenshotPreview");
+
+      if (previewImg) previewImg.src = compressedDataUrl;
+      if (previewBox) previewBox.classList.remove("hidden");
+
+      showToast("✅ Payment Proof Screenshot Attached!");
+    };
+    img.src = rawDataUrl;
   };
   reader.readAsDataURL(file);
 };
