@@ -227,6 +227,7 @@ Sometimes it's just **good psychology + a convincing website**.
 
 ---
 
+<<<<<<< HEAD
 # 🛡️ Defensive Learning
 
 This project can also be extended into a defensive cybersecurity tool.
@@ -284,6 +285,12 @@ Building GCStore helps with:
 
 ---
 
+=======
+
+Basically:
+**Turn the fake scam store into a tool that helps people detect scam stores.**
+
+>>>>>>> 6d5120e477b6f352145c9b115e65fafb2e14c39a
 # ⚠️ IMPORTANT — Don't Be That Guy 💀
 
 GCStore is for **education, research, and authorized security testing only**.
@@ -351,4 +358,8 @@ Because sometimes...
 **Environment:** Authorized Lab / Training Only  
 **Goal:** Learn → Understand → Detect → Prevent
 
+<<<<<<< HEAD
 Made for learning, not scamming. 🫡
+=======
+Made for learning, not scamming. 🫡
+>>>>>>> 6d5120e477b6f352145c9b115e65fafb2e14c39a
