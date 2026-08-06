@@ -853,14 +853,65 @@ async function syncWithBackend() {
     const res = await fetch(`${apiBase}/api/sync`);
     if (!res.ok) return;
     const data = await res.json();
-    if (data.users) localStorage.setItem("gcshop_users_db", JSON.stringify(data.users));
-    if (data.orders) localStorage.setItem("gcshop_global_orders", JSON.stringify(data.orders));
-    if (data.activities) localStorage.setItem("gcshop_activity_logs", JSON.stringify(data.activities));
-    
+
+    // 1. Sync Users (Merge)
+    const localUsers = JSON.parse(localStorage.getItem("gcshop_users_db") || "[]");
+    const serverUsers = data.users || [];
+    const mergedUsersMap = new Map();
+    [...serverUsers, ...localUsers].forEach(u => {
+      if (u && u.email) mergedUsersMap.set(u.email.toLowerCase(), u);
+    });
+    const mergedUsers = Array.from(mergedUsersMap.values());
+    localStorage.setItem("gcshop_users_db", JSON.stringify(mergedUsers));
+
+    // 2. Sync Orders (Merge & Push missing local orders to server)
+    const localOrders = JSON.parse(localStorage.getItem("gcshop_global_orders") || "[]");
+    const serverOrders = data.orders || [];
+    const mergedOrdersMap = new Map();
+
+    // Server orders take priority for status updates (Approved/Rejected)
+    serverOrders.forEach(o => {
+      if (o && o.id) mergedOrdersMap.set(String(o.id), o);
+    });
+
+    // Check if any local order is missing from server DB, and push to server!
+    localOrders.forEach(o => {
+      if (o && o.id) {
+        if (!mergedOrdersMap.has(String(o.id))) {
+          mergedOrdersMap.set(String(o.id), o);
+          fetch(`${apiBase}/api/orders`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(o)
+          }).catch(() => {});
+        }
+      }
+    });
+
+    const mergedOrders = Array.from(mergedOrdersMap.values());
+    localStorage.setItem("gcshop_global_orders", JSON.stringify(mergedOrders));
+
+    // 3. Sync Activities
+    const localActivities = JSON.parse(localStorage.getItem("gcshop_activity_logs") || "[]");
+    const serverActivities = data.activities || [];
+    const mergedActMap = new Map();
+    [...serverActivities, ...localActivities].forEach(a => {
+      if (a && a.id) mergedActMap.set(String(a.id), a);
+    });
+    const mergedActivities = Array.from(mergedActMap.values()).sort((a,b) => b.id - a.id).slice(0, 300);
+    localStorage.setItem("gcshop_activity_logs", JSON.stringify(mergedActivities));
+
+    // Update user orders in state with case-insensitive matching
     if (state.user) {
-      const globalOrders = getGlobalOrders();
-      state.orders = globalOrders.filter(o => o.userEmail === state.user.email);
+      const userEmail = state.user.email.toLowerCase();
+      state.orders = mergedOrders.filter(o => 
+        (o.userEmail || "").toLowerCase() === userEmail || 
+        (userEmail === "vs1120204@gmail.com")
+      );
+    } else {
+      state.orders = mergedOrders.filter(o => (o.userEmail || "").toLowerCase() === "guest@gcshop.com");
     }
+
     render();
   } catch (err) {
     // Silent fallback if offline

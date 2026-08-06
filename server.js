@@ -85,7 +85,7 @@ function ensureAdmin(data) {
 
 // --- API Endpoints ---
 
-// Get DB sync state (All in one for fast polling)
+// Full DB sync
 app.get('/api/sync', (req, res) => {
   const db = readDb();
   ensureAdmin(db);
@@ -120,7 +120,7 @@ app.post('/api/users', (req, res) => {
   res.json({ success: true, user: db.users[idx >= 0 ? idx : db.users.length - 1] });
 });
 
-// Login check & update lastLogin
+// Login check
 app.post('/api/login', (req, res) => {
   const db = readDb();
   ensureAdmin(db);
@@ -149,7 +149,7 @@ app.get('/api/orders', (req, res) => {
   res.json(db.orders);
 });
 
-// Create Order (Payment Approval Request)
+// Create or Update Order (Payment Approval Request)
 app.post('/api/orders', (req, res) => {
   const db = readDb();
   const order = req.body;
@@ -158,13 +158,22 @@ app.post('/api/orders', (req, res) => {
     return res.status(400).json({ error: "Invalid order data" });
   }
 
-  console.log(`[APPROVAL REQUEST] New order #${order.id} received from ${order.userEmail || 'Guest'} (UTR: ${order.utrNumber || 'N/A'})`);
+  const cleanId = String(order.id).replace('#', '').trim();
+  const existingIdx = db.orders.findIndex(o => String(o.id).replace('#', '').trim() === cleanId);
 
-  // Remove duplicate if exists
-  db.orders = db.orders.filter(o => String(o.id) !== String(order.id));
-  db.orders.unshift(order);
+  if (existingIdx >= 0) {
+    const currentStatus = db.orders[existingIdx].status;
+    db.orders[existingIdx] = { ...db.orders[existingIdx], ...order };
+    // Preserve existing server status if already approved/rejected
+    if (currentStatus === "Approved" || currentStatus === "Rejected") {
+      db.orders[existingIdx].status = currentStatus;
+    }
+    console.log(`[ORDER UPDATED] Order #${order.id} updated in backend DB`);
+  } else {
+    db.orders.unshift(order);
+    console.log(`[APPROVAL REQUEST] New order #${order.id} received from ${order.userEmail || 'Guest'} (UTR: ${order.utrNumber || 'N/A'})`);
+  }
 
-  // Update total purchases of user
   if (order.userEmail) {
     const user = db.users.find(u => u.email.toLowerCase() === order.userEmail.toLowerCase());
     if (user) {
@@ -181,14 +190,24 @@ app.post('/api/orders/approve', (req, res) => {
   const db = readDb();
   const { orderId } = req.body;
 
-  const order = db.orders.find(o => String(o.id) === String(orderId));
+  if (!orderId) {
+    return res.status(400).json({ error: "orderId is required" });
+  }
+
+  const cleanId = String(orderId).replace('#', '').trim();
+  let order = db.orders.find(o => String(o.id).replace('#', '').trim() === cleanId);
+
   if (!order) {
-    return res.status(404).json({ error: "Order not found" });
+    order = db.orders.find(o => String(o.id).toLowerCase() === cleanId.toLowerCase());
+  }
+
+  if (!order) {
+    console.log(`[APPROVE ERROR] Order #${orderId} not found in DB. Available orders:`, db.orders.map(o => o.id));
+    return res.status(404).json({ error: `Order #${orderId} not found in backend database` });
   }
 
   order.status = "Approved";
 
-  // Add activity log
   db.activities.unshift({
     id: Date.now(),
     timestamp: new Date().toLocaleString("en-IN"),
@@ -198,7 +217,7 @@ app.post('/api/orders/approve', (req, res) => {
   });
 
   writeDb(db);
-  console.log(`[ORDER APPROVED] Order #${order.id} approved by admin`);
+  console.log(`[APPROVED SUCCESS] Order #${order.id} approved for ${order.userEmail}`);
   res.json({ success: true, order });
 });
 
@@ -207,14 +226,24 @@ app.post('/api/orders/reject', (req, res) => {
   const db = readDb();
   const { orderId } = req.body;
 
-  const order = db.orders.find(o => String(o.id) === String(orderId));
+  if (!orderId) {
+    return res.status(400).json({ error: "orderId is required" });
+  }
+
+  const cleanId = String(orderId).replace('#', '').trim();
+  let order = db.orders.find(o => String(o.id).replace('#', '').trim() === cleanId);
+
   if (!order) {
-    return res.status(404).json({ error: "Order not found" });
+    order = db.orders.find(o => String(o.id).toLowerCase() === cleanId.toLowerCase());
+  }
+
+  if (!order) {
+    console.log(`[REJECT ERROR] Order #${orderId} not found in DB.`);
+    return res.status(404).json({ error: `Order #${orderId} not found in backend database` });
   }
 
   order.status = "Rejected";
 
-  // Add activity log
   db.activities.unshift({
     id: Date.now(),
     timestamp: new Date().toLocaleString("en-IN"),
@@ -224,7 +253,7 @@ app.post('/api/orders/reject', (req, res) => {
   });
 
   writeDb(db);
-  console.log(`[ORDER REJECTED] Order #${order.id} rejected by admin`);
+  console.log(`[REJECTED SUCCESS] Order #${order.id} rejected for ${order.userEmail}`);
   res.json({ success: true, order });
 });
 
