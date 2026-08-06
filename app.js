@@ -834,7 +834,31 @@ function startGatewayTimer() {
   }, 1000);
 }
 
-// --- Database & User Activity Tracking System ---
+// --- Database & User Activity Tracking System & Backend API Sync ---
+const API_BASE = window.location.origin.includes("http") ? window.location.origin : "http://localhost:3000";
+
+async function syncWithBackend() {
+  try {
+    const res = await fetch(`${API_BASE}/api/sync`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.users) localStorage.setItem("gcshop_users_db", JSON.stringify(data.users));
+    if (data.orders) localStorage.setItem("gcshop_global_orders", JSON.stringify(data.orders));
+    if (data.activities) localStorage.setItem("gcshop_activity_logs", JSON.stringify(data.activities));
+    
+    if (state.user) {
+      const globalOrders = getGlobalOrders();
+      state.orders = globalOrders.filter(o => o.userEmail === state.user.email);
+    }
+    render();
+  } catch (err) {
+    // Silent fallback if offline
+  }
+}
+
+// Auto-poll central server every 3 seconds for live multi-device approval & login sync
+setInterval(syncWithBackend, 3000);
+
 function getUsersDb() {
   let db = JSON.parse(localStorage.getItem("gcshop_users_db") || "[]");
   const adminEmail = "vs1120204@gmail.com";
@@ -868,6 +892,12 @@ function saveUserToDb(user) {
     db.push(user);
   }
   localStorage.setItem("gcshop_users_db", JSON.stringify(db));
+
+  fetch(`${API_BASE}/api/users`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(user)
+  }).catch(() => {});
 }
 
 function getActivityLogs() {
@@ -885,6 +915,13 @@ function recordActivity(email, action, details = "") {
   };
   logs.unshift(entry);
   localStorage.setItem("gcshop_activity_logs", JSON.stringify(logs.slice(0, 300)));
+
+  fetch(`${API_BASE}/api/activity`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entry)
+  }).catch(() => {});
+
   if (state.view === "admin") {
     renderAdminPanel();
   }
@@ -907,6 +944,12 @@ function saveGlobalOrder(order) {
       saveUserToDb(user);
     }
   }
+
+  fetch(`${API_BASE}/api/orders`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(order)
+  }).catch(() => {});
 }
 
 const upiHandles = {
@@ -1718,18 +1761,21 @@ window.renderAdminPanel = function() {
 window.approveOrder = function(orderId) {
   const globalOrders = getGlobalOrders();
   const order = globalOrders.find(o => String(o.id) === String(orderId));
-  if (!order) return;
-
-  order.status = "Approved";
-  localStorage.setItem("gcshop_global_orders", JSON.stringify(globalOrders));
-
-  const localOrder = state.orders.find(o => String(o.id) === String(orderId));
-  if (localOrder) {
-    localOrder.status = "Approved";
+  if (order) {
+    order.status = "Approved";
+    localStorage.setItem("gcshop_global_orders", JSON.stringify(globalOrders));
+    const localOrder = state.orders.find(o => String(o.id) === String(orderId));
+    if (localOrder) localOrder.status = "Approved";
   }
 
-  recordActivity(order.userEmail || "Guest", "Payment Approved", `Admin verified payment for Order #${order.id} (₹${order.total}). Voucher code unlocked.`);
-  showToast(`✅ Order #${order.id} Approved! Voucher unlocked for user.`);
+  fetch(`${API_BASE}/api/orders/approve`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ orderId })
+  }).then(() => syncWithBackend()).catch(() => {});
+
+  recordActivity(order ? (order.userEmail || "Guest") : "Guest", "Payment Approved", `Admin verified payment for Order #${orderId}. Voucher code unlocked.`);
+  showToast(`✅ Order #${orderId} Approved! Voucher unlocked for user.`);
 
   renderAdminPanel();
   renderOrders();
@@ -1738,18 +1784,21 @@ window.approveOrder = function(orderId) {
 window.rejectOrder = function(orderId) {
   const globalOrders = getGlobalOrders();
   const order = globalOrders.find(o => String(o.id) === String(orderId));
-  if (!order) return;
-
-  order.status = "Rejected";
-  localStorage.setItem("gcshop_global_orders", JSON.stringify(globalOrders));
-
-  const localOrder = state.orders.find(o => String(o.id) === String(orderId));
-  if (localOrder) {
-    localOrder.status = "Rejected";
+  if (order) {
+    order.status = "Rejected";
+    localStorage.setItem("gcshop_global_orders", JSON.stringify(globalOrders));
+    const localOrder = state.orders.find(o => String(o.id) === String(orderId));
+    if (localOrder) localOrder.status = "Rejected";
   }
 
-  recordActivity(order.userEmail || "Guest", "Payment Rejected", `Admin rejected Order #${order.id} payment proof.`);
-  showToast(`❌ Order #${order.id} Rejected.`);
+  fetch(`${API_BASE}/api/orders/reject`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ orderId })
+  }).then(() => syncWithBackend()).catch(() => {});
+
+  recordActivity(order ? (order.userEmail || "Guest") : "Guest", "Payment Rejected", `Admin rejected Order #${orderId} payment proof.`);
+  showToast(`❌ Order #${orderId} Rejected.`);
 
   renderAdminPanel();
   renderOrders();
@@ -1757,6 +1806,7 @@ window.rejectOrder = function(orderId) {
 
 window.clearActivityLogs = function() {
   localStorage.removeItem("gcshop_activity_logs");
+  fetch(`${API_BASE}/api/activity`, { method: "DELETE" }).catch(() => {});
   showToast("Activity logs cleared!");
   renderAdminPanel();
 };

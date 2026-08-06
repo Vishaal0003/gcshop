@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "name": "Vishal (Admin)",
+      "email": "vs1120204@gmail.com",
+      "password": "admin@123",
+      "phone": "9876543210",
+      "role": "admin",
+      "registeredAt": "6/8/2026",
+      "lastLogin": "6/8/2026, 7:40:27 pm",
+      "totalPurchases": 0
+    }
+  ],
+  "orders": [],
+  "activities": [
+    {
+      "id": 1786025427102,
+      "timestamp": "6/8/2026, 7:40:27 pm",
+      "email": "System",
+      "action": "Backend Server Started",
+      "details": "Central sync database initialized"
+    }
+  ]
+}
