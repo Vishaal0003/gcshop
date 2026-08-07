@@ -670,9 +670,9 @@ function handleCardError(img, id) {
 function productCard(product) {
   const selectedIndex = product.selectedOptionIndex || 0;
   const currentOpt = (product.options && product.options[selectedIndex]) || {
-    price: product.price || 499,
-    origPrice: (product.price || 499) + 250,
-    balance: product.balance || "1000 INR"
+    price: product.price || 1199,
+    origPrice: (product.price || 1199) + 250,
+    balance: product.balance || "7500"
   };
 
   const origOptPrice = currentOpt.origPrice || (currentOpt.price + 250);
@@ -767,8 +767,8 @@ function addToCart(id) {
 
   const selectedIndex = product.selectedOptionIndex || 0;
   const opt = (product.options && product.options[selectedIndex]) || {
-    price: product.price || 499,
-    balance: product.balance || "1000 INR"
+    price: product.price || 1199,
+    balance: product.balance || "7500"
   };
 
   const existing = state.cart.find((item) => item.id === product.id && item.optionIndex === selectedIndex);
@@ -937,6 +937,10 @@ function preparePayment() {
     date: new Date(),
     items: state.cart.map((item) => ({ ...item }))
   };
+  try {
+    localStorage.setItem("gcshop_pending_order", JSON.stringify(state.pendingOrder));
+    localStorage.setItem("gcshop_payment_amount", String(state.paymentAmount));
+  } catch (e) {}
   document.getElementById("paymentAmount").textContent = formatMoney(state.paymentAmount);
   setView("payment");
 }
@@ -1276,6 +1280,18 @@ window.removePaymentScreenshot = function() {
 };
 
 function openPaymentGateway() {
+  if (!state.pendingOrder && state.paymentType !== "wallet") {
+    const savedPending = localStorage.getItem("gcshop_pending_order");
+    if (savedPending) {
+      try {
+        state.pendingOrder = JSON.parse(savedPending);
+        state.paymentAmount = Number(localStorage.getItem("gcshop_payment_amount")) || state.pendingOrder.total || 0;
+      } catch (e) {}
+    }
+  }
+  if (!state.pendingOrder && state.cart.length > 0) {
+    preparePayment();
+  }
   if (!state.pendingOrder && state.paymentType !== "wallet") return;
   state.gatewayMethod = "Paytm";
   document.getElementById("gatewayUtr").value = "";
@@ -1320,13 +1336,38 @@ window.submitGatewayPayment = function() {
       showToast(`Payment successful (${state.gatewayMethod}) - ${formatMoney(state.paymentAmount)} added to wallet`);
       setView("wallet");
     } else {
-      if (!state.pendingOrder || !Array.isArray(state.pendingOrder.items)) {
-        state.pendingOrder = {
-          id: `ORD${Date.now().toString().slice(-8)}`,
-          items: (state.cart && state.cart.length) ? [...state.cart] : [{ id: products[0] ? products[0].id : 1, qty: 1, price: products[0] ? products[0].price : 499, balance: "1000" }],
-          total: state.paymentAmount || 499,
-          date: new Date()
-        };
+      if (!state.pendingOrder || !Array.isArray(state.pendingOrder.items) || state.pendingOrder.items.length === 0) {
+        const savedPending = localStorage.getItem("gcshop_pending_order");
+        if (savedPending) {
+          try { state.pendingOrder = JSON.parse(savedPending); } catch(e) {}
+        }
+      }
+
+      if (!state.pendingOrder || !Array.isArray(state.pendingOrder.items) || state.pendingOrder.items.length === 0) {
+        const cartItems = (state.cart && state.cart.length) ? state.cart.map(item => ({ ...item })) : [];
+        if (cartItems.length > 0) {
+          const calcTotal = cartItems.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.qty) || 1), 0);
+          state.pendingOrder = {
+            id: `ORD${Date.now().toString().slice(-10)}`,
+            items: cartItems,
+            total: calcTotal,
+            date: new Date()
+          };
+        } else {
+          const firstProductPrice = products[0] && products[0].options && products[0].options[0] ? products[0].options[0].price : (products[0] ? products[0].price : 1199);
+          state.pendingOrder = {
+            id: `ORD${Date.now().toString().slice(-10)}`,
+            items: [{ id: products[0] ? products[0].id : 1, qty: 1, price: firstProductPrice, balance: products[0] && products[0].options && products[0].options[0] ? products[0].options[0].balance : "7500" }],
+            total: state.paymentAmount || firstProductPrice,
+            date: new Date()
+          };
+        }
+      }
+
+      const finalCalculatedTotal = (state.pendingOrder.items || []).reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.qty) || 1), 0);
+      if (finalCalculatedTotal > 0) {
+        state.pendingOrder.total = finalCalculatedTotal;
+        state.paymentAmount = finalCalculatedTotal;
       }
 
       const orderItemsWithVouchers = [];
@@ -1406,6 +1447,10 @@ window.submitGatewayPayment = function() {
       });
       state.cart = [];
       state.pendingOrder = null;
+      try {
+        localStorage.removeItem("gcshop_pending_order");
+        localStorage.removeItem("gcshop_payment_amount");
+      } catch (e) {}
 
       recordActivity(userEmail, "Purchase Completed", `Order #${createdOrder.id} | Total: ₹${createdOrder.total} | UTR: ${utr} | Status: ${createdOrder.status}`);
 
@@ -2071,8 +2116,8 @@ function addProductToCartWithQty(id) {
   } else {
     const selectedIndex = product.selectedOptionIndex || 0;
     const opt = (product.options && product.options[selectedIndex]) || {
-      price: product.price || 499,
-      balance: product.balance || "1000 INR"
+      price: product.price || 1199,
+      balance: product.balance || "7500"
     };
     const existing = state.cart.find((item) => item.id === product.id && item.optionIndex === selectedIndex);
     if (existing) {
@@ -2172,8 +2217,8 @@ function renderCreditCardDetail() {
 
   const selectedIndex = product.selectedOptionIndex || 0;
   const currentOpt = (product.options && product.options[selectedIndex]) || {
-    price: product.price || 499,
-    balance: product.balance || "1000 INR"
+    price: product.price || 1199,
+    balance: product.balance || "7500"
   };
 
   const origPriceUsd = product.origPrice || (product.price * 5);
