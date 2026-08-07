@@ -7,11 +7,21 @@ const products = [
     theme: "play",
     selectedOptionIndex: 0,
     options: [
-      { price: 449, origPrice: 649, balance: "3500" },
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 1699, origPrice: 1999, balance: "10000" },
-      { price: 3699, origPrice: 3999, balance: "20000" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      },
+      {
+        price: 3699,
+        origPrice: 3999,
+        balance: "20000"
+      }
     ]
   },
   {
@@ -22,11 +32,26 @@ const products = [
     theme: "flipkart",
     selectedOptionIndex: 0,
     options: [
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1149, origPrice: 1449, balance: "7500" },
-      { price: 1699, origPrice: 1999, balance: "10000" },
-      { price: 2199, origPrice: 2499, balance: "12500" },
-      { price: 4699, origPrice: 4999, balance: "25000" }
+      {
+        price: 1149,
+        origPrice: 1449,
+        balance: "7500"
+      },
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      },
+      {
+        price: 2199,
+        origPrice: 2499,
+        balance: "12500"
+      },
+      {
+        price: 4699,
+        origPrice: 4999,
+        balance: "25000"
+      }
     ]
   },
   {
@@ -37,11 +62,21 @@ const products = [
     theme: "amazonpay",
     selectedOptionIndex: 0,
     options: [
-      { price: 499, origPrice: 699, balance: "3500" },
-      { price: 699, origPrice: 949, balance: "5000" },
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 1749, origPrice: 2049, balance: "10000" },
-      { price: 4649, origPrice: 4949, balance: "25000" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 1749,
+        origPrice: 2049,
+        balance: "10000"
+      },
+      {
+        price: 4649,
+        origPrice: 4949,
+        balance: "25000"
+      }
     ]
   },
   {
@@ -52,10 +87,16 @@ const products = [
     theme: "apple",
     selectedOptionIndex: 0,
     options: [
-      { price: 449, origPrice: 649, balance: "3500" },
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1649, origPrice: 1949, balance: "10000" },
-      { price: 3699, origPrice: 3999, balance: "20000" }
+      {
+        price: 1649,
+        origPrice: 1949,
+        balance: "10000"
+      },
+      {
+        price: 3699,
+        origPrice: 3999,
+        balance: "20000"
+      }
     ]
   },
   {
@@ -66,10 +107,16 @@ const products = [
     theme: "swiggy",
     selectedOptionIndex: 0,
     options: [
-      { price: 399, origPrice: 599, balance: "3000" },
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 1699, origPrice: 1999, balance: "10000" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -80,10 +127,16 @@ const products = [
     theme: "zomato",
     selectedOptionIndex: 0,
     options: [
-      { price: 449, origPrice: 649, balance: "3000" },
-      { price: 799, origPrice: 1049, balance: "5000" },
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 1699, origPrice: 1999, balance: "10000" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -94,10 +147,16 @@ const products = [
     theme: "blinkit",
     selectedOptionIndex: 0,
     options: [
-      { price: 449, origPrice: 649, balance: "3000" },
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 1649, origPrice: 1949, balance: "10000" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 1649,
+        origPrice: 1949,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -108,10 +167,16 @@ const products = [
     theme: "pvr",
     selectedOptionIndex: 0,
     options: [
-      { price: 449, origPrice: 649, balance: "3000" },
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 1699, origPrice: 1999, balance: "10000" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -122,10 +187,16 @@ const products = [
     theme: "jio",
     selectedOptionIndex: 0,
     options: [
-      { price: 449, origPrice: 649, balance: "3000" },
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 1699, origPrice: 1999, balance: "10000" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -136,11 +207,21 @@ const products = [
     theme: "steam",
     selectedOptionIndex: 0,
     options: [
-      { price: 449, origPrice: 649, balance: "3500" },
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 1699, origPrice: 1999, balance: "10000" },
-      { price: 3649, origPrice: 3949, balance: "20000" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      },
+      {
+        price: 3649,
+        origPrice: 3949,
+        balance: "20000"
+      }
     ]
   },
   {
@@ -151,10 +232,16 @@ const products = [
     theme: "xbox",
     selectedOptionIndex: 0,
     options: [
-      { price: 449, origPrice: 649, balance: "3500" },
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 1699, origPrice: 1999, balance: "10000" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -165,8 +252,11 @@ const products = [
     theme: "bigbasket",
     selectedOptionIndex: 0,
     options: [
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1699, origPrice: 1999, balance: "10000" }
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -177,8 +267,11 @@ const products = [
     theme: "bestbuy",
     selectedOptionIndex: 0,
     options: [
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1699, origPrice: 1999, balance: "10000" }
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -189,8 +282,11 @@ const products = [
     theme: "etsy",
     selectedOptionIndex: 0,
     options: [
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1699, origPrice: 1999, balance: "10000" }
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -201,8 +297,11 @@ const products = [
     theme: "target",
     selectedOptionIndex: 0,
     options: [
-      { price: 749, origPrice: 999, balance: "5000" },
-      { price: 1699, origPrice: 1999, balance: "10000" }
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      }
     ]
   },
   {
@@ -213,8 +312,16 @@ const products = [
     theme: "walmart",
     selectedOptionIndex: 0,
     options: [
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 2199, origPrice: 2499, balance: "12500" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 2199,
+        origPrice: 2499,
+        balance: "12500"
+      }
     ]
   },
   {
@@ -225,8 +332,16 @@ const products = [
     theme: "shopify",
     selectedOptionIndex: 0,
     options: [
-      { price: 1199, origPrice: 1499, balance: "7500" },
-      { price: 2199, origPrice: 2499, balance: "12500" }
+      {
+        price: 1199,
+        origPrice: 1499,
+        balance: "7500"
+      },
+      {
+        price: 2199,
+        origPrice: 2499,
+        balance: "12500"
+      }
     ]
   },
   {
@@ -237,8 +352,16 @@ const products = [
     theme: "amazon",
     selectedOptionIndex: 0,
     options: [
-      { price: 1699, origPrice: 1999, balance: "10000" },
-      { price: 4699, origPrice: 4999, balance: "25000" }
+      {
+        price: 1699,
+        origPrice: 1999,
+        balance: "10000"
+      },
+      {
+        price: 4699,
+        origPrice: 4999,
+        balance: "25000"
+      }
     ]
   },
   {
