@@ -683,7 +683,7 @@ function productCard(product) {
       <select class="option-select" data-option-select="${product.id}" ${isOutOfStock ? 'disabled' : ''}>
         ${product.options.map((opt, idx) => `
           <option value="${idx}" ${idx === selectedIndex ? "selected" : ""}>
-            Get ${opt.balance} Balance
+            Get ${opt.balance} Balance — ${formatMoney(opt.price)}
           </option>
         `).join("")}
       </select>
@@ -2211,7 +2211,7 @@ function renderCreditCardDetail() {
         <select class="option-select" data-option-select="${product.id}" style="width: 100%; padding: 10px 14px; font-size: 14px;" ${!product.stock ? 'disabled' : ''}>
           ${product.options.map((opt, idx) => `
             <option value="${idx}" ${idx === selectedIndex ? "selected" : ""}>
-              Get ${opt.balance} Balance
+              Get ${opt.balance} Balance — ${formatMoney(opt.price)}
             </option>
           `).join("")}
         </select>
@@ -2581,6 +2581,8 @@ document.addEventListener("change", (event) => {
       const article = select.closest(".gift-card");
       if (article) {
         article.outerHTML = productCard(product);
+      } else if (state.view === "carddetail" && state.selectedCreditCardId === id) {
+        renderCreditCardDetail();
       }
     }
   }
