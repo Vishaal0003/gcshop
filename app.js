@@ -8,6 +8,11 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
+        price: 799,
+        origPrice: 999,
+        balance: "5000"
+      },
+      {
         price: 1199,
         origPrice: 1499,
         balance: "7500"
@@ -32,6 +37,11 @@ const products = [
     theme: "flipkart",
     selectedOptionIndex: 0,
     options: [
+      {
+        price: 799,
+        origPrice: 999,
+        balance: "5000"
+      },
       {
         price: 1149,
         origPrice: 1449,
@@ -63,6 +73,11 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
+        price: 799,
+        origPrice: 999,
+        balance: "5000"
+      },
+      {
         price: 1199,
         origPrice: 1499,
         balance: "7500"
@@ -88,13 +103,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1649,
-        origPrice: 1949,
+        price: 849,
+        origPrice: 1049,
+        balance: "5000"
+      },
+      {
+        price: 1699,
+        origPrice: 1999,
         balance: "10000"
       },
       {
-        price: 3699,
-        origPrice: 3999,
+        price: 3749,
+        origPrice: 4049,
         balance: "20000"
       }
     ]
@@ -108,13 +128,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1199,
-        origPrice: 1499,
+        price: 699,
+        origPrice: 899,
+        balance: "5000"
+      },
+      {
+        price: 1099,
+        origPrice: 1399,
         balance: "7500"
       },
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 1599,
+        origPrice: 1899,
         balance: "10000"
       }
     ]
@@ -128,13 +153,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1199,
-        origPrice: 1499,
+        price: 749,
+        origPrice: 949,
+        balance: "5000"
+      },
+      {
+        price: 1149,
+        origPrice: 1449,
         balance: "7500"
       },
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 1649,
+        origPrice: 1949,
         balance: "10000"
       }
     ]
@@ -148,13 +178,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1199,
-        origPrice: 1499,
+        price: 649,
+        origPrice: 849,
+        balance: "5000"
+      },
+      {
+        price: 1049,
+        origPrice: 1349,
         balance: "7500"
       },
       {
-        price: 1649,
-        origPrice: 1949,
+        price: 1599,
+        origPrice: 1899,
         balance: "10000"
       }
     ]
@@ -168,13 +203,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1199,
-        origPrice: 1499,
+        price: 899,
+        origPrice: 1099,
+        balance: "5000"
+      },
+      {
+        price: 1299,
+        origPrice: 1599,
         balance: "7500"
       },
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 1799,
+        origPrice: 2099,
         balance: "10000"
       }
     ]
@@ -188,13 +228,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1199,
-        origPrice: 1499,
+        price: 849,
+        origPrice: 1049,
+        balance: "5000"
+      },
+      {
+        price: 1249,
+        origPrice: 1549,
         balance: "7500"
       },
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 1749,
+        origPrice: 2049,
         balance: "10000"
       }
     ]
@@ -207,6 +252,11 @@ const products = [
     theme: "steam",
     selectedOptionIndex: 0,
     options: [
+      {
+        price: 799,
+        origPrice: 999,
+        balance: "5000"
+      },
       {
         price: 1199,
         origPrice: 1499,
@@ -233,13 +283,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1199,
-        origPrice: 1499,
+        price: 899,
+        origPrice: 1099,
+        balance: "5000"
+      },
+      {
+        price: 1299,
+        origPrice: 1599,
         balance: "7500"
       },
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 1799,
+        origPrice: 2099,
         balance: "10000"
       }
     ]
@@ -253,8 +308,13 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 699,
+        origPrice: 899,
+        balance: "5000"
+      },
+      {
+        price: 1599,
+        origPrice: 1899,
         balance: "10000"
       }
     ]
@@ -268,8 +328,13 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 949,
+        origPrice: 1149,
+        balance: "5000"
+      },
+      {
+        price: 1849,
+        origPrice: 2149,
         balance: "10000"
       }
     ]
@@ -283,8 +348,13 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 849,
+        origPrice: 1049,
+        balance: "5000"
+      },
+      {
+        price: 1749,
+        origPrice: 2049,
         balance: "10000"
       }
     ]
@@ -298,8 +368,13 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 899,
+        origPrice: 1099,
+        balance: "5000"
+      },
+      {
+        price: 1799,
+        origPrice: 2099,
         balance: "10000"
       }
     ]
@@ -313,13 +388,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1199,
-        origPrice: 1499,
+        price: 949,
+        origPrice: 1149,
+        balance: "5000"
+      },
+      {
+        price: 1349,
+        origPrice: 1649,
         balance: "7500"
       },
       {
-        price: 2199,
-        origPrice: 2499,
+        price: 2349,
+        origPrice: 2649,
         balance: "12500"
       }
     ]
@@ -333,13 +413,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1199,
-        origPrice: 1499,
+        price: 899,
+        origPrice: 1099,
+        balance: "5000"
+      },
+      {
+        price: 1299,
+        origPrice: 1599,
         balance: "7500"
       },
       {
-        price: 2199,
-        origPrice: 2499,
+        price: 2299,
+        origPrice: 2599,
         balance: "12500"
       }
     ]
@@ -353,13 +438,18 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 1699,
-        origPrice: 1999,
+        price: 949,
+        origPrice: 1149,
+        balance: "5000"
+      },
+      {
+        price: 1849,
+        origPrice: 2149,
         balance: "10000"
       },
       {
-        price: 4699,
-        origPrice: 4999,
+        price: 4849,
+        origPrice: 5149,
         balance: "25000"
       }
     ]
