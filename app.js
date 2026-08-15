@@ -8,7 +8,7 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 799,
+        price: 899,
         origPrice: 999,
         balance: "5000"
       },
@@ -38,7 +38,7 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 799,
+        price: 899,
         origPrice: 999,
         balance: "5000"
       },
@@ -73,7 +73,7 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 799,
+        price: 899,
         origPrice: 999,
         balance: "5000"
       },
@@ -253,7 +253,7 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 799,
+        price: 899,
         origPrice: 999,
         balance: "5000"
       },
@@ -1032,7 +1032,38 @@ function preparePayment() {
     localStorage.setItem("gcshop_payment_amount", String(state.paymentAmount));
   } catch (e) {}
   document.getElementById("paymentAmount").textContent = formatMoney(state.paymentAmount);
+  renderPaymentProductsSummary();
   setView("payment");
+}
+
+function renderPaymentProductsSummary() {
+  const paymentProductsSummary = document.getElementById("paymentProductsSummary");
+  const gatewayProductsSummary = document.getElementById("gatewayProductsSummary");
+  
+  if (!state.pendingOrder || !state.pendingOrder.items || !state.pendingOrder.items.length) {
+    if (paymentProductsSummary) paymentProductsSummary.style.display = "none";
+    if (gatewayProductsSummary) gatewayProductsSummary.style.display = "none";
+    return;
+  }
+  
+  const html = state.pendingOrder.items.map(item => {
+    return `<div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+      <span><strong>${item.name}</strong> (x${item.quantity}) ${item.option ? '<br><small class="muted">Balance: ' + item.option.balance + '</small>' : ''}</span>
+      <span>${formatMoney((item.option ? item.option.price : item.price) * item.quantity)}</span>
+    </div>`;
+  }).join('');
+  
+  const summaryHtml = `<div style="margin-bottom: 8px; font-weight: 700; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">Items in your Order</div>${html}`;
+  
+  if (paymentProductsSummary) {
+    paymentProductsSummary.innerHTML = summaryHtml;
+    paymentProductsSummary.style.display = "block";
+  }
+  
+  if (gatewayProductsSummary) {
+    gatewayProductsSummary.innerHTML = summaryHtml;
+    gatewayProductsSummary.style.display = "block";
+  }
 }
 
 function startGatewayTimer() {
@@ -1386,6 +1417,7 @@ function openPaymentGateway() {
   state.gatewayMethod = "Paytm";
   document.getElementById("gatewayUtr").value = "";
   removePaymentScreenshot();
+  renderPaymentProductsSummary();
   setView("paymentGateway");
   startGatewayTimer();
   renderGatewayStatus();
