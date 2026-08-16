@@ -103,8 +103,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 849,
-        origPrice: 1049,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -128,8 +128,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 699,
-        origPrice: 899,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -153,8 +153,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 749,
-        origPrice: 949,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -178,8 +178,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 649,
-        origPrice: 849,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -204,7 +204,7 @@ const products = [
     options: [
       {
         price: 899,
-        origPrice: 1099,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -228,8 +228,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 849,
-        origPrice: 1049,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -284,7 +284,7 @@ const products = [
     options: [
       {
         price: 899,
-        origPrice: 1099,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -308,8 +308,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 699,
-        origPrice: 899,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -328,8 +328,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 949,
-        origPrice: 1149,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -348,8 +348,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 849,
-        origPrice: 1049,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -369,7 +369,7 @@ const products = [
     options: [
       {
         price: 899,
-        origPrice: 1099,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -388,8 +388,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 949,
-        origPrice: 1149,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -414,7 +414,7 @@ const products = [
     options: [
       {
         price: 899,
-        origPrice: 1099,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -438,8 +438,8 @@ const products = [
     selectedOptionIndex: 0,
     options: [
       {
-        price: 949,
-        origPrice: 1149,
+        price: 899,
+        origPrice: 999,
         balance: "5000"
       },
       {
@@ -456,169 +456,169 @@ const products = [
   },
   {
     id: 101,
-    name: "DIGITAL Visa Prepaid 1 Card (Balance: $990.00)",
+    name: "DIGITAL Visa Prepaid 1 Card (Balance: $242.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 22,
     origPrice: 110,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 990,
-    balance: "$990.00 USD",
+    usdBalance: 242,
+    balance: "$242.00 USD",
     stock: true,
     theme: "visa"
   },
   {
     id: 102,
-    name: "DIGITAL Visa Prepaid 3 Cards (Balance: $2,790.00)",
+    name: "DIGITAL Visa Prepaid 3 Cards (Balance: $700.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 56,
     origPrice: 279,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 2790,
-    balance: "$2,790.00 USD",
+    usdBalance: 700,
+    balance: "$700.00 USD",
     stock: true,
     theme: "visa"
   },
   {
     id: 103,
-    name: "DIGITAL Visa Prepaid 5 Cards (Balance: $4,510.00)",
+    name: "DIGITAL Visa Prepaid 5 Cards (Balance: $1,148.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 82,
     origPrice: 410,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 4510,
-    balance: "$4,510.00 USD",
+    usdBalance: 1148,
+    balance: "$1,148.00 USD",
     stock: false,
     theme: "visa"
   },
   {
     id: 104,
-    name: "DIGITAL Visa Prepaid 10 Cards (Balance: $8,520.00)",
+    name: "DIGITAL Visa Prepaid 10 Cards (Balance: $2,130.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 142,
     origPrice: 710,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 8520,
-    balance: "$8,520.00 USD",
+    usdBalance: 2130,
+    balance: "$2,130.00 USD",
     stock: true,
     theme: "visa"
   },
   {
     id: 105,
-    name: "DIGITAL MasterCard Prepaid 1 Card (Balance: $880.00)",
+    name: "DIGITAL MasterCard Prepaid 1 Card (Balance: $231.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 22,
     origPrice: 110,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 880,
-    balance: "$880.00 USD",
+    usdBalance: 231,
+    balance: "$231.00 USD",
     stock: true,
     theme: "mastercard"
   },
   {
     id: 106,
-    name: "DIGITAL MasterCard Prepaid 3 Cards (Balance: $2,511.00)",
+    name: "DIGITAL MasterCard Prepaid 3 Cards (Balance: $728.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 56,
     origPrice: 279,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 2511,
-    balance: "$2,511.00 USD",
+    usdBalance: 728,
+    balance: "$728.00 USD",
     stock: true,
     theme: "mastercard"
   },
   {
     id: 107,
-    name: "DIGITAL MasterCard Prepaid 5 Cards (Balance: $4,100.00)",
+    name: "DIGITAL MasterCard Prepaid 5 Cards (Balance: $1,189.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 82,
     origPrice: 410,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 4100,
-    balance: "$4,100.00 USD",
+    usdBalance: 1189,
+    balance: "$1,189.00 USD",
     stock: false,
     theme: "mastercard"
   },
   {
     id: 108,
-    name: "DIGITAL MasterCard Prepaid 10 Cards (Balance: $8,520.00)",
+    name: "DIGITAL MasterCard Prepaid 10 Cards (Balance: $1,988.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 142,
     origPrice: 710,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 8520,
-    balance: "$8,520.00 USD",
+    usdBalance: 1988,
+    balance: "$1,988.00 USD",
     stock: true,
     theme: "mastercard"
   },
   {
     id: 109,
-    name: "American Express Prepaid 1 Card (Balance: $990.00)",
+    name: "American Express Prepaid 1 Card (Balance: $264.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 22,
     origPrice: 110,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 990,
-    balance: "$990.00 USD",
+    usdBalance: 264,
+    balance: "$264.00 USD",
     stock: true,
     theme: "amex"
   },
   {
     id: 110,
-    name: "American Express Prepaid 3 Cards (Balance: $2,790.00)",
+    name: "American Express Prepaid 3 Cards (Balance: $756.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 56,
     origPrice: 279,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 2790,
-    balance: "$2,790.00 USD",
+    usdBalance: 756,
+    balance: "$756.00 USD",
     stock: false,
     theme: "amex"
   },
   {
     id: 111,
-    name: "American Express Prepaid 5 Cards (Balance: $4,510.00)",
+    name: "American Express Prepaid 5 Cards (Balance: $1,230.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 82,
     origPrice: 410,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 4510,
-    balance: "$4,510.00 USD",
+    usdBalance: 1230,
+    balance: "$1,230.00 USD",
     stock: true,
     theme: "amex"
   },
   {
     id: 112,
-    name: "American Express Prepaid 10 Cards (Balance: $8,520.00)",
+    name: "American Express Prepaid 10 Cards (Balance: $2,059.00)",
     category: "creditcards",
     vendor: "Platinum",
     price: 142,
     origPrice: 710,
     discountBadge: "80% OFF",
     newBadge: true,
-    usdBalance: 8520,
-    balance: "$8,520.00 USD",
+    usdBalance: 2059,
+    balance: "$2,059.00 USD",
     stock: false,
     theme: "amex"
   }
@@ -793,7 +793,6 @@ function productCard(product) {
         ${optionsMarkup}
         <div class="price-row" style="margin-top: 10px;">
           <div class="price-info" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-            <span class="card-orig-price-crossed">${formatMoney(origOptPrice)}</span>
             <span class="price-val" style="color: #e11d48; font-weight: 700; font-size: 16px;">${formatMoney(currentOpt.price)}</span>
           </div>
           <span class="stock" style="color: ${isOutOfStock ? '#ef4444' : '#16a34a'}; font-weight: 700;">${product.stock ? "In stock" : "Sold out"}</span>
@@ -2353,7 +2352,6 @@ function renderCreditCardDetail() {
         <span style="color: #e11d48; font-weight: 800; font-size: 22px;">$${product.price.toFixed(2)} (${formatMoney(inrPrice)}) <span style="background: #10b981; color: #fff; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; vertical-align: middle;">80% OFF</span></span>
        </div>`
     : `<div style="display:flex; flex-direction:column; gap: 2px;">
-        <span style="font-size: 14px; text-decoration: line-through; color: #94a3b8; font-weight: 500;">Original: ${formatMoney(currentOpt.origPrice || (currentOpt.price + 250))}</span>
         <span style="color: #e11d48; font-weight: 800; font-size: 22px;">${formatMoney(currentOpt.price)} <span style="background: #dc2626; color: #fff; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; vertical-align: middle;">SAVE ₹${(currentOpt.origPrice || (currentOpt.price + 250)) - currentOpt.price}</span></span>
        </div>`;
 
@@ -2604,10 +2602,9 @@ function setupAdCarousel() {
   const next = carousel.querySelector('.ad-next');
   const dotsWrap = carousel.querySelector('.ad-dots');
 
-  // 6 slides: 15th August Independence Day Sale + credit card ads + gift card ads
-  const slideCount = 6;
+  // 5 slides: credit card ads + gift card ads
+  const slideCount = 5;
   const fallbacks = [
-    'assets/ads/independence.png',
     posterDataUrl('MasterCard Prepaid Bundle', 'Buy 3 Cards, Save 20% • Limited Time', 1),
     posterDataUrl('AMEX Summer Sale', '10 Cards Bundle • Save 40% Today', 4),
     posterDataUrl('Gift Card Mega Sale', 'Flat 90% OFF on All Gift Cards', 3),
@@ -2621,11 +2618,11 @@ function setupAdCarousel() {
     <div class="ad-slide" style="background-image:url('${src}')" role="img"></div>
   `).join('');
 
-  // Load actual images from ads folder and replace fallbacks
+  // Load actual images from ads folder (ad2 to ad6) and replace fallbacks
   const extensions = ['png', 'jpg', 'jpeg'];
   for (let i = 1; i <= slideCount; i++) {
     extensions.forEach(ext => {
-      const path = `assets/ads/ad${i}.${ext}`;
+      const path = `assets/ads/ad${i + 1}.${ext}`;
       const idx = i - 1;
       const img = new Image();
       img.onload = () => {
